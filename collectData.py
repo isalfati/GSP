@@ -11,7 +11,6 @@ from pygsp import graphs, filters, plotting
 # Global Variables
 city = "Madrid"
 
-
 # Avoid warnings
 warnings.simplefilter(action='ignore')
 
@@ -38,7 +37,8 @@ date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 filename = "/home/zap2x/Desktop/GSP/Datasets/" + date
 
 resCity = api.locations(city=city, df=True)  # This returns the city of Madrid
-print(res.iloc[0])  # replaces the old .ix[<index>]
+# print(resCity.iloc[0])  # replaces the old .ix[<index>]
+print(resCity)
 
 resO3 = api.latest(city=city, parameter='o3', df=True)
 # resO3.to_csv(filename + "_o3.csv", sep=',')
@@ -48,3 +48,7 @@ resNO2 = api.latest(city=city, parameter='no2', df=True)
 
 resPM25 = api.latest(city=city, parameter='pm25', df=True)
 # resPM25.to_csv(filename + "_pm25.csv", sep=',')
+
+# TODO: Check if there is any way to obtain the id of the stations that have all
+# three records (o2, no2, pm25), if not, I should search all three data sets and find
+# those stations who have all three records.
