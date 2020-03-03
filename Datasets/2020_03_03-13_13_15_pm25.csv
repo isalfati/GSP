@@ -1,0 +1,20 @@
+lastUpdated,parameter,value,unit,sourceName,country,city,location,averagingPeriod.value,averagingPeriod.unit
+2020-03-03 10:00:00+00:00,pm25,6,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES0118A,1,hours
+2020-03-03 10:00:00+00:00,pm25,7,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1193A,1,hours
+2020-03-03 10:00:00+00:00,pm25,4,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1525A,1,hours
+2020-03-02 16:00:00+00:00,pm25,3,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1563A,1,hours
+2020-03-03 10:00:00+00:00,pm25,7,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1567A,1,hours
+2020-03-03 10:00:00+00:00,pm25,1,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1752A,1,hours
+2020-03-03 10:00:00+00:00,pm25,7,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1802A,1,hours
+2020-03-03 10:00:00+00:00,pm25,8,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1803A,1,hours
+2020-03-03 10:00:00+00:00,pm25,11,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1809A,1,hours
+2020-03-03 10:00:00+00:00,pm25,7,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1810A,1,hours
+2020-03-03 10:00:00+00:00,pm25,3,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1811A,1,hours
+2020-03-03 10:00:00+00:00,pm25,8,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1838A,1,hours
+2020-03-03 10:00:00+00:00,pm25,8,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1869A,1,hours
+2020-03-03 10:00:00+00:00,pm25,4,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1890A,1,hours
+2020-03-03 10:00:00+00:00,pm25,4,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1937A,1,hours
+2020-03-03 09:00:00+00:00,pm25,8,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1938A,1,hours
+2020-03-03 10:00:00+00:00,pm25,5,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1940A,1,hours
+2020-03-03 10:00:00+00:00,pm25,6,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES1943A,1,hours
+2020-03-03 10:00:00+00:00,pm25,8,b'\xc2\xb5g/m\xc2\xb3',EEA Spain,ES,Madrid,ES2028A,1,hours
