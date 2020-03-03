@@ -1,10 +1,12 @@
 import openaq
 import warnings
+import numpy as np
 import pandas as pd
-#import seaborn as sns
-#import matplotlib as mpl
+# import seaborn as sns
+# import matplotlib as mpl
 from datetime import datetime
-#import matplotlib.pyplot as plt
+# import matplotlib.pyplot as plt
+from pygsp import graphs, filters, plotting
 
 # Global Variables
 city = "Madrid"
@@ -21,8 +23,8 @@ pd.options.display.width = None
 print("Versions of the libraries:\n")
 print("OpenAQ v{}".format(openaq.__version__))
 print("Pandas v{}".format(pd.__version__))
-#print("Seaborn v{}".format(sns.__version__))
-#print("Matplot v{}".format(mpl.__version__))
+# print("Seaborn v{}".format(sns.__version__))
+# print("Matplot v{}".format(mpl.__version__))
 
 api = openaq.OpenAQ()
 
@@ -35,15 +37,14 @@ print(param)
 date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 filename = "/home/zap2x/Desktop/GSP/Datasets/" + date
 
+resCity = api.locations(city=city, df=True)  # This returns the city of Madrid
+print(res.iloc[0])  # replaces the old .ix[<index>]
 
-res = api.locations(city=city, df=True) # This returns the city of Madrid
-print(res.iloc[0]) # replaces the old .ix[<index>] 
+resO3 = api.latest(city=city, parameter='o3', df=True)
+# resO3.to_csv(filename + "_o3.csv", sep=',')
 
-res = api.latest(city=city, parameter='o3', df=True)
-res.to_csv(filename + "_o3.csv", sep=',')
+resNO2 = api.latest(city=city, parameter='no2', df=True)
+# resNO2.to_csv(filename + "_no2.csv", sep=',')
 
-res = api.latest(city=city, parameter='no2', df=True)
-res.to_csv(filename + "_no2.csv", sep=',')
-
-res = api.latest(city=city, parameter='pm25', df=True)
-res.to_csv(filename + "_pm25.csv", sep=',')
+resPM25 = api.latest(city=city, parameter='pm25', df=True)
+# resPM25.to_csv(filename + "_pm25.csv", sep=',')
