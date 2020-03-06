@@ -59,16 +59,19 @@ mergedDataSet = pd.merge(left=refinedData, right=cityLocationsLeftJoin, how='lef
 print(mergedDataSet)
 
 dataO3 = mergedDataSet[mergedDataSet.parameter.str.contains('o3')]
-dataO3.reset_index(inplace = True)
+dataO3.reset_index(drop = True, inplace = True)
+#dataO3.to_csv(filename + "_O3_" + city + ".csv", sep=',')
 print("\n============================== O3 DATA ==============================")
 print(dataO3)
 
 dataNO2 = mergedDataSet[mergedDataSet.parameter.str.contains('no2')]
-dataNO2.reset_index(inplace = True)
+dataNO2.reset_index(drop = True, inplace = True)
+#dataNO2.to_csv(filename + "_NO2_" + city + ".csv", sep=',')
 print("\n============================== NO2 DATA ==============================")
 print(dataNO2)
 
 dataPM25 = mergedDataSet[mergedDataSet.parameter.str.contains('pm25')]
-dataPM25.reset_index(inplace = True)
+dataPM25.reset_index(drop = True, inplace = True)
+#dataPM25.to_csv(filename + "_PM25_" + city + ".csv", sep=',')
 print("\n============================== PM25 DATA ==============================")
 print(dataPM25)
