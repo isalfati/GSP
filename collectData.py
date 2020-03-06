@@ -10,12 +10,14 @@ from pygsp import graphs, filters, plotting
 
 # Global Variables
 city = "Madrid"
+selection = ['o3', 'no2', 'pm25']
 
 # Avoid warnings
 warnings.simplefilter(action='ignore')
 
 # Set Display Options
 pd.options.display.max_columns = None
+pd.options.display.max_rows = None
 pd.options.display.width = None
 
 # Check versions
@@ -28,27 +30,45 @@ print("Pandas v{}".format(pd.__version__))
 api = openaq.OpenAQ()
 
 # List of Parameters
-print("\nThis API gathers information of the following parameters:\n")
-param = api.parameters(df=True)
-print(param)
+print("\nThis program gathers information of the following parameters:\n")
+#param = api.parameters(df=True)
+print(selection)
+print()
 
 # yy/mm/dd
 date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 filename = "/home/zap2x/Desktop/GSP/Datasets/" + date
 
-resCity = api.locations(city=city, df=True)  # This returns the city of Madrid
-# print(resCity.iloc[0])  # replaces the old .ix[<index>]
-print(resCity)
+# Obtaining the latest values of the sensors in a City
+resCity = api.latest(city=city, parameters=['o3', 'no2', 'pm25'], df=True)
+#resCityParams.to_csv(filename + "_all_params_" + city + ".csv", sep=',')
 
-resO3 = api.latest(city=city, parameter='o3', df=True)
-# resO3.to_csv(filename + "_o3.csv", sep=',')
+basicData = pd.DataFrame(resCity[['location', 'parameter', 'value']])
+refinedData = basicData[basicData.parameter.str.contains('|'.join(selection))]
+#print(refinedData)
 
-resNO2 = api.latest(city=city, parameter='no2', df=True)
-# resNO2.to_csv(filename + "_no2.csv", sep=',')
+# This returns the city locations of all the sensors
+cityLocations = api.locations(city=city, df=True)  
+#cityLocations.to_csv(filename + "_all_in_" + city + "_city.csv", sep=',')
 
-resPM25 = api.latest(city=city, parameter='pm25', df=True)
-# resPM25.to_csv(filename + "_pm25.csv", sep=',')
+cityLocationsLeftJoin = cityLocations[['location', 'coordinates.longitude', 'coordinates.latitude']]
+#print(cityLocationsLeftJoin)
 
-# TODO: Check if there is any way to obtain the id of the stations that have all
-# three records (o2, no2, pm25), if not, I should search all three data sets and find
-# those stations who have all three records.
+mergedDataSet = pd.merge(left=refinedData, right=cityLocationsLeftJoin, how='left', left_on='location', right_on='location')
+#mergedDataSet.to_csv(filename + "_" + city + "_DataSet.csv", sep=',')
+print(mergedDataSet)
+
+dataO3 = mergedDataSet[mergedDataSet.parameter.str.contains('o3')]
+dataO3.reset_index(inplace = True)
+print("\n============================== O3 DATA ==============================")
+print(dataO3)
+
+dataNO2 = mergedDataSet[mergedDataSet.parameter.str.contains('no2')]
+dataNO2.reset_index(inplace = True)
+print("\n============================== NO2 DATA ==============================")
+print(dataNO2)
+
+dataPM25 = mergedDataSet[mergedDataSet.parameter.str.contains('pm25')]
+dataPM25.reset_index(inplace = True)
+print("\n============================== PM25 DATA ==============================")
+print(dataPM25)
