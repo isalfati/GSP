@@ -46,12 +46,12 @@ print()
 
 # yy/mm/dd
 date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-filename = "/home/zap2x/Desktop/GSP/Datasets/" + date
+filename = "/home/zap2x/Desktop/GSP/Datasets/" + date + "_Data"
 
 # Obtaining the latest values of the sensors in a City
 resCity = api.latest(city=city, parameters=selection, df=True)
 #print(resCity)
-#resCity.to_csv(filename + "_all_params_" + city + ".csv", sep=',')
+#resCity.to_csv(filename + "4_all_parameters_" + city + ".csv", sep=',')
 
 basicData = pd.DataFrame(resCity[['location', 'parameter', 'value']])
 refinedData = basicData[basicData.parameter.str.contains('|'.join(selection))]
@@ -59,30 +59,30 @@ refinedData = basicData[basicData.parameter.str.contains('|'.join(selection))]
 
 # This returns the city locations of all the sensors
 cityLocations = api.locations(city=city, df=True)  
-#cityLocations.to_csv(filename + "_all_in_" + city + "_city.csv", sep=',')
+#cityLocations.to_csv(filename + "5_all_info_" + city + ".csv", sep=',')
 
 cityLocationsLeftJoin = cityLocations[['location', 'coordinates.longitude', 'coordinates.latitude']]
 #print(cityLocationsLeftJoin)
 
 mergedDataSet = pd.merge(left=refinedData, right=cityLocationsLeftJoin, how='left', left_on='location', right_on='location')
-#mergedDataSet.to_csv(filename + "_" + city + "_DataSet.csv", sep=',')
+#mergedDataSet.to_csv(filename + "0_" + city + "_DataSet.csv", sep=',')
 #print(mergedDataSet)
 
 dataO3 = mergedDataSet[mergedDataSet.parameter.str.contains('o3')]
 dataO3.reset_index(drop = True, inplace = True)
-#dataO3.to_csv(filename + "_O3_" + city + ".csv", sep=',')
+#dataO3.to_csv(filename + "1_O3_" + city + ".csv", sep=',')
 #print("\n============================== O3 DATA ==============================")
 #print(dataO3)
 
 dataNO2 = mergedDataSet[mergedDataSet.parameter.str.contains('no2')]
 dataNO2.reset_index(drop = True, inplace = True)
-#dataNO2.to_csv(filename + "_NO2_" + city + ".csv", sep=',')
+#dataNO2.to_csv(filename + "2_NO2_" + city + ".csv", sep=',')
 #print("\n============================== NO2 DATA ==============================")
 #print(dataNO2)
 
 dataPM10 = mergedDataSet[mergedDataSet.parameter.str.contains('pm10')]
 dataPM10.reset_index(drop = True, inplace = True)
-#dataPM10.to_csv(filename + "_PM10_" + city + ".csv", sep=',')
+#dataPM10.to_csv(filename + "3_PM10_" + city + ".csv", sep=',')
 #print("\n============================== PM25 DATA ==============================")
 #print(dataPM10)
 
