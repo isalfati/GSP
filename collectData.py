@@ -105,7 +105,7 @@ for i in range(0, len(pointsO3[0])):
 # Symmetric Matrix
 WO3 = WO3 + WO3.T
 #print(WO3)
-np.savetxt("/home/zap2x/Desktop/WO3.txt", WO3, fmt='%.2f')
+#np.savetxt("/home/zap2x/Desktop/WO3.txt", WO3, fmt='%.2f')
 # Graph O3
 GO3 = graphs.Graph(WO3)
 
@@ -131,24 +131,24 @@ WNO2 = WNO2 + WNO2.T
 # Graph NO2
 GNO2 = graphs.Graph(WNO2)
 
-# Graph Creation PM25
-pointsPM25 = [dataPM10['coordinates.longitude'].tolist(), dataPM10['coordinates.latitude'].tolist()]
-#print("\nCoordinates PM25")
-#print(pointsPM25)
+# Graph Creation PM10
+pointsPM10 = [dataPM10['coordinates.longitude'].tolist(), dataPM10['coordinates.latitude'].tolist()]
+#print("\nCoordinates PM10")
+#print(pointsPM10)
 
-sizePM25 = len(dataPM10)
-WPM10 = np.zeros((sizePM25, sizePM25))
+sizePM10 = len(dataPM10)
+WPM10 = np.zeros((sizePM10, sizePM10))
 
-for i in range(0, len(pointsPM25[0])):
-    pointTmp = [pointsPM25[0][i], pointsPM25[1][i]]
+for i in range(0, len(pointsPM10[0])):
+    pointTmp = [pointsPM10[0][i], pointsPM10[1][i]]
     #print(*pointTmp, sep=", ")
-    for j in range(i, len(pointsPM25[0])):
-        nextPointTmp = [[pointsPM25[0][j], pointsPM25[1][j]]]
+    for j in range(i, len(pointsPM10[0])):
+        nextPointTmp = [[pointsPM10[0][j], pointsPM10[1][j]]]
         #print(*nextPointTmp, sep=", ")
         WPM10[i][j] = geopy.distance.vincenty(pointTmp, nextPointTmp).km
 
 # Symmetric Matrix
 WPM10 = WPM10 + WPM10.T
 #print(WPM10)
-# Graph PM25
-GPM25 = graphs.Graph(WPM10)
+# Graph PM10
+GPM10 = graphs.Graph(WPM10)
