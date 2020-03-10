@@ -50,6 +50,7 @@ filename = "/home/zap2x/Desktop/GSP/Datasets/" + date + "_Data"
 
 # Obtaining the latest values of the sensors in a City
 resCity = api.latest(city=city, parameters=selection, df=True)
+# resCity = api.measurements(city=city, parameter=selection, date_from="2020-03-07T23:00:00", date_to="2020-03-08T22:59:00", limit=10000, df=True)
 #print(resCity)
 #resCity.to_csv(filename + "4_all_parameters_" + city + ".csv", sep=',')
 
