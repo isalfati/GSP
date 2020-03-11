@@ -49,10 +49,9 @@ date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
 filename = "/home/zap2x/Desktop/GSP/Datasets/" + date + "_Data"
 
 # Obtaining the latest values of the sensors in a City
-resCity = api.latest(city=city, parameters=selection, df=True)
-# resCity = api.measurements(city=city, parameter=selection, date_from="2020-03-07T23:00:00", date_to="2020-03-08T22:59:00", limit=10000, df=True)
-#print(resCity)
-#resCity.to_csv(filename + "4_all_parameters_" + city + ".csv", sep=',')
+resCityDay = api.measurements(city=city, parameter=selection, date_from=date_from, date_to=date_to, order_by="date", limit=10000, df=True)
+#print(resCityDay)
+#resCityDay.to_csv(filename + interested_day + "_" + city + ".csv", sep=',')
 
 basicData = pd.DataFrame(resCity[['location', 'parameter', 'value']])
 refinedData = basicData[basicData.parameter.str.contains('|'.join(selection))]
