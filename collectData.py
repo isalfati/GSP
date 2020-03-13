@@ -1,3 +1,4 @@
+import os
 import sys
 import math
 import openaq
@@ -14,6 +15,12 @@ from pygsp import graphs, filters, plotting
 # Global Variables
 city = "Barcelona"
 selection = ['o3', 'no2', 'pm10'] #PM25 does not exist in Barcelona
+
+# 24 hour period
+
+interested_day = "2020-03-08"
+date_from      = "2020-03-07T23:00:00"
+date_to        = "2020-03-08T22:59:00"
 
 # Avoid warnings
 warnings.simplefilter(action='ignore')
@@ -46,13 +53,41 @@ print()
 
 # yy/mm/dd
 date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
-filename = "/home/zap2x/Desktop/GSP/Datasets/" + date + "_Data"
+filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # Obtaining the latest values of the sensors in a City
 resCityDay = api.measurements(city=city, parameter=selection, date_from=date_from, date_to=date_to, order_by="date", limit=10000, df=True)
-#print(resCityDay)
-#resCityDay.to_csv(filename + interested_day + "_" + city + ".csv", sep=',')
 
+
+
+
+# Delete unwanted columns
+columnsToDelete = ["unit", "date.utc"]
+columnsToRename = {"coordinates.latitude" : "latitude", "coordinates.longitude" : "longitude"}
+resCityDay = resCityDay.drop(columnsToDelete, axis=1)
+resCityDay = resCityDay.rename(columns=columnsToRename)
+resCityDay["date"] = resCityDay.index
+#resCityDay["date"] = pd.to_datetime(resCityDay["date"])
+resCityDay["date"] = resCityDay["date"].dt.strftime("%Y_%m_%d-%H:%M:%S")
+resCityDay.reset_index(drop = True, inplace = True)
+
+#print(resCityDay)
+resCityDay.to_csv(filename + interested_day + "_per_hours_" + city + ".csv", sep=',')
+
+dataO3Day   = resCityDay[resCityDay.parameter.str.contains('o3')]
+dataO3Day.reset_index(drop = True, inplace = True)
+dataO3Day.to_csv(filename + interested_day + "_per_hours_O3_" + city + ".csv", sep=',')
+
+dataNO2Day  = resCityDay[resCityDay.parameter.str.contains('no2')]
+dataNO2Day.reset_index(drop = True, inplace = True)
+dataNO2Day.to_csv(filename + interested_day + "_per_hours_NO2_" + city + ".csv", sep=',')
+
+dataPM10Day = resCityDay[resCityDay.parameter.str.contains('pm10')]
+dataPM10Day.reset_index(drop = True, inplace = True)
+dataPM10Day.to_csv(filename + interested_day + "_per_hours_PM10_" + city + ".csv", sep=',')
+
+
+"""
 basicData = pd.DataFrame(resCity[['location', 'parameter', 'value']])
 refinedData = basicData[basicData.parameter.str.contains('|'.join(selection))]
 #print(refinedData)
@@ -152,3 +187,4 @@ WPM10 = WPM10 + WPM10.T
 #print(WPM10)
 # Graph PM10
 GPM10 = graphs.Graph(WPM10)
+"""
