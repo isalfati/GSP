@@ -1,12 +1,19 @@
 import os
 import sys
 import math
+import gmplot
 import openaq
 import warnings
+import geopandas
 import numpy as np
 import pandas as pd
 import geopy.distance
 # import seaborn as sns
+
+import cartopy
+import cartopy.crs as ccrs
+import cartopy.feature as cfeature
+
 import matplotlib as mpl
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -28,9 +35,10 @@ warnings.simplefilter(action='ignore')
 pd.options.display.max_columns = None
 pd.options.display.max_rows = None
 pd.options.display.width = None
+cartoplot = 0.01
 
 plotting.BACKEND = 'matplotlib'
-plt.rcParams['figure.figsize'] = (10, 5)
+plt.rcParams['figure.figsize'] = (10, 10)
 
 np.set_printoptions(threshold=sys.maxsize)
 
@@ -103,9 +111,40 @@ for i in range(0, len(pointsO3[0])):
 
 ## Symmetric Matrix
 WO3 = WO3 + WO3.T
+#print(np.matrix(WO3))
 
 ## Graph Construction
 GO3 = graphs.Graph(WO3)
+#print('{} nodes, {} edges'.format(GO3.N, GO3.Ne))
+
+print("\nBasic Weighted Graph info:")
+print("Is connected? Answer: {}".format(GO3.is_connected()))
+print("Is directed? Anser: {}".format(GO3.is_directed()))
+
+min_lat = locationO3["latitude"].min()
+max_lat = locationO3["latitude"].max()
+min_lon = locationO3["longitude"].min()
+max_lon = locationO3["longitude"].max()
+center_lat = (min_lat + max_lat) / 2
+center_lon = (min_lon + max_lon) / 2
+
+print("\nBoundaries GeoMap NO2 in {}:".format(city))
+print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
+print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
+print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
+
+fig = plt.figure(figsize=(10,8))
+ax = plt.axes(projection=ccrs.PlateCarree())
+ax.add_feature(cfeature.LAND)
+ax.add_feature(cfeature.OCEAN)
+ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
+
+# Plotting by COORDINATES
+gdfO3 = geopandas.GeoDataFrame(locationO3, geometry=geopandas.points_from_xy(locationO3.longitude, locationO3.latitude))
+gdfO3.plot(ax=ax, color='red')
+
+plt.show()
 
 ######################
 # Graph Creation NO2 #
@@ -128,9 +167,39 @@ for i in range(0, len(pointsNO2[0])):
 
 ## Symmetric Matrix
 WNO2 = WNO2 + WNO2.T
+#print(np.matrix(WNO2))
 
 ## Graph Construction
 GNO2 = graphs.Graph(WNO2)
+
+print("\nBasic Weighted Graph info:")
+print("Is connected? Answer: {}".format(GNO2.is_connected()))
+print("Is directed? Anser: {}".format(GNO2.is_directed()))
+
+min_lat = locationNO2["latitude"].min()
+max_lat = locationNO2["latitude"].max()
+min_lon = locationNO2["longitude"].min()
+max_lon = locationNO2["longitude"].max()
+center_lat = (min_lat + max_lat) / 2
+center_lon = (min_lon + max_lon) / 2
+
+print("\nBoundaries GeoMap NO2 in {}:".format(city))
+print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
+print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
+print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
+
+fig = plt.figure(figsize=(10,8))
+ax = plt.axes(projection=ccrs.PlateCarree())
+ax.add_feature(cfeature.LAND)
+ax.add_feature(cfeature.OCEAN)
+ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
+
+# Plotting by COORDINATES
+gdfO3 = geopandas.GeoDataFrame(locationNO2, geometry=geopandas.points_from_xy(locationNO2.longitude, locationNO2.latitude))
+gdfO3.plot(ax=ax, color='red')
+
+plt.show()
 
 ####################### 
 # Graph Creation PM10 #
@@ -153,6 +222,36 @@ for i in range(0, len(pointsPM10[0])):
 
 ## Symmetric Matrix
 WPM10 = WPM10 + WPM10.T
+print(np.matrix(WPM10))
 
 ## Graph Construction
 GPM10 = graphs.Graph(WPM10)
+
+print("\nBasic Weighted Graph info:")
+print("Is connected? Answer: {}".format(GPM10.is_connected()))
+print("Is directed? Anser: {}".format(GPM10.is_directed()))
+
+min_lat = locationPM10["latitude"].min()
+max_lat = locationPM10["latitude"].max()
+min_lon = locationPM10["longitude"].min()
+max_lon = locationPM10["longitude"].max()
+center_lat = (min_lat + max_lat) / 2
+center_lon = (min_lon + max_lon) / 2
+
+print("\nBoundaries GeoMap PM10 in {}:".format(city))
+print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
+print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
+print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
+
+fig = plt.figure(figsize=(10,8))
+ax = plt.axes(projection=ccrs.PlateCarree())
+ax.add_feature(cfeature.LAND)
+ax.add_feature(cfeature.OCEAN)
+ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
+
+# Plotting by COORDINATES
+gdfO3 = geopandas.GeoDataFrame(locationPM10, geometry=geopandas.points_from_xy(locationPM10.longitude, locationPM10.latitude))
+gdfO3.plot(ax=ax, color='red')
+
+plt.show()
