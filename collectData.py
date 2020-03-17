@@ -8,7 +8,6 @@ import geopandas
 import numpy as np
 import pandas as pd
 import geopy.distance
-# import seaborn as sns
 
 import cartopy
 import cartopy.crs as ccrs
@@ -44,10 +43,10 @@ np.set_printoptions(threshold=sys.maxsize)
 
 # Check versions
 print("Versions of the libraries:\n")
-print("OpenAQ v{}".format(openaq.__version__))
-print("Pandas v{}".format(pd.__version__))
-# print("Seaborn v{}".format(sns.__version__))
-# print("Matplot v{}".format(mpl.__version__))
+print("OpenAQ  v{}.".format(openaq.__version__))
+print("Pandas  v{}.".format(pd.__version__))
+print("Geopy   v{}.".format(geopy.__version__))
+print("Cartopy v{}.".format(cartopy.__version__))
 
 api = openaq.OpenAQ()
 
@@ -59,7 +58,7 @@ print(selection)
 print()
 
 # yy/mm/dd
-date = datetime.now().strftime("%Y_%m_%d-%H_%M_%S")
+
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # Obtaining measurements of the sensors in a City
@@ -76,19 +75,25 @@ resCityDay.reset_index(drop = True, inplace = True)
 
 resCityDay.to_csv(filename + interested_day + "_per_hours_" + city + ".csv", sep=',')
 
+
 dataO3Day = resCityDay[resCityDay.parameter.str.contains('o3')]
+dataO3Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataO3Day.reset_index(drop = True, inplace = True)
-dataO3Day.to_csv(filename + interested_day + "_per_hours_O3_" + city + ".csv", sep=',')
+dataO3Day.to_csv(filename + interested_day + "_per_hours_o3_" + city + ".csv", sep=',')
 
 dataNO2Day  = resCityDay[resCityDay.parameter.str.contains('no2')]
+dataNO2Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataNO2Day.reset_index(drop = True, inplace = True)
-dataNO2Day.to_csv(filename + interested_day + "_per_hours_NO2_" + city + ".csv", sep=',')
+dataNO2Day.to_csv(filename + interested_day + "_per_hours_no2_" + city + ".csv", sep=',')
 
 dataPM10Day = resCityDay[resCityDay.parameter.str.contains('pm10')]
+dataPM10Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataPM10Day.reset_index(drop = True, inplace = True)
-dataPM10Day.to_csv(filename + interested_day + "_per_hours_PM10_" + city + ".csv", sep=',')
+dataPM10Day.to_csv(filename + interested_day + "_per_hours_pm10_" + city + ".csv", sep=',')
 
-columnsClean = {"country", "date"}
+#################################################################################################################################################################
+"""
+columnsClean = {"country", "date", "value", "parameter"}
 
 #####################
 # Graph Creation O3 #
@@ -97,9 +102,11 @@ columnsClean = {"country", "date"}
 ## Cleaning Location O3 Data
 locationO3 = dataO3Day.drop_duplicates(subset="location")
 locationO3 = locationO3.drop(columns=columnsClean, axis=1)
+print(locationO3)
 
 ## Distances between O3 stations
 pointsO3 = [locationO3['longitude'].tolist(), locationO3['latitude'].tolist()]
+print(locationO3.dtypes)
 sizeO3 = len(locationO3)
 WO3 = np.zeros((sizeO3, sizeO3))
 
@@ -108,10 +115,11 @@ for i in range(0, len(pointsO3[0])):
     for j in range(i, len(pointsO3[0])):
         nextPointTmp = [[pointsO3[0][j], pointsO3[1][j]]]
         WO3[i][j] = round(geopy.distance.vincenty(pointTmp, nextPointTmp).km, 3)
+        print(WO3[i][j])
 
 ## Symmetric Matrix
 WO3 = WO3 + WO3.T
-#print(np.matrix(WO3))
+print(np.matrix(WO3))
 
 ## Graph Construction
 GO3 = graphs.Graph(WO3)
@@ -128,7 +136,7 @@ max_lon = locationO3["longitude"].max()
 center_lat = (min_lat + max_lat) / 2
 center_lon = (min_lon + max_lon) / 2
 
-print("\nBoundaries GeoMap NO2 in {}:".format(city))
+print("\nBoundaries GeoMap O3 in {}:".format(city))
 print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
 print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
 print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
@@ -138,12 +146,24 @@ ax = plt.axes(projection=ccrs.PlateCarree())
 ax.add_feature(cfeature.LAND)
 ax.add_feature(cfeature.OCEAN)
 ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.set_title("Location of O3 Stations", pad=25)
 ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
 
 # Plotting by COORDINATES
 gdfO3 = geopandas.GeoDataFrame(locationO3, geometry=geopandas.points_from_xy(locationO3.longitude, locationO3.latitude))
 gdfO3.plot(ax=ax, color='red')
+plt.show()
 
+dataO3_00 = dataO3Day[dataO3Day.date.str.contains('2020_03_08-00:00:00')]
+dataO3_00.reset_index(drop = True, inplace = True)
+print(dataO3_00)
+
+fig2 = plt.figure(figsize=(10,8))
+x = dataO3_00['location']
+plt.xticks(rotation=45)
+values = dataO3_00['value']
+
+plt.stem(x, values)
 plt.show()
 
 ######################
@@ -188,11 +208,11 @@ print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
 print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
 print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
 
-fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection=ccrs.PlateCarree())
 ax.add_feature(cfeature.LAND)
 ax.add_feature(cfeature.OCEAN)
 ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.set_title("Location of NO2 Stations", pad=25)
 ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
 
 # Plotting by COORDINATES
@@ -243,11 +263,11 @@ print("Minimum Latitude: {}, Maximum Latitude: {}.".format(min_lat, max_lat))
 print("Minimum Longitude: {}, Maximum Longitude: {}.".format(min_lon, max_lon))
 print("Medium Latitude: {}, Medium Longitude: {}.".format(center_lat, center_lon))
 
-fig = plt.figure(figsize=(10,8))
 ax = plt.axes(projection=ccrs.PlateCarree())
 ax.add_feature(cfeature.LAND)
 ax.add_feature(cfeature.OCEAN)
 ax.set_extent([min_lon-cartoplot, max_lon+cartoplot, min_lat-cartoplot, max_lat+cartoplot])
+ax.set_title("Location of PM10 Stations", pad=25)
 ax.gridlines(crs=ccrs.PlateCarree(), draw_labels=True)
 
 # Plotting by COORDINATES
@@ -255,3 +275,4 @@ gdfO3 = geopandas.GeoDataFrame(locationPM10, geometry=geopandas.points_from_xy(l
 gdfO3.plot(ax=ax, color='red')
 
 plt.show()
+"""
