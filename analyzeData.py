@@ -3,25 +3,17 @@ import sys
 import math
 import gmplot
 import openaq
+import folium #
 import warnings
 import geopandas
 import numpy as np
 import pandas as pd
 import seaborn as sns
 import geopy.distance
-
-import mplleaflet as mpll
-import folium
-
-import cartopy
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-
 import matplotlib as mpl
-from datetime import datetime
+import mplleaflet as mpll
 import matplotlib.pyplot as plt
 from pygsp import graphs, filters, plotting
-
 
 # Parameter to be analyzed
 analyze = 'no2'
@@ -43,7 +35,9 @@ pd.options.display.precision = 13
 cartoplot = 0.01
 
 #plotting.BACKEND = 'matplotlib'
-plt.rcParams['figure.figsize'] = (10, 10)
+#plt.rcParams['figure.figsize'] = (10, 10)
+figx, figy = (10, 10)
+markersize = 8
 
 # Suppress=True allows to not use scientific notation when reading from CSV.
 np.set_printoptions(threshold=np.inf, suppress=True)
@@ -80,19 +74,31 @@ for i in range(0, len(points[0])):
 weightMatrix = weightMatrix + weightMatrix.T
 
 # VIP.
-print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]))
+#print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]))
 # np.savetxt(filename + "_oe.txt", weightMatrix, delimiter='\t', fmt='%1.3f')
 
+# Graph Creation
 weightGraph = graphs.Graph(weightMatrix)
-#sns.set(style='darkgrid', color_codes=True)
-#sns.jointplot(x="longitude", y="latitude", data=locationStation)
-#plt.show()
-
-#plot:
 
 
-line_plot_fig, line_plot_ax = plt.subplots(figsize=(12,9))
+# Set Figure
+fig, ax = plt.subplots(1, 2, figsize=(figx*2, figy))
 
+# Style
+sns.set(style='whitegrid', color_codes=True)
+
+# Define Plot Type
+sns.scatterplot(x="longitude", y="latitude", data=locationStation, ax=ax[0])
+# Save Figure
+extent = ax[0].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+plt.savefig(filename + interested_day + "_Location_Stations_" + analyze + ".png", bbox_inches=extent.expanded(1.2, 1.2))
+
+# Plot Edges + Map
+line_plot_ax = ax[1]
+line_plot_ax.set_xlabel("longitude")
+line_plot_ax.set_ylabel("latitude")
+
+# Plot Edges.
 for i in range(0, len(weightMatrix[0])):
     pointTmp = [weightMatrix[0][i], weightMatrix[1][i]]
     for j in range(i, len(weightMatrix[0])):
@@ -103,13 +109,25 @@ for i in range(0, len(weightMatrix[0])):
             df2 = pd.DataFrame(np.array([[locationStation.loc[i].latitude, locationStation.loc[i].longitude], [locationStation.loc[j].latitude, locationStation.loc[j].longitude]]), columns=["longitude", "latitude"])
             line_plot_ax.plot(df2.latitude, df2.longitude, 'black')
 
-#line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'black')
-line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo', markersize=8) # Black Circles
+line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # Black Circles
 #for i, point in locationStation.iterrows():
 #    line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(point['location']))
 
-# Show and save
-plt.show()
-#mpll.show(fig=line_plot_fig, path=filename + interested_day + "_location_station_" + analyze + "_map.html")
-mpll.save_html(fig=line_plot_fig, fileobj=filename + interested_day + "_location_station_" + analyze + "_map.html")
 
+extent = ax[1].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
+plt.savefig(filename + interested_day + "_Location_Stations_Graph_" + analyze + ".png", bbox_inches=extent.expanded(1.2, 1.2))
+#plt.show()
+
+min_lat = locationStation["latitude"].min()
+max_lat = locationStation["latitude"].max()
+min_lon = locationStation["longitude"].min()
+max_lon = locationStation["longitude"].max()
+center_lat = (min_lat + max_lat) / 2
+center_lon = (min_lon + max_lon) / 2
+
+m = folium.Map(location=[center_lat, center_lon], tiles='openstreetmap', zoom_start=10, control_scale=True)
+
+for i in range(0, len(locationStation)):
+    folium.Marker([locationStation.iloc[i]['latitude'], locationStation.iloc[i]['longitude']], popup=locationStation.iloc[i]['location']).add_to(m)
+
+m.save(filename + interested_day + "_location_station_" + analyze + "_map.html")

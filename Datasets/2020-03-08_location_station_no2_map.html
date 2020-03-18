@@ -1,39 +1,710 @@
-<head>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.js"></script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.3/leaflet.css" />
-  <style>
-    #map6d728bbc392349e894b6e08a4420b147 {
-      height:100%;
-    }
-  </style> 
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_c3c1efbeb70e496ba35add9d2f0b3ca4 {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
 </head>
-<body>
-  <div id="map6d728bbc392349e894b6e08a4420b147"></div>
-<script text="text/javascript">
-var map = L.map('map6d728bbc392349e894b6e08a4420b147');
-L.tileLayer(
-  "http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  {maxZoom:19, attribution: '<a href="https://github.com/jwass/mplleaflet">mplleaflet</a> | Map data (c) <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'}).addTo(map);
-var gjData = {"type": "FeatureCollection", "features": [{"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.204522594, 41.40388185046721]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.1149730819999997, 41.3705041074673]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.222244805, 41.425620903467205]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.101405057, 41.5611753964668]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.133098078, 41.3788028014672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.212050059, 41.5491688934669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.188296656, 41.482016278467], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.1149730819999997, 41.3705041074673]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.222244805, 41.425620903467205]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.133098078, 41.3788028014672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.204522594, 41.40388185046721], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.009802277, 41.3921574584672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [1.9748873059999998, 41.450769338467104]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.222244805, 41.425620903467205]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.133098078, 41.3788028014672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.1149730819999997, 41.3705041074673], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [1.9748873059999998, 41.450769338467104]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [1.921203402, 41.4754091344671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.133098078, 41.3788028014672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.009802277, 41.3921574584672], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [2.007401267, 41.5561153974668]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [1.921203402, 41.4754091344671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.9748873059999998, 41.450769338467104], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.007401267, 41.5561153974668], [1.921203402, 41.4754091344671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.007401267, 41.5561153974668], [2.101405057, 41.5611753964668]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.007401267, 41.5561153974668], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.007401267, 41.5561153974668], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.921203402, 41.4754091344671], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.133098078, 41.3788028014672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.212050059, 41.5491688934669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.222244805, 41.425620903467205], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.101405057, 41.5611753964668], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.101405057, 41.5611753964668], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.101405057, 41.5611753964668], [2.212050059, 41.5491688934669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.101405057, 41.5611753964668], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.721248774, 41.2190364604676], [1.6722000240000001, 41.2022318394677]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[1.721248774, 41.2190364604676], [1.6865754919999998, 41.346823037467296]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.15382196, 41.3853432834672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.133098078, 41.3788028014672], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.209511187, 41.4473502534671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.15382196, 41.3853432834672], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.153385124, 41.398743250467206]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.212050059, 41.5491688934669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.209511187, 41.4473502534671], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.125383709, 41.512675807467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.153385124, 41.398743250467206], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.187416735, 41.3864139334672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.042497085, 41.492082862467]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.212050059, 41.5491688934669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.125383709, 41.512675807467], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.187416735, 41.3864139334672], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.187416735, 41.3864139334672], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.187416735, 41.3864139334672], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.187416735, 41.3864139334672], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.042497085, 41.492082862467], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.042497085, 41.492082862467], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.042497085, 41.492082862467], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.358018901, 41.779343451466396], [2.217575622, 41.8460342084663]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.212050059, 41.5491688934669], [2.183795315, 41.5267059304669]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.212050059, 41.5491688934669], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.212050059, 41.5491688934669], [2.287117688, 41.598666900466796]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.212050059, 41.5491688934669], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.4432537869999997, 41.5471597114669], [2.287117688, 41.598666900466796]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.183795315, 41.5267059304669], [2.147992032, 41.4260771994671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.183795315, 41.5267059304669], [2.287117688, 41.598666900466796]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.183795315, 41.5267059304669], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.147992032, 41.4260771994671], [2.237875306, 41.4439835604671]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.147992032, 41.4260771994671], [2.09772526, 41.32149520946739]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.147992032, 41.4260771994671], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.237875306, 41.4439835604671], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "LineString", "coordinates": [[2.09772526, 41.32149520946739], [2.1151496659999998, 41.3874846394672]]}, "properties": {"color": "#000000", "weight": 1.5, "opacity": 1}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.188296656, 41.482016278467]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.204522594, 41.40388185046721]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.1149730819999997, 41.3705041074673]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.009802277, 41.3921574584672]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.9748873059999998, 41.450769338467104]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.007401267, 41.5561153974668]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.825306423, 41.7302802604665]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.921203402, 41.4754091344671]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.625893365, 41.5776268914668]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.222244805, 41.425620903467205]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.101405057, 41.5611753964668]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.495746675, 41.6890494414666]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.721248774, 41.2190364604676]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.133098078, 41.3788028014672]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.287271914, 42.0032765034659]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.15382196, 41.3853432834672]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.209511187, 41.4473502534671]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.153385124, 41.398743250467206]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.125383709, 41.512675807467]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.187416735, 41.3864139334672]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.042497085, 41.492082862467]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.6722000240000001, 41.2022318394677]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.358018901, 41.779343451466396]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.212050059, 41.5491688934669]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.6865754919999998, 41.346823037467296]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.4432537869999997, 41.5471597114669]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.183795315, 41.5267059304669]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [1.848237224, 42.0979101924658]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.147992032, 41.4260771994671]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.287117688, 41.598666900466796]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.237875306, 41.4439835604671]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.217575622, 41.8460342084663]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.09772526, 41.32149520946739]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}, {"type": "Feature", "geometry": {"type": "Point", "coordinates": [2.1151496659999998, 41.3874846394672]}, "properties": {"html": "<svg width=\"10px\" height=\"10px\" viewBox=\"-5.0 -5.0 10.0 10.0\" xmlns=\"http://www.w3.org/2000/svg\" version=\"1.1\">  <path d=\"M 0.0 -4.0 C 1.0608124 -4.0 2.078319483139414 -3.5785347663529667 2.8284271247461903 -2.8284271247461903 C 3.5785347663529667 -2.078319483139414 4.0 -1.0608124 4.0 -0.0 C 4.0 1.0608124 3.5785347663529667 2.078319483139414 2.8284271247461903 2.8284271247461903 C 2.078319483139414 3.5785347663529667 1.0608124 4.0 0.0 4.0 C -1.0608124 4.0 -2.078319483139414 3.5785347663529667 -2.8284271247461903 2.8284271247461903 C -3.5785347663529667 2.078319483139414 -4.0 1.0608124 -4.0 -0.0 C -4.0 -1.0608124 -3.5785347663529667 -2.078319483139414 -2.8284271247461903 -2.8284271247461903 C -2.078319483139414 -3.5785347663529667 -1.0608124 -4.0 0.0 -4.0 Z\" stroke=\"#0000FF\" stroke-width=\"1.0\" stroke-opacity=\"1\" fill=\"#0000FF\" fill-opacity=\"1\" /></svg>", "anchor_x": 5.0, "anchor_y": 5.0}}]};
-
-if (gjData.features.length != 0) {
-  var gj = L.geoJson(gjData, {
-    style: function (feature) {
-      return feature.properties;
-    },
-    pointToLayer: function (feature, latlng) {
-      var icon = L.divIcon({'html': feature.properties.html, 
-        iconAnchor: [feature.properties.anchor_x, 
-                     feature.properties.anchor_y], 
-          className: 'empty'});  // What can I do about empty?
-      return L.marker(latlng, {icon: icon});
-    }
-  });
-  gj.addTo(map);
-  
-  map.fitBounds(gj.getBounds());
-} else {
-  map.setView([0, 0], 1);
-}
-</script>
+<body>    
+    
+            <div class="folium-map" id="map_c3c1efbeb70e496ba35add9d2f0b3ca4" ></div>
+        
 </body>
+<script>    
+    
+            var map_c3c1efbeb70e496ba35add9d2f0b3ca4 = L.map(
+                "map_c3c1efbeb70e496ba35add9d2f0b3ca4",
+                {
+                    center: [41.650071015966745, 2.06082002],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 10,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+
+            
+
+        
+    
+            var tile_layer_f072cc94ea2f45f090c787f8be901cb5 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+            var marker_f297273d29b245a18af5a781744ab542 = L.marker(
+                [41.482016278467, 2.188296656],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_7e91bcdac1d641a49eaea17798b9a074 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4d2a5c94e0064275b612eec1b4cebf19 = $(`<div id="html_4d2a5c94e0064275b612eec1b4cebf19" style="width: 100.0%; height: 100.0%;">ES0584A</div>`)[0];
+            popup_7e91bcdac1d641a49eaea17798b9a074.setContent(html_4d2a5c94e0064275b612eec1b4cebf19);
+        
+
+        marker_f297273d29b245a18af5a781744ab542.bindPopup(popup_7e91bcdac1d641a49eaea17798b9a074)
+        ;
+
+        
+    
+    
+            var marker_6bc10036d1e14922bb8aaa41b8e75606 = L.marker(
+                [41.40388185046721, 2.204522594],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_68cb240ff05f4008bf65c4f93d33d04b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_d75034167f764272beb584e3f1bdab4e = $(`<div id="html_d75034167f764272beb584e3f1bdab4e" style="width: 100.0%; height: 100.0%;">ES0691A</div>`)[0];
+            popup_68cb240ff05f4008bf65c4f93d33d04b.setContent(html_d75034167f764272beb584e3f1bdab4e);
+        
+
+        marker_6bc10036d1e14922bb8aaa41b8e75606.bindPopup(popup_68cb240ff05f4008bf65c4f93d33d04b)
+        ;
+
+        
+    
+    
+            var marker_d755e1b46e344702ab671734069183ee = L.marker(
+                [41.3705041074673, 2.1149730819999997],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_1797f58711b6417295b972b726596306 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b5c15d285e6e4798b26fc0bced24c052 = $(`<div id="html_b5c15d285e6e4798b26fc0bced24c052" style="width: 100.0%; height: 100.0%;">ES0692A</div>`)[0];
+            popup_1797f58711b6417295b972b726596306.setContent(html_b5c15d285e6e4798b26fc0bced24c052);
+        
+
+        marker_d755e1b46e344702ab671734069183ee.bindPopup(popup_1797f58711b6417295b972b726596306)
+        ;
+
+        
+    
+    
+            var marker_7b8f5f4d963b4954936643bd8595cd91 = L.marker(
+                [41.3921574584672, 2.009802277],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_fa72f31815554f1995c8560427dc39da = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5b84de0409424253b60935a73106ae3a = $(`<div id="html_5b84de0409424253b60935a73106ae3a" style="width: 100.0%; height: 100.0%;">ES0694A</div>`)[0];
+            popup_fa72f31815554f1995c8560427dc39da.setContent(html_5b84de0409424253b60935a73106ae3a);
+        
+
+        marker_7b8f5f4d963b4954936643bd8595cd91.bindPopup(popup_fa72f31815554f1995c8560427dc39da)
+        ;
+
+        
+    
+    
+            var marker_c4d3aaaa6ffe4ffebef9bf90bee678ff = L.marker(
+                [41.450769338467104, 1.9748873059999998],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_2ebb5ab7575b49a28bdf054ce946af55 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_40885a1affb747568854b5d616ccac60 = $(`<div id="html_40885a1affb747568854b5d616ccac60" style="width: 100.0%; height: 100.0%;">ES0971A</div>`)[0];
+            popup_2ebb5ab7575b49a28bdf054ce946af55.setContent(html_40885a1affb747568854b5d616ccac60);
+        
+
+        marker_c4d3aaaa6ffe4ffebef9bf90bee678ff.bindPopup(popup_2ebb5ab7575b49a28bdf054ce946af55)
+        ;
+
+        
+    
+    
+            var marker_4eecd8497a5a4a259cb2c350000f894d = L.marker(
+                [41.5561153974668, 2.007401267],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_a4976b08083841c8ad704890927ef6b5 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c60f6ab02c904d33b092ae179e0e1cdb = $(`<div id="html_c60f6ab02c904d33b092ae179e0e1cdb" style="width: 100.0%; height: 100.0%;">ES1018A</div>`)[0];
+            popup_a4976b08083841c8ad704890927ef6b5.setContent(html_c60f6ab02c904d33b092ae179e0e1cdb);
+        
+
+        marker_4eecd8497a5a4a259cb2c350000f894d.bindPopup(popup_a4976b08083841c8ad704890927ef6b5)
+        ;
+
+        
+    
+    
+            var marker_d9a7f36a0edc4891a8c30f6be4f788d5 = L.marker(
+                [41.7302802604665, 1.825306423],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_1094124d65d04ab6a06e23c36bc7de2a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_5f704c8207564415b062774276da4386 = $(`<div id="html_5f704c8207564415b062774276da4386" style="width: 100.0%; height: 100.0%;">ES1125A</div>`)[0];
+            popup_1094124d65d04ab6a06e23c36bc7de2a.setContent(html_5f704c8207564415b062774276da4386);
+        
+
+        marker_d9a7f36a0edc4891a8c30f6be4f788d5.bindPopup(popup_1094124d65d04ab6a06e23c36bc7de2a)
+        ;
+
+        
+    
+    
+            var marker_0dbde6795be0487891b6b11698fa832f = L.marker(
+                [41.4754091344671, 1.921203402],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_b7c0a85bcd5a4a3a8906be45e3851ee7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6b8962182f19436f99c78730be53fae4 = $(`<div id="html_6b8962182f19436f99c78730be53fae4" style="width: 100.0%; height: 100.0%;">ES1126A</div>`)[0];
+            popup_b7c0a85bcd5a4a3a8906be45e3851ee7.setContent(html_6b8962182f19436f99c78730be53fae4);
+        
+
+        marker_0dbde6795be0487891b6b11698fa832f.bindPopup(popup_b7c0a85bcd5a4a3a8906be45e3851ee7)
+        ;
+
+        
+    
+    
+            var marker_d198840811fa4cc281a991445ffb0934 = L.marker(
+                [41.5776268914668, 1.625893365],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_a5372b73663b421dbe413177d5cf89ed = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8abf863b5605484486cb6078c09dbce9 = $(`<div id="html_8abf863b5605484486cb6078c09dbce9" style="width: 100.0%; height: 100.0%;">ES1135A</div>`)[0];
+            popup_a5372b73663b421dbe413177d5cf89ed.setContent(html_8abf863b5605484486cb6078c09dbce9);
+        
+
+        marker_d198840811fa4cc281a991445ffb0934.bindPopup(popup_a5372b73663b421dbe413177d5cf89ed)
+        ;
+
+        
+    
+    
+            var marker_cf9a226447a448bab892482d01067b71 = L.marker(
+                [41.425620903467205, 2.222244805],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_39a6c846d62843ecb9601a981fdd25f8 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_dda3ea51e0674863babefb54cbb6c7c0 = $(`<div id="html_dda3ea51e0674863babefb54cbb6c7c0" style="width: 100.0%; height: 100.0%;">ES1148A</div>`)[0];
+            popup_39a6c846d62843ecb9601a981fdd25f8.setContent(html_dda3ea51e0674863babefb54cbb6c7c0);
+        
+
+        marker_cf9a226447a448bab892482d01067b71.bindPopup(popup_39a6c846d62843ecb9601a981fdd25f8)
+        ;
+
+        
+    
+    
+            var marker_07117a4e1fb449b08aa109ec7e866d8b = L.marker(
+                [41.5611753964668, 2.101405057],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_18f66ec8b93644df8947aca1ef8ea76a = L.popup({"maxWidth": "100%"});
+
+        
+            var html_18384764868e414daa9096b28284b080 = $(`<div id="html_18384764868e414daa9096b28284b080" style="width: 100.0%; height: 100.0%;">ES1262A</div>`)[0];
+            popup_18f66ec8b93644df8947aca1ef8ea76a.setContent(html_18384764868e414daa9096b28284b080);
+        
+
+        marker_07117a4e1fb449b08aa109ec7e866d8b.bindPopup(popup_18f66ec8b93644df8947aca1ef8ea76a)
+        ;
+
+        
+    
+    
+            var marker_244fedca6afd4d0d81633702b89ff45c = L.marker(
+                [41.6890494414666, 2.495746675],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_9aed424497c74bd59efb71e6aa905237 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_45593e6d073b42adafb4c77cf96635de = $(`<div id="html_45593e6d073b42adafb4c77cf96635de" style="width: 100.0%; height: 100.0%;">ES1275A</div>`)[0];
+            popup_9aed424497c74bd59efb71e6aa905237.setContent(html_45593e6d073b42adafb4c77cf96635de);
+        
+
+        marker_244fedca6afd4d0d81633702b89ff45c.bindPopup(popup_9aed424497c74bd59efb71e6aa905237)
+        ;
+
+        
+    
+    
+            var marker_47d3d977dbe14d4b95c90ad471ae634a = L.marker(
+                [41.2190364604676, 1.721248774],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_11ebad7ecbe34d32814201a88c741571 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_7d19559c11be45deb6418aa2f9453d99 = $(`<div id="html_7d19559c11be45deb6418aa2f9453d99" style="width: 100.0%; height: 100.0%;">ES1339A</div>`)[0];
+            popup_11ebad7ecbe34d32814201a88c741571.setContent(html_7d19559c11be45deb6418aa2f9453d99);
+        
+
+        marker_47d3d977dbe14d4b95c90ad471ae634a.bindPopup(popup_11ebad7ecbe34d32814201a88c741571)
+        ;
+
+        
+    
+    
+            var marker_069b79da607d41fa8baeab123a3112e2 = L.marker(
+                [41.3788028014672, 2.133098078],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_2de5e74762b947d19e40721f20931673 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b072951fab094c1d8d6b1df05ae9f78d = $(`<div id="html_b072951fab094c1d8d6b1df05ae9f78d" style="width: 100.0%; height: 100.0%;">ES1396A</div>`)[0];
+            popup_2de5e74762b947d19e40721f20931673.setContent(html_b072951fab094c1d8d6b1df05ae9f78d);
+        
+
+        marker_069b79da607d41fa8baeab123a3112e2.bindPopup(popup_2de5e74762b947d19e40721f20931673)
+        ;
+
+        
+    
+    
+            var marker_d5e9b8e2e1e84b88a372101ad94737f3 = L.marker(
+                [42.0032765034659, 2.287271914],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_4b0a81fcded94d7088bd12d627d326e7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e52b213581fa4368bd5948144d428373 = $(`<div id="html_e52b213581fa4368bd5948144d428373" style="width: 100.0%; height: 100.0%;">ES1397A</div>`)[0];
+            popup_4b0a81fcded94d7088bd12d627d326e7.setContent(html_e52b213581fa4368bd5948144d428373);
+        
+
+        marker_d5e9b8e2e1e84b88a372101ad94737f3.bindPopup(popup_4b0a81fcded94d7088bd12d627d326e7)
+        ;
+
+        
+    
+    
+            var marker_c9ce4192f59d4fb5be2f594d129e8bce = L.marker(
+                [41.3853432834672, 2.15382196],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_bb244ff60193487e951efcae9e017d6f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a198658e73e2488bbe71b87df37ff52b = $(`<div id="html_a198658e73e2488bbe71b87df37ff52b" style="width: 100.0%; height: 100.0%;">ES1438A</div>`)[0];
+            popup_bb244ff60193487e951efcae9e017d6f.setContent(html_a198658e73e2488bbe71b87df37ff52b);
+        
+
+        marker_c9ce4192f59d4fb5be2f594d129e8bce.bindPopup(popup_bb244ff60193487e951efcae9e017d6f)
+        ;
+
+        
+    
+    
+            var marker_d01b738b2ce6463a81acf759c39ef25e = L.marker(
+                [41.4473502534671, 2.209511187],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_2e0c64649e274ef7ba0b3564a19a4a03 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_37a527f4cac44763b239a664357c998a = $(`<div id="html_37a527f4cac44763b239a664357c998a" style="width: 100.0%; height: 100.0%;">ES1453A</div>`)[0];
+            popup_2e0c64649e274ef7ba0b3564a19a4a03.setContent(html_37a527f4cac44763b239a664357c998a);
+        
+
+        marker_d01b738b2ce6463a81acf759c39ef25e.bindPopup(popup_2e0c64649e274ef7ba0b3564a19a4a03)
+        ;
+
+        
+    
+    
+            var marker_8443ad22ddde4fa79a95fa35aa8de326 = L.marker(
+                [41.398743250467206, 2.153385124],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_1da33225d0fd4ec7ad4ff9ed9103e7ed = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6a1fbe20775d4eeba383388056c58cf6 = $(`<div id="html_6a1fbe20775d4eeba383388056c58cf6" style="width: 100.0%; height: 100.0%;">ES1480A</div>`)[0];
+            popup_1da33225d0fd4ec7ad4ff9ed9103e7ed.setContent(html_6a1fbe20775d4eeba383388056c58cf6);
+        
+
+        marker_8443ad22ddde4fa79a95fa35aa8de326.bindPopup(popup_1da33225d0fd4ec7ad4ff9ed9103e7ed)
+        ;
+
+        
+    
+    
+            var marker_2552a9632a2049a0a3acf4bcf4b9a05e = L.marker(
+                [41.512675807467, 2.125383709],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_f5dd0e41c8204d8baedcdc8d2738406b = L.popup({"maxWidth": "100%"});
+
+        
+            var html_121406492628450eba08462a99164c9c = $(`<div id="html_121406492628450eba08462a99164c9c" style="width: 100.0%; height: 100.0%;">ES1551A</div>`)[0];
+            popup_f5dd0e41c8204d8baedcdc8d2738406b.setContent(html_121406492628450eba08462a99164c9c);
+        
+
+        marker_2552a9632a2049a0a3acf4bcf4b9a05e.bindPopup(popup_f5dd0e41c8204d8baedcdc8d2738406b)
+        ;
+
+        
+    
+    
+            var marker_1215854dee604f4097eb381d09618f8d = L.marker(
+                [41.3864139334672, 2.187416735],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_b64f9d581b064767ad5dbe8de3eae739 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_438a1c901aed44e2898689bda0c882d7 = $(`<div id="html_438a1c901aed44e2898689bda0c882d7" style="width: 100.0%; height: 100.0%;">ES1679A</div>`)[0];
+            popup_b64f9d581b064767ad5dbe8de3eae739.setContent(html_438a1c901aed44e2898689bda0c882d7);
+        
+
+        marker_1215854dee604f4097eb381d09618f8d.bindPopup(popup_b64f9d581b064767ad5dbe8de3eae739)
+        ;
+
+        
+    
+    
+            var marker_2f62a9b747c446a0aaf915d4063252b9 = L.marker(
+                [41.492082862467, 2.042497085],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_c8b100bbef1d4d66bb1f7b91217737cf = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0ef1ff4d95c24623a3960c07ba1f5a6d = $(`<div id="html_0ef1ff4d95c24623a3960c07ba1f5a6d" style="width: 100.0%; height: 100.0%;">ES1684A</div>`)[0];
+            popup_c8b100bbef1d4d66bb1f7b91217737cf.setContent(html_0ef1ff4d95c24623a3960c07ba1f5a6d);
+        
+
+        marker_2f62a9b747c446a0aaf915d4063252b9.bindPopup(popup_c8b100bbef1d4d66bb1f7b91217737cf)
+        ;
+
+        
+    
+    
+            var marker_fb380010430141dea91d76aeded8b7cd = L.marker(
+                [41.2022318394677, 1.6722000240000001],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_d8018085ebb44b9f92a948c15ae7adbc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_daf6c16746104229963a86214262e7b2 = $(`<div id="html_daf6c16746104229963a86214262e7b2" style="width: 100.0%; height: 100.0%;">ES1773A</div>`)[0];
+            popup_d8018085ebb44b9f92a948c15ae7adbc.setContent(html_daf6c16746104229963a86214262e7b2);
+        
+
+        marker_fb380010430141dea91d76aeded8b7cd.bindPopup(popup_d8018085ebb44b9f92a948c15ae7adbc)
+        ;
+
+        
+    
+    
+            var marker_793439f5f2a94cd29124398144d98bac = L.marker(
+                [41.779343451466396, 2.358018901],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_fb56742fdc5b4afc95a3deac9495296d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_124c9ce597bb43a785afa52a4b4cfd33 = $(`<div id="html_124c9ce597bb43a785afa52a4b4cfd33" style="width: 100.0%; height: 100.0%;">ES1778A</div>`)[0];
+            popup_fb56742fdc5b4afc95a3deac9495296d.setContent(html_124c9ce597bb43a785afa52a4b4cfd33);
+        
+
+        marker_793439f5f2a94cd29124398144d98bac.bindPopup(popup_fb56742fdc5b4afc95a3deac9495296d)
+        ;
+
+        
+    
+    
+            var marker_ca4e83bb3f464037a98a4ac59d2260b6 = L.marker(
+                [41.5491688934669, 2.212050059],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_df3952be3cc148a693b2578b246eaa82 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_415d0f3d86ab477da3ce2b07cffe0998 = $(`<div id="html_415d0f3d86ab477da3ce2b07cffe0998" style="width: 100.0%; height: 100.0%;">ES1814A</div>`)[0];
+            popup_df3952be3cc148a693b2578b246eaa82.setContent(html_415d0f3d86ab477da3ce2b07cffe0998);
+        
+
+        marker_ca4e83bb3f464037a98a4ac59d2260b6.bindPopup(popup_df3952be3cc148a693b2578b246eaa82)
+        ;
+
+        
+    
+    
+            var marker_181fbba52b8d45248f9a8ae25d2bfb04 = L.marker(
+                [41.346823037467296, 1.6865754919999998],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_9e81c8b457be4c76b646e4228dbb7bbc = L.popup({"maxWidth": "100%"});
+
+        
+            var html_060512baf81749c7bf136103d0c0452d = $(`<div id="html_060512baf81749c7bf136103d0c0452d" style="width: 100.0%; height: 100.0%;">ES1815A</div>`)[0];
+            popup_9e81c8b457be4c76b646e4228dbb7bbc.setContent(html_060512baf81749c7bf136103d0c0452d);
+        
+
+        marker_181fbba52b8d45248f9a8ae25d2bfb04.bindPopup(popup_9e81c8b457be4c76b646e4228dbb7bbc)
+        ;
+
+        
+    
+    
+            var marker_1576ca6005d5476483dc3533d2f81a1a = L.marker(
+                [41.5471597114669, 2.4432537869999997],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_e53cce35ea6b49d58d04d72f28ac6c9f = L.popup({"maxWidth": "100%"});
+
+        
+            var html_51254a81606e481881464ba6eb89c1aa = $(`<div id="html_51254a81606e481881464ba6eb89c1aa" style="width: 100.0%; height: 100.0%;">ES1816A</div>`)[0];
+            popup_e53cce35ea6b49d58d04d72f28ac6c9f.setContent(html_51254a81606e481881464ba6eb89c1aa);
+        
+
+        marker_1576ca6005d5476483dc3533d2f81a1a.bindPopup(popup_e53cce35ea6b49d58d04d72f28ac6c9f)
+        ;
+
+        
+    
+    
+            var marker_5a9aaebba8fe467c914bd68af3be3745 = L.marker(
+                [41.5267059304669, 2.183795315],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_a0049a03f50140c7b85c20e6a8715072 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_b0a1c33199e1427e843815584deb902f = $(`<div id="html_b0a1c33199e1427e843815584deb902f" style="width: 100.0%; height: 100.0%;">ES1817A</div>`)[0];
+            popup_a0049a03f50140c7b85c20e6a8715072.setContent(html_b0a1c33199e1427e843815584deb902f);
+        
+
+        marker_5a9aaebba8fe467c914bd68af3be3745.bindPopup(popup_a0049a03f50140c7b85c20e6a8715072)
+        ;
+
+        
+    
+    
+            var marker_d03fbda2207a4ceba07279d545a8ff22 = L.marker(
+                [42.0979101924658, 1.848237224],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_fcab92b7d4fd4e25a88d36f17a03a9b6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e08bec2a97ee472481009eca513635bb = $(`<div id="html_e08bec2a97ee472481009eca513635bb" style="width: 100.0%; height: 100.0%;">ES1851A</div>`)[0];
+            popup_fcab92b7d4fd4e25a88d36f17a03a9b6.setContent(html_e08bec2a97ee472481009eca513635bb);
+        
+
+        marker_d03fbda2207a4ceba07279d545a8ff22.bindPopup(popup_fcab92b7d4fd4e25a88d36f17a03a9b6)
+        ;
+
+        
+    
+    
+            var marker_9ffb2321afce4a05bc0ef5a767f514bd = L.marker(
+                [41.4260771994671, 2.147992032],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_d081470470d74ff4a68a64865ae9b7b3 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c5661879a1454223aee6a5c02cdc6f36 = $(`<div id="html_c5661879a1454223aee6a5c02cdc6f36" style="width: 100.0%; height: 100.0%;">ES1856A</div>`)[0];
+            popup_d081470470d74ff4a68a64865ae9b7b3.setContent(html_c5661879a1454223aee6a5c02cdc6f36);
+        
+
+        marker_9ffb2321afce4a05bc0ef5a767f514bd.bindPopup(popup_d081470470d74ff4a68a64865ae9b7b3)
+        ;
+
+        
+    
+    
+            var marker_82d840959b774deab7788b509b89047f = L.marker(
+                [41.598666900466796, 2.287117688],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_96bc8ec22fa94e3ab667919e56cd6b10 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_df3f8d5d0fdb4fffbc67d3d119390b7c = $(`<div id="html_df3f8d5d0fdb4fffbc67d3d119390b7c" style="width: 100.0%; height: 100.0%;">ES1891A</div>`)[0];
+            popup_96bc8ec22fa94e3ab667919e56cd6b10.setContent(html_df3f8d5d0fdb4fffbc67d3d119390b7c);
+        
+
+        marker_82d840959b774deab7788b509b89047f.bindPopup(popup_96bc8ec22fa94e3ab667919e56cd6b10)
+        ;
+
+        
+    
+    
+            var marker_a8507c4c5d2c46f7b0c1ffbfdc6f7564 = L.marker(
+                [41.4439835604671, 2.237875306],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_dc270add277c4038a40fcb3881f89900 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_6700e19a48ac4bddb7ebbc700391fd5d = $(`<div id="html_6700e19a48ac4bddb7ebbc700391fd5d" style="width: 100.0%; height: 100.0%;">ES1892A</div>`)[0];
+            popup_dc270add277c4038a40fcb3881f89900.setContent(html_6700e19a48ac4bddb7ebbc700391fd5d);
+        
+
+        marker_a8507c4c5d2c46f7b0c1ffbfdc6f7564.bindPopup(popup_dc270add277c4038a40fcb3881f89900)
+        ;
+
+        
+    
+    
+            var marker_6bcb42e913e24f7886e359a8769bafd0 = L.marker(
+                [41.8460342084663, 2.217575622],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_e1468cc1cbbc4d529851e8f8f2ff3eb6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_1ddfa83ecd4a4fad99c001a8955fe3f8 = $(`<div id="html_1ddfa83ecd4a4fad99c001a8955fe3f8" style="width: 100.0%; height: 100.0%;">ES1923A</div>`)[0];
+            popup_e1468cc1cbbc4d529851e8f8f2ff3eb6.setContent(html_1ddfa83ecd4a4fad99c001a8955fe3f8);
+        
+
+        marker_6bcb42e913e24f7886e359a8769bafd0.bindPopup(popup_e1468cc1cbbc4d529851e8f8f2ff3eb6)
+        ;
+
+        
+    
+    
+            var marker_46924a3e92ae4572b9acee39e39a57ad = L.marker(
+                [41.32149520946739, 2.09772526],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_b5432ecc717643afa9e4ff968a48bcbd = L.popup({"maxWidth": "100%"});
+
+        
+            var html_e41861f27deb48b5895e3f83e091c9c6 = $(`<div id="html_e41861f27deb48b5895e3f83e091c9c6" style="width: 100.0%; height: 100.0%;">ES1929A</div>`)[0];
+            popup_b5432ecc717643afa9e4ff968a48bcbd.setContent(html_e41861f27deb48b5895e3f83e091c9c6);
+        
+
+        marker_46924a3e92ae4572b9acee39e39a57ad.bindPopup(popup_b5432ecc717643afa9e4ff968a48bcbd)
+        ;
+
+        
+    
+    
+            var marker_e51f0541d6e74fb38d4d31f83eacefb6 = L.marker(
+                [41.3874846394672, 2.1151496659999998],
+                {}
+            ).addTo(map_c3c1efbeb70e496ba35add9d2f0b3ca4);
+        
+    
+        var popup_5b76c11b5c6e4c7abc6ea93988ee5f96 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c9b050f015194654b113b4bc9158d47e = $(`<div id="html_c9b050f015194654b113b4bc9158d47e" style="width: 100.0%; height: 100.0%;">ES1992A</div>`)[0];
+            popup_5b76c11b5c6e4c7abc6ea93988ee5f96.setContent(html_c9b050f015194654b113b4bc9158d47e);
+        
+
+        marker_e51f0541d6e74fb38d4d31f83eacefb6.bindPopup(popup_5b76c11b5c6e4c7abc6ea93988ee5f96)
+        ;
+
+        
+    
+</script>
