@@ -86,10 +86,7 @@ for index, val in enumerate(locationStation['location'].unique()):
         listMissingData[index][1] = True
 
 """
-for each location, if has all the data, sum all values of the column value with location = location, and divide them for lenght of column.
-for index, val in enumerate(locationStation['location'].unique()):
-    if not listMissingData[index][1]:
-        for row in dataParam.location.str.contains(val).tolist():
+# Now we want to agroupate data by a certain hours, every 2, 4, 8, 12, 24h, but some stations have missing data.
 """            
 
 # Building Weight Matrix a.k.a. adjacency matrix with weights
@@ -130,7 +127,11 @@ print("\nExponential Matrix:")
 print('\n'.join(['\t'.join([str(round(cell, decimals)) for cell in row]) for row in expWeightMatrix]))
 """
 
-# Graph Creation
+#@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Graph Creation @@@
+#@@@@@@@@@@@@@@@@@@@@@@
+
+# For now, I'm using the weighted matrix, calculating the distance between latitudes and longitudes
 Graph = graphs.Graph(weightMatrix)
 
 # Access Laplacian Matrix.
@@ -138,8 +139,9 @@ LaplacianMatrix = Graph.L
 print("\nLaplacian Matrix:")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix.toarray()]))
 
-#Graph.plot_signal()
-#plt.show()
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Saving Coordinates Plots @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Set Figure
 fig, ax = plt.subplots(1, 2, figsize=(figx*2, figy))
@@ -176,6 +178,10 @@ line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # B
 extent = ax[1].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
 plt.savefig(filename + interested_day + "_location_stations_graph_" + analyze + "_" + city + ".png", bbox_inches=extent.expanded(1.2, 1.2))
 #plt.show()
+
+#@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Folium Map (Geo) @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@
 
 min_lat = locationStation["latitude"].min()
 max_lat = locationStation["latitude"].max()
