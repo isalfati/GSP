@@ -34,11 +34,6 @@ warnings.simplefilter(action='ignore')
 pd.options.display.max_columns = None
 pd.options.display.max_rows = None
 pd.options.display.width = None
-cartoplot = 0.01
-
-plotting.BACKEND = 'matplotlib'
-plt.rcParams['figure.figsize'] = (10, 10)
-
 np.set_printoptions(threshold=sys.maxsize)
 
 # Check versions
@@ -57,8 +52,7 @@ print(param)
 print(selection)
 print()
 
-# yy/mm/dd
-
+# Filename
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # Obtaining measurements of the sensors in a City
@@ -74,7 +68,6 @@ resCityDay["date"] = resCityDay["date"].dt.strftime("%Y_%m_%d-%H:%M:%S")
 resCityDay.reset_index(drop = True, inplace = True)
 
 resCityDay.to_csv(filename + interested_day + "_per_hours_" + city + ".csv", sep=',')
-
 
 dataO3Day = resCityDay[resCityDay.parameter.str.contains('o3')]
 dataO3Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)

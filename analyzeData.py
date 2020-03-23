@@ -3,9 +3,8 @@ import sys
 import math
 import gmplot
 import openaq
-import folium #
+import folium 
 import warnings
-import geopandas
 import numpy as np
 import pandas as pd
 import seaborn as sns
@@ -13,7 +12,7 @@ import geopy.distance
 import matplotlib as mpl
 import mplleaflet as mpll
 import matplotlib.pyplot as plt
-from pygsp import graphs, filters, plotting
+from pygsp import graphs, filters, plotting, utils
 
 #@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ GLOBAL VARIABLES @@@
@@ -28,12 +27,14 @@ interested_day = "2020-03-08"
 interestedDayTimestamp = "2020_03_08"
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 maxDistance = 15.0
+meanRatio = 8 # in hours (min 1h, max 24h), should always be even and > 1
+expoK = 0.5
 
 # Figures
 figx, figy = (10, 10)
 
 # Cleaning columns
-columnsClean = {"country", "date", "value", "parameter"}
+columnsClean = ["parameter", "value", "country", "city", "date"]
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Configuration Parameters @@@
@@ -62,9 +63,9 @@ dataParam = pd.read_csv(filename + interested_day + "_per_hours_" + analyze + "_
 
 # locationStation contains a Dataframe with [location(identifier), city, latitude, longitude]
 locationStation = dataParam.drop_duplicates(subset="location")
-locationStation = locationStation.drop(columns=columnsClean, axis=1)
+locationStation.drop(columns=columnsClean, inplace=True)
 locationStation.reset_index(drop=True, inplace=True)
-#print("List of stations that measures {}: {}".format(analyze, locationStation['location'].unique()))
+print("List of stations that measures {}: {}".format(analyze, locationStation['location'].unique()))
 
 # List of timestamps of a day.
 listTimeStamps = []
@@ -72,12 +73,24 @@ for i in range(0, 24):
     listTimeStamps.append(interestedDayTimestamp + "-0" + str(i) + ":00:00") if i < 10 else listTimeStamps.append(interestedDayTimestamp + '-' + str(i) + ":00:00")
     
 # Check if any station has missing measurement time, this is useful for reconstructing signals of missing data.
-for i in locationStation['location'].unique():
-    iterList = dataParam[dataParam.location.str.contains(i)]
+listMissingData = []
+for elem in locationStation['location'].unique():
+    listMissingData.append([elem, False])
+
+for index, val in enumerate(locationStation['location'].unique()):
+    iterList = dataParam[dataParam.location.str.contains(val)]
     iterTimeList = iterList.date.tolist()
     missingMeasurements = [elem for elem in listTimeStamps if elem not in iterTimeList]
     if missingMeasurements:
-        print("The station with identifier {} misses the following time measurements {}.".format(i, missingMeasurements))
+        print("The station with identifier {} misses the following time measurements {}.".format(val, missingMeasurements))
+        listMissingData[index][1] = True
+
+"""
+for each location, if has all the data, sum all values of the column value with location = location, and divide them for lenght of column.
+for index, val in enumerate(locationStation['location'].unique()):
+    if not listMissingData[index][1]:
+        for row in dataParam.location.str.contains(val).tolist():
+"""            
 
 # Building Weight Matrix a.k.a. adjacency matrix with weights
 # Each element of this matrix measures the distance between station i and station j.
@@ -85,6 +98,8 @@ for i in locationStation['location'].unique():
 points = [locationStation['latitude'].tolist(), locationStation['longitude'].tolist()]
 size   = len(locationStation)
 weightMatrix = np.zeros((size, size))
+adjacencyMatrix = np.zeros((size, size))
+expWeightMatrix = np.zeros((size, size))
 
 for i in range(0, len(points[0])):
     pointTmp = [points[0][i], points[1][i]]
@@ -93,13 +108,27 @@ for i in range(0, len(points[0])):
         nextPointTmp = [[points[0][j], points[1][j]]]
         #print(" |-> To {}.".format(nextPointTmp))
         distance = round(geopy.distance.VincentyDistance(pointTmp, nextPointTmp).km, 4) # LAT1, LON1, LAT2, LON2
+        
         weightMatrix[i][j] = distance if distance <= maxDistance else 0.0 #example
-        #weightMatrix[i][j] = distance
+        adjacencyMatrix[i][j] = 1 if weightMatrix[i][j] > 0 else 0
+        
+        #expWeightMatrix[i][j] = math.exp()
+        
 
 # Because we want undirected graphs, we add the transposed matrix
+adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
+print("\nAdjacency Matrix:")
+print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in adjacencyMatrix]))
+
 weightMatrix = weightMatrix + weightMatrix.T
 print("\nWeighted Matrix:")
 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]))
+
+"""
+expWeightMatrix = expWeightMatrix + expWeightMatrix.T
+print("\nExponential Matrix:")
+print('\n'.join(['\t'.join([str(round(cell, decimals)) for cell in row]) for row in expWeightMatrix]))
+"""
 
 # Graph Creation
 Graph = graphs.Graph(weightMatrix)
@@ -109,7 +138,9 @@ LaplacianMatrix = Graph.L
 print("\nLaplacian Matrix:")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix.toarray()]))
 
-"""
+#Graph.plot_signal()
+#plt.show()
+
 # Set Figure
 fig, ax = plt.subplots(1, 2, figsize=(figx*2, figy))
 
@@ -120,7 +151,7 @@ sns.set(style='whitegrid', color_codes=True)
 sns.scatterplot(x="longitude", y="latitude", data=locationStation, ax=ax[0])
 # Save Figure
 extent = ax[0].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-plt.savefig(filename + interested_day + "_Location_Stations_" + analyze + "_" + city+ ".png", bbox_inches=extent.expanded(1.2, 1.2))
+plt.savefig(filename + interested_day + "_location_stations_" + analyze + "_" + city+ ".png", bbox_inches=extent.expanded(1.2, 1.2))
 
 # Plot Edges + Map
 line_plot_ax = ax[1]
@@ -142,9 +173,8 @@ line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # B
 #for i, point in locationStation.iterrows():
 #    line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(point['location']))
 
-
 extent = ax[1].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
-plt.savefig(filename + interested_day + "_Location_Stations_Graph_" + analyze + "_" + city + ".png", bbox_inches=extent.expanded(1.2, 1.2))
+plt.savefig(filename + interested_day + "_location_stations_graph_" + analyze + "_" + city + ".png", bbox_inches=extent.expanded(1.2, 1.2))
 #plt.show()
 
 min_lat = locationStation["latitude"].min()
@@ -159,7 +189,6 @@ m = folium.Map(location=[center_lat, center_lon], tiles='openstreetmap', zoom_st
 for i in range(0, len(locationStation)):
     folium.Marker([locationStation.iloc[i]['latitude'], locationStation.iloc[i]['longitude']], popup=locationStation.iloc[i]['location']).add_to(m)
 
-m.save(filename + interested_day + "_location_station_" + analyze + "_" + city + "_map.html")
+m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city + "_map.html")
 
 plt.show()
-"""
