@@ -26,9 +26,11 @@ city = "Barcelona"
 interested_day = "2020-03-08"
 interestedDayTimestamp = "2020_03_08"
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
+
+# TBD, but we will try different thresholds 
 maxDistance = 15.0
+
 meanRatio = 8 # in hours (min 1h, max 24h), should always be even and > 1
-expoK = 0.5
 
 # Figures
 figx, figy = (10, 10)
@@ -94,23 +96,33 @@ for index, val in enumerate(locationStation['location'].unique()):
 # If they are separated more than a certain distance, there will be no connection between i and j.
 points = [locationStation['latitude'].tolist(), locationStation['longitude'].tolist()]
 size   = len(locationStation)
-weightMatrix = np.zeros((size, size))
+
 adjacencyMatrix = np.zeros((size, size))
+weightMatrix    = np.zeros((size, size))
 expWeightMatrix = np.zeros((size, size))
 
-for i in range(0, len(points[0])):
+sumdist = 0
+
+# TODO: Calcular Weighted matrix sin mirar si está por debajo de maxDistance.
+#       Entonces, revisitar la weighted matrix y generar adyacencias y expWeightMatrix teniendo en cuenta tau y K.
+
+for i in range(0, size):
     pointTmp = [points[0][i], points[1][i]]
     #print("From {}.".format(pointTmp))
-    for j in range(i, len(points[0])):
+    for j in range(i, size):
         nextPointTmp = [[points[0][j], points[1][j]]]
         #print(" |-> To {}.".format(nextPointTmp))
         distance = round(geopy.distance.VincentyDistance(pointTmp, nextPointTmp).km, 4) # LAT1, LON1, LAT2, LON2
-        
-        weightMatrix[i][j] = distance if distance <= maxDistance else 0.0 #example
-        adjacencyMatrix[i][j] = 1 if weightMatrix[i][j] > 0 else 0
-        
-        #expWeightMatrix[i][j] = math.exp()
-        
+        sumdist += distance
+        if distance <= maxDistance and i != j:
+            weightMatrix[i][j]    = distance
+            adjacencyMatrix[i][j] = 1
+        else:
+            weightMatrix[i][j] = adjacencyMatrix[i][j] = 0
+
+sumSim = round(sumdist * 2, decimals)
+tau = round(sumSim / (size*size), decimals)
+print("Constant Tau will be: {} / {} = {}".format(sumSim, size*size, tau))        
 
 # Because we want undirected graphs, we add the transposed matrix
 adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
@@ -171,9 +183,11 @@ for i in range(0, len(weightMatrix[0])):
             df2 = pd.DataFrame(np.array([[locationStation.loc[i].latitude, locationStation.loc[i].longitude], [locationStation.loc[j].latitude, locationStation.loc[j].longitude]]), columns=["longitude", "latitude"])
             line_plot_ax.plot(df2.latitude, df2.longitude, 'black')
 
-line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # Black Circles
+line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # Black-Blue Circles
+
+# Plot index of location, who's index is assigned by sort(locations)
 #for i, point in locationStation.iterrows():
-#    line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(point['location']))
+#    line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(i))
 
 extent = ax[1].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
 plt.savefig(filename + interested_day + "_location_stations_graph_" + analyze + "_" + city + ".png", bbox_inches=extent.expanded(1.2, 1.2))
