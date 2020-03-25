@@ -27,7 +27,7 @@ interested_day = "2020-03-08"
 interestedDayTimestamp = "2020_03_08"
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
-# TBD, but we will try different thresholds 
+# TBD, but we will try different thresholds 5km, 10km, 15km, 20km.
 maxDistance = 15.0
 
 meanRatio = 8 # in hours (min 1h, max 24h), should always be even and > 1
@@ -97,34 +97,47 @@ for index, val in enumerate(locationStation['location'].unique()):
 points = [locationStation['latitude'].tolist(), locationStation['longitude'].tolist()]
 size   = len(locationStation)
 
-adjacencyMatrix = np.zeros((size, size))
-weightMatrix    = np.zeros((size, size))
-expWeightMatrix = np.zeros((size, size))
+adjacencyMatrix = np.zeros((size, size)) # 1 or 0
+distancesMatrix = np.zeros((size, size)) # [i][j] = distance(i, j)
+weightMatrix = np.zeros((size, size)) # [i][j] = e^(-distance(i,j)^2) / (Tau^2)
 
 sumdist = 0
-
-# TODO: Calcular Weighted matrix sin mirar si está por debajo de maxDistance.
-#       Entonces, revisitar la weighted matrix y generar adyacencias y expWeightMatrix teniendo en cuenta tau y K.
-
+# Distances Matrix
 for i in range(0, size):
     pointTmp = [points[0][i], points[1][i]]
     #print("From {}.".format(pointTmp))
     for j in range(i, size):
         nextPointTmp = [[points[0][j], points[1][j]]]
         #print(" |-> To {}.".format(nextPointTmp))
-        distance = round(geopy.distance.VincentyDistance(pointTmp, nextPointTmp).km, 4) # LAT1, LON1, LAT2, LON2
+        distance = round(geopy.distance.VincentyDistance(pointTmp, nextPointTmp).km, decimals) # LAT1, LON1, LAT2, LON2
         sumdist += distance
-        if distance <= maxDistance and i != j:
-            weightMatrix[i][j]    = distance
+        distancesMatrix[i][j] = distance
+
+totalDist = round(sumdist * 2, decimals)
+tau = round(totalDist / (size*size), decimals) # Mean of all distances
+
+print("The constant Tau will be {}.".format(tau))
+print("Threshold is: {}.".format(maxDistance))
+
+# Weighted Matrix + Adjacencies
+for i in range(0, size):
+    for j in range(i, size):
+        dst = distancesMatrix[i][j]
+        aux1 = dst*dst
+        aux2 = tau*tau
+
+        if dst <= maxDistance and i != j:
+            weightMatrix[i][j] = round(math.exp(-aux1/aux2), decimals)
             adjacencyMatrix[i][j] = 1
         else:
-            weightMatrix[i][j] = adjacencyMatrix[i][j] = 0
-
-sumSim = round(sumdist * 2, decimals)
-tau = round(sumSim / (size*size), decimals)
-print("Constant Tau will be: {} / {} = {}".format(sumSim, size*size, tau))        
+            weightMatrix[i][j] = 0
+            adjacencyMatrix[i][j] = 0
 
 # Because we want undirected graphs, we add the transposed matrix
+distancesMatrix = distancesMatrix + distancesMatrix.T
+print("\nDistances Matrix:")
+print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in distancesMatrix]))
+
 adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
 print("\nAdjacency Matrix:")
 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in adjacencyMatrix]))
@@ -133,11 +146,6 @@ weightMatrix = weightMatrix + weightMatrix.T
 print("\nWeighted Matrix:")
 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]))
 
-"""
-expWeightMatrix = expWeightMatrix + expWeightMatrix.T
-print("\nExponential Matrix:")
-print('\n'.join(['\t'.join([str(round(cell, decimals)) for cell in row]) for row in expWeightMatrix]))
-"""
 
 #@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Graph Creation @@@
@@ -150,6 +158,28 @@ Graph = graphs.Graph(weightMatrix)
 LaplacianMatrix = Graph.L
 print("\nLaplacian Matrix:")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix.toarray()]))
+
+# Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
+#   Where A is the diagonal matrix of eigenvalues
+#   Where the columns of U are the eigenvectors
+Graph.compute_fourier_basis()
+
+# Spectral decomposition
+print("\nEigenvalues: {}.".format(Graph.e))
+print("Maximum eigenvalue: {}.".format(Graph.lmax))
+
+#plt.stem(Graph.e)
+#plt.show()
+
+Eigenvectors = Graph.U
+print("\nEigenvectors:")
+print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
+
+"""
+for i in range(0, size):
+    plt.stem(Graph.U[:, i])
+    plt.show()
+"""
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Saving Coordinates Plots @@@
@@ -210,5 +240,10 @@ for i in range(0, len(locationStation)):
     folium.Marker([locationStation.iloc[i]['latitude'], locationStation.iloc[i]['longitude']], popup=locationStation.iloc[i]['location']).add_to(m)
 
 m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city + "_map.html")
+#plt.show()
 
-plt.show()
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Signal Reconstruction @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Now we know which stations are close. It is time to recreate the signal in those time frames which do not have a value.
