@@ -245,7 +245,7 @@ center_lon = (min_lon + max_lon) / 2
 m = folium.Map(location=[center_lat, center_lon], tiles='openstreetmap', zoom_start=10, control_scale=True)
 
 for i in range(0, len(locationStation)):
-    folium.Marker([locationStation.iloc[i]['latitude'], locationStation.iloc[i]['longitude']], popup=locationStation.iloc[i]['location']).add_to(m)
+    folium.Marker([locationStation.iloc[i]['latitude'], locationStation.iloc[i]['longitude']], popup=locationStation.iloc[i]['spot']).add_to(m)
 
 m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city + "_map.html")
 #plt.show()
