@@ -12,6 +12,7 @@ import geopy.distance
 import matplotlib as mpl
 import mplleaflet as mpll
 import matplotlib.pyplot as plt
+import matplotlib.gridspec as gridspec
 from pygsp import graphs, filters, plotting, utils
 
 #@@@@@@@@@@@@@@@@@@@@@@@@
@@ -65,6 +66,7 @@ dataParam = pd.read_csv(filename + interested_day + "_per_hours_" + analyze + "_
 
 # locationStation contains a Dataframe with [location(identifier), city, latitude, longitude]
 locationStation = dataParam.drop_duplicates(subset="location")
+print(locationStation)
 locationStation.drop(columns=columnsClean, inplace=True)
 locationStation.reset_index(drop=True, inplace=True)
 print("List of stations that measures {}: {}".format(analyze, locationStation['location'].unique()))
@@ -146,17 +148,17 @@ weightMatrix = weightMatrix + weightMatrix.T
 print("\nWeighted Matrix:")
 print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]))
 
-
 #@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Graph Creation @@@
 #@@@@@@@@@@@@@@@@@@@@@@
 
 # For now, I'm using the weighted matrix, calculating the distance between latitudes and longitudes
 Graph = graphs.Graph(weightMatrix)
+#Graph.compute_laplacian('normalized')
 
 # Access Laplacian Matrix.
 LaplacianMatrix = Graph.L
-print("\nLaplacian Matrix:")
+print("\nLaplacian Matrix (combinatorial):")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix.toarray()]))
 
 # Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
@@ -165,8 +167,7 @@ print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) f
 Graph.compute_fourier_basis()
 
 # Spectral decomposition
-print("\nEigenvalues: {}.".format(Graph.e))
-print("Maximum eigenvalue: {}.".format(Graph.lmax))
+print("\nEigenvalues, a.k.a. Graph Adjacency Spectrum:\n {}.".format(Graph.e))
 
 #plt.stem(Graph.e)
 #plt.show()
@@ -175,10 +176,16 @@ Eigenvectors = Graph.U
 print("\nEigenvectors:")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
+
 """
 for i in range(0, size):
-    plt.stem(Graph.U[:, i])
-    plt.show()
+    plt.subplot(size, 1, i+1)
+    plt.yticks([-1, -0.5,  0, 0.5, +1])
+    plt.axhline(0, color='black')
+    plt.axvline(0, color='black')
+    plt.stem(Graph.U[:, i], basefmt='black', markerfmt='or', linefmt='red')
+plt.subplots_adjust(hspace=0.5)
+plt.show()
 """
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -216,8 +223,9 @@ for i in range(0, len(weightMatrix[0])):
 line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # Black-Blue Circles
 
 # Plot index of location, who's index is assigned by sort(locations)
-#for i, point in locationStation.iterrows():
-#    line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(i))
+for i, point in locationStation.iterrows():
+    #line_plot_ax.text(point['longitude']+0.01, point['latitude'], str(locationStation.location[i] + ", " + str(i))) 
+    line_plot_ax.text(point['longitude']+0.005, point['latitude'], str("ID: ") + str(i) + "-> " + str(locationStation.spot[i]), fontsize=8)
 
 extent = ax[1].get_window_extent().transformed(fig.dpi_scale_trans.inverted())
 plt.savefig(filename + interested_day + "_location_stations_graph_" + analyze + "_" + city + ".png", bbox_inches=extent.expanded(1.2, 1.2))
@@ -247,3 +255,8 @@ m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Now we know which stations are close. It is time to recreate the signal in those time frames which do not have a value.
+
+reconstruction = dataParam[dataParam.date.str.contains("00:00:00")]
+reconstruction.reset_index(drop=True, inplace=True)
+print(reconstruction)
+plt.show()
