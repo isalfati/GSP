@@ -24,14 +24,17 @@ analyze = 'pm10'
 
 # City, Day, Output location, maximum distance between stations
 city = "Barcelona"
-interested_day = "2020-03-08"
-interestedDayTimestamp = "2020_03_08"
+interested_day         = "2020-03-08" # <- |
+interestedDayTimestamp = "2020_03_08" # <- | Careful, they serve different purposes
+
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # TBD, but we will try different thresholds 5km, 10km, 15km, 20km.
 maxDistance = 15.0
 
 meanRatio = 8 # in hours (min 1h, max 24h), should always be even and > 1
+
+missingDataIndicator = False
 
 # Figures
 figx, figy = (10, 10)
@@ -66,7 +69,6 @@ dataParam = pd.read_csv(filename + interested_day + "_per_hours_" + analyze + "_
 
 # locationStation contains a Dataframe with [location(identifier), city, latitude, longitude]
 locationStation = dataParam.drop_duplicates(subset="location")
-print(locationStation)
 locationStation.drop(columns=columnsClean, inplace=True)
 locationStation.reset_index(drop=True, inplace=True)
 print("List of stations that measures {}: {}".format(analyze, locationStation['location'].unique()))
@@ -78,16 +80,18 @@ for i in range(0, 24):
     
 # Check if any station has missing measurement time, this is useful for reconstructing signals of missing data.
 listMissingData = []
-for elem in locationStation['location'].unique():
-    listMissingData.append([elem, False])
+for elem in locationStation['location']:
+    listMissingData.append([elem, False, []])
 
-for index, val in enumerate(locationStation['location'].unique()):
+for index, val in enumerate(locationStation['location']):
     iterList = dataParam[dataParam.location.str.contains(val)]
     iterTimeList = iterList.date.tolist()
     missingMeasurements = [elem for elem in listTimeStamps if elem not in iterTimeList]
     if missingMeasurements:
         print("The station with identifier {} misses the following time measurements {}.".format(val, missingMeasurements))
         listMissingData[index][1] = True
+        listMissingData[index][2] = missingMeasurements
+        missingDataIndicator = True
 
 """
 # Now we want to agroupate data by a certain hours, every 2, 4, 8, 12, 24h, but some stations have missing data.
@@ -219,6 +223,7 @@ for i in range(0, len(weightMatrix[0])):
             #print("                   |-> Long {}, Lat {}.".format(locationStation.loc[j].latitude, locationStation.loc[j].longitude))
             df2 = pd.DataFrame(np.array([[locationStation.loc[i].latitude, locationStation.loc[i].longitude], [locationStation.loc[j].latitude, locationStation.loc[j].longitude]]), columns=["longitude", "latitude"])
             line_plot_ax.plot(df2.latitude, df2.longitude, 'black')
+            # Add distance in the middle of the edge
 
 line_plot_ax.plot(locationStation.longitude, locationStation.latitude, 'bo') # Black-Blue Circles
 
@@ -254,9 +259,36 @@ m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city 
 #@@@ Signal Reconstruction @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# Now we know which stations are close. It is time to recreate the signal in those time frames which do not have a value.
 
-reconstruction = dataParam[dataParam.date.str.contains("00:00:00")]
-reconstruction.reset_index(drop=True, inplace=True)
-print(reconstruction)
-plt.show()
+N = len(locationStation['location']) # N Nodes of our graph
+vertexSignal = [[]]
+
+# Is any data missing?
+if missingDataIndicator:
+    print("\nThere is some data missing, reconstructing data.")
+    
+    for index, elem in enumerate(listMissingData):
+        identifier = elem[0]
+        missing    = elem[1]
+        listTimes  = elem[2]
+
+        print("Index {} is element {}.".format(index, elem))
+
+        for time in listTimes:
+            print("Checking time slot: {}.\n".format(time))            
+            valuesDF = dataParam[dataParam.date.str.contains(time)]
+            valuesSignal = valuesDF['value'].tolist()       # Values <----------------|
+            valuesStations = valuesDF['location'].tolist()  #                         |
+            stations = locationStation['location'].tolist() # Vertex who has values ->|
+
+            vertexSignal = [] #
+            for i in valuesStations:
+                vertexSignal.append(stations.index(i))
+            
+            print("Vertex List: {}.".format(vertexSignal))
+            print("Signal List: {}.\n".format(valuesSignal))
+            
+            
+
+else:
+    print("\nNo missing data in the dataset.")

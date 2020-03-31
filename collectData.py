@@ -82,22 +82,24 @@ resCityDay.reset_index(drop = True, inplace = True)
 
 # Merge with spots
 resCityDay = resCityDay.merge(infoSensor, on="location", how="left")
-
+# Maybe resCityDay should be sorted by location and date?
+resCityDay.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
+resCityDay.reset_index(drop=True, inplace=True)
 resCityDay.to_csv(filename + interested_day + "_per_hours_" + city + ".csv", sep=',')
 
 dataO3Day = resCityDay[resCityDay.parameter.str.contains('o3')]
 dataO3Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
-dataO3Day.reset_index(drop = True, inplace = True)
+dataO3Day.reset_index(drop=True, inplace=True)
 dataO3Day.to_csv(filename + interested_day + "_per_hours_o3_" + city + ".csv", sep=',')
 
 dataNO2Day  = resCityDay[resCityDay.parameter.str.contains('no2')]
 dataNO2Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
-dataNO2Day.reset_index(drop = True, inplace = True)
+dataNO2Day.reset_index(drop=True, inplace=True)
 dataNO2Day.to_csv(filename + interested_day + "_per_hours_no2_" + city + ".csv", sep=',')
 
 dataPM10Day = resCityDay[resCityDay.parameter.str.contains('pm10')]
 dataPM10Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
-dataPM10Day.reset_index(drop = True, inplace = True)
+dataPM10Day.reset_index(drop=True, inplace=True)
 dataPM10Day.to_csv(filename + interested_day + "_per_hours_pm10_" + city + ".csv", sep=',')
 
 print("Data collected sucessfully.")
