@@ -161,9 +161,10 @@ Graph = graphs.Graph(weightMatrix)
 #Graph.compute_laplacian('normalized')
 
 # Access Laplacian Matrix.
-LaplacianMatrix = Graph.L
+LaplacianSparseMatrix = Graph.L
+LaplacianMatrix = LaplacianSparseMatrix.toarray()
 print("\nLaplacian Matrix (combinatorial):")
-print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix.toarray()]))
+print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
 
 # Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
 #   Where A is the diagonal matrix of eigenvalues
@@ -171,6 +172,7 @@ print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) f
 Graph.compute_fourier_basis()
 
 # Spectral decomposition
+Eigenvalues = Graph.e
 print("\nEigenvalues, a.k.a. Graph Adjacency Spectrum:\n {}.".format(Graph.e))
 
 #plt.stem(Graph.e)
@@ -258,6 +260,28 @@ m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Signal Reconstruction @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Smoothness of Eigenvalues
+eigenvec   = []
+eigenvecTransposed = []
+smoothness = []
+for index in range(0, len(Eigenvectors[0])):
+    eigenvec = np.array([Eigenvectors[:, index]])
+    eigenvecTransposed = eigenvec.T
+    
+    aux = np.matmul(eigenvec, LaplacianMatrix)
+    Saux = np.matmul(eigenvecTransposed, aux)
+
+    smoothness.append(Saux)
+
+print("Eigenvector:\n{}.".format(eigenvec))
+print("Eigenvector Transposed:\n{}.".format(eigenvecTransposed))
+print("Smoothness of the eigenvector:\n")
+print('\n\n'.join(['\n'.join(['\t'.join([str(round(item, decimalsSparse)) for item in row]) for row in elem]) for elem in smoothness]))
+# TODO: ^this makes any sense?
+
+
+
 
 
 N = len(locationStation['location']) # N Nodes of our graph
