@@ -30,7 +30,7 @@ interestedDayTimestamp = "2020_03_08" # <- | Careful, they serve different purpo
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # TBD, but we will try different thresholds 5km, 10km, 15km, 20km.
-maxDistance = 15.0
+maxDistance = 20.14
 
 meanRatio = 8 # in hours (min 1h, max 24h), should always be even and > 1
 
@@ -285,10 +285,25 @@ if missingDataIndicator:
             for i in valuesStations:
                 vertexSignal.append(stations.index(i))
             
+            print("N: {}, M: {}, K = M = {}.".format(N, len(vertexSignal), len(vertexSignal)))
             print("Vertex List: {}.".format(vertexSignal))
             print("Signal List: {}.\n".format(valuesSignal))
-            
-            
 
+            # GDFT
+            EigenvectorsInv = np.linalg.inv(Eigenvectors)
+            print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in EigenvectorsInv]))
+
+            """
+            for item in list:
+                if conditional:
+                    expression
+            
+            Equivalent to:
+
+            [ expresion for item in list if conditional ]
+            """
+
+            #GDFT = np.matmul(EigenvectorsInv, )
+            
 else:
     print("\nNo missing data in the dataset.")
