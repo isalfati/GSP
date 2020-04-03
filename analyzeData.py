@@ -261,7 +261,7 @@ m.save(filename + interested_day + "_location_stations_" + analyze + "_" + city 
 #@@@ Signal Reconstruction @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-# Smoothness of Eigenvalues
+# Smoothness of Eigenvectors
 eigenvec   = []
 eigenvecTransposed = []
 smoothness = []
@@ -269,16 +269,12 @@ for index in range(0, len(Eigenvectors[0])):
     eigenvec = np.array([Eigenvectors[:, index]])
     eigenvecTransposed = eigenvec.T
     
-    aux = np.matmul(eigenvec, LaplacianMatrix)
-    Saux = np.matmul(eigenvecTransposed, aux)
 
-    smoothness.append(Saux)
-
-print("Eigenvector:\n{}.".format(eigenvec))
-print("Eigenvector Transposed:\n{}.".format(eigenvecTransposed))
-print("Smoothness of the eigenvector:\n")
-print('\n\n'.join(['\n'.join(['\t'.join([str(round(item, decimalsSparse)) for item in row]) for row in elem]) for elem in smoothness]))
-# TODO: ^this makes any sense?
+#print("Eigenvector:\n{}.".format(eigenvec))
+#print("Eigenvector Transposed:\n{}.".format(eigenvecTransposed))
+#print("Smoothness of the eigenvector:\n")
+#print('\n\n'.join(['\n'.join(['\t'.join([str(round(item, decimalsSparse)) for item in row]) for row in elem]) for elem in smoothness]))
+# TODO: To do.
 
 
 
@@ -290,7 +286,7 @@ vertexSignal = [[]]
 # Is any data missing?
 if missingDataIndicator:
     print("\nThere is some data missing, reconstructing data.")
-    
+       
     for index, elem in enumerate(listMissingData):
         identifier = elem[0]
         missing    = elem[1]
@@ -309,15 +305,44 @@ if missingDataIndicator:
             for i in valuesStations:
                 vertexSignal.append(stations.index(i))
             
-            print("N: {}, M: {}, K = M = {}.".format(N, len(vertexSignal), len(vertexSignal)))
+            M = len(vertexSignal)
+            # Definition of K
+            K = 3
+            # Size [MxK]
+            measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+            
+            print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
             print("Vertex List: {}.".format(vertexSignal))
             print("Signal List: {}.\n".format(valuesSignal))
 
+
+            measurementMatrixTransposed = measurementMatrix.T
+            auxiliar = np.matmul(measurementMatrixTransposed, measurementMatrix)
+            auxiliarInverse = np.linalg.inv(auxiliar)
+            auxiliar2 = np.matmul(auxiliarInverse, measurementMatrixTransposed)
+            coeficientsX = np.matmul(auxiliar2, valuesSignal).tolist()
+            
+            for i in range(0, N-K):
+                coeficientsX.append(0)
+
+            coeficientsX = np.array([coeficientsX])
+
+            print(coeficientsX)
+            
+            # Recover Signal
+            signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+            print(signalRecovered)
+
+          
+
+
+
+            """
             # GDFT
             EigenvectorsInv = np.linalg.inv(Eigenvectors)
             print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in EigenvectorsInv]))
 
-            """
+            
             for item in list:
                 if conditional:
                     expression
