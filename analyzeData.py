@@ -1,6 +1,7 @@
 import os
 import sys
 import math
+import time # Lord
 import gmplot
 import openaq
 import folium 
@@ -20,7 +21,7 @@ from pygsp import graphs, filters, plotting, utils
 #@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Parameter to be analyzed
-analyze = 'pm10'
+analyze = 'o3'
 
 # City, Day, Output location, maximum distance between stations
 city = "Barcelona"
@@ -82,6 +83,10 @@ for i in range(0, 24):
 listMissingData = []
 for elem in locationStation['location']:
     listMissingData.append([elem, False, []])
+    
+#####
+# TODO: Inducing first row missing.
+#####
 
 for index, val in enumerate(locationStation['location']):
     iterList = dataParam[dataParam.location.str.contains(val)]
@@ -158,12 +163,12 @@ print('\n'.join(['\t'.join([str(cell) for cell in row]) for row in weightMatrix]
 
 # For now, I'm using the weighted matrix, calculating the distance between latitudes and longitudes
 Graph = graphs.Graph(weightMatrix)
-#Graph.compute_laplacian('normalized')
+Graph.compute_laplacian('normalized')
 
 # Access Laplacian Matrix.
 LaplacianSparseMatrix = Graph.L
 LaplacianMatrix = LaplacianSparseMatrix.toarray()
-print("\nLaplacian Matrix (combinatorial):")
+print("\nLaplacian Matrix (Normalized):")
 print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
 
 # Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
@@ -294,9 +299,10 @@ if missingDataIndicator:
 
         print("Index {} is element {}.".format(index, elem))
 
-        for time in listTimes:
-            print("Checking time slot: {}.\n".format(time))            
-            valuesDF = dataParam[dataParam.date.str.contains(time)]
+        for timeslot in listTimes:
+            print("\n############### New Timeslot ###############")
+            print("Checking time slot: {}.".format(timeslot))            
+            valuesDF = dataParam[dataParam.date.str.contains(timeslot)]
             valuesSignal = valuesDF['value'].tolist()       # Values <----------------|
             valuesStations = valuesDF['location'].tolist()  #                         |
             stations = locationStation['location'].tolist() # Vertex who has values ->|
@@ -304,55 +310,62 @@ if missingDataIndicator:
             vertexSignal = [] #
             for i in valuesStations:
                 vertexSignal.append(stations.index(i))
-            
+
             M = len(vertexSignal)
             # Definition of K
-            K = 3
-            # Size [MxK]
-            measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+            K = 6
             
-            print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
-            print("Vertex List: {}.".format(vertexSignal))
-            print("Signal List: {}.\n".format(valuesSignal))
+            vertexSignal = [] #
+            for i in valuesStations:
+                vertexSignal.append(stations.index(i))
 
-
-            measurementMatrixTransposed = measurementMatrix.T
-            auxiliar = np.matmul(measurementMatrixTransposed, measurementMatrix)
-            auxiliarInverse = np.linalg.inv(auxiliar)
-            auxiliar2 = np.matmul(auxiliarInverse, measurementMatrixTransposed)
-            coeficientsX = np.matmul(auxiliar2, valuesSignal).tolist()
+            M = len(vertexSignal)
+            # Definition of K
             
-            for i in range(0, N-K):
-                coeficientsX.append(0)
+            for val in range(1, M+1):
+                K = val
+                print("\n========== New It ==========")
+                print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+                print("Vertex List: {}.".format(vertexSignal))
+                print("Signal List: {}.".format(valuesSignal))
 
-            coeficientsX = np.array([coeficientsX])
+                # Start Time
+                start = time.process_time()
+                
+                measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+                pInv = np.linalg.pinv(measurementMatrix)
 
-            print(coeficientsX)
-            
-            # Recover Signal
-            signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
-            print(signalRecovered)
+                coeficientsX = np.matmul(pInv, valuesSignal).tolist()
+                
+                for i in range(0, N-K):
+                    coeficientsX.append(0)
 
-          
+                coeficientsX = np.array(coeficientsX)
+                            
+                # Recover Signal
+                signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+                signalRecovered = [round(x, decimals) for x in signalRecovered]
 
+                print("Recovered L: {}.".format(signalRecovered))
 
+                
+                # End Time
+                elapsedTime = (time.process_time() - start)*100
+                print("\nElapsed time(ms): {}.".format(elapsedTime))
 
-            """
-            # GDFT
-            EigenvectorsInv = np.linalg.inv(Eigenvectors)
-            print('\n'.join(['\t'.join([str(round(cell, decimalsSparse)) for cell in row]) for row in EigenvectorsInv]))
+           
 
-            
-            for item in list:
-                if conditional:
-                    expression
-            
-            Equivalent to:
-
-            [ expresion for item in list if conditional ]
-            """
-
-            #GDFT = np.matmul(EigenvectorsInv, )
             
 else:
     print("\nNo missing data in the dataset.")
+
+
+"""            
+for item in list:
+    if conditional:
+        expression
+            
+Equivalent to:
+
+[ expresion for item in list if conditional ]
+"""
