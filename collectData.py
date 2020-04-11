@@ -8,11 +8,6 @@ import geopandas
 import numpy as np
 import pandas as pd
 import geopy.distance
-
-import cartopy
-import cartopy.crs as ccrs
-import cartopy.feature as cfeature
-
 import matplotlib as mpl
 from datetime import datetime
 import matplotlib.pyplot as plt
@@ -22,10 +17,23 @@ from pygsp import graphs, filters, plotting
 city = "Barcelona"
 selection = ['o3', 'no2', 'pm10'] #PM25 does not exist in Barcelona
 
-# 24 hour period
-interested_day = "2020-03-08"
-date_from      = "2020-03-07T23:00:00"
-date_to        = "2020-03-08T22:00:00"
+interestedYear  = "2020"
+interestedMonth = "March"
+
+monthList = { # Dictionary
+    "January"  : "31",
+    "February" : "28",
+    "March"    : "31",
+    "April"    : "30",
+    "May"      : "31",
+    "June"     : "30",
+    "July"     : "31",
+    "August"   : "31",
+    "September": "30",
+    "October"  : "31",
+    "November" : "30",
+    "December" : "31"
+}
 
 # Avoid warnings
 warnings.simplefilter(action='ignore')
@@ -41,7 +49,6 @@ print("Versions of the libraries:\n")
 print("OpenAQ  v{}.".format(openaq.__version__))
 print("Pandas  v{}.".format(pd.__version__))
 print("Geopy   v{}.".format(geopy.__version__))
-print("Cartopy v{}.".format(cartopy.__version__))
 
 api = openaq.OpenAQ()
 
@@ -55,8 +62,19 @@ print()
 # Filename
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
-# Obtaining measurements of the sensors in a City
-resCityDay = api.measurements(city=city, parameter=selection, date_from=date_from, date_to=date_to, order_by="date", limit=10000, df=True)
+# Obtaining measurements of the sensors in a City during a Certain Month
+dataParam = pd.DataFrame()
+monthIndex = list(monthList.keys()).index(interestedMonth) + 1
+monthIndex = "0" + str(monthIndex) if monthIndex < 10 else str(monthIndex)
+partialDate = interestedYear + "-" + monthIndex + "-"
+
+for day in range(1, int(monthList[interestedMonth]) + 1):
+    print("Wait a moment, please...")
+    partialDay = "0" + str(day) if day < 10 else str(day)
+    auxDateFrom = partialDate + partialDay
+    auxDateTo   = partialDate + partialDay + "T23:00:00"
+    tmpDF = api.measurements(city=city, parameter=selection, date_from=auxDateFrom, date_to=auxDateTo, order_by="date", limit=10000, df=True)
+    dataParam = dataParam.append(tmpDF)
 
 # Delete unwanted columns
 columnsToDelete = ["unit", "date.utc"]
@@ -72,34 +90,32 @@ infoSensor = infoSensor.rename(columns=columnsSensorsToRename)
 for index in range(0, len(infoSensor)):
     infoSensor["spot"][index] = infoSensor["spot"][index][0]
 
-print(infoSensor)
-
-resCityDay = resCityDay.drop(columnsToDelete, axis=1)
-resCityDay = resCityDay.rename(columns=columnsToRename)
-resCityDay["date"] = resCityDay.index
-resCityDay["date"] = resCityDay["date"].dt.strftime("%Y_%m_%d-%H:%M:%S")
-resCityDay.reset_index(drop = True, inplace = True)
+dataParam = dataParam.drop(columnsToDelete, axis=1)
+dataParam = dataParam.rename(columns=columnsToRename)
+dataParam["date"] = dataParam.index
+dataParam["date"] = dataParam["date"].dt.strftime("%Y_%m_%d-%H:%M:%S")
+dataParam.reset_index(drop = True, inplace = True)
 
 # Merge with spots
-resCityDay = resCityDay.merge(infoSensor, on="location", how="left")
-# Maybe resCityDay should be sorted by location and date?
-resCityDay.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
-resCityDay.reset_index(drop=True, inplace=True)
-resCityDay.to_csv(filename + interested_day + "_per_hours_" + city + ".csv", sep=',')
+dataParam = dataParam.merge(infoSensor, on="location", how="left")
+# Maybe dataParam should be sorted by location and date?
+dataParam.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
+dataParam.reset_index(drop=True, inplace=True)
+dataParam.to_csv(filename + city + "_" + interestedMonth + "_" + interestedYear + "_per_hours.csv", sep=',')
 
-dataO3Day = resCityDay[resCityDay.parameter.str.contains('o3')]
+dataO3Day = dataParam[dataParam.parameter.str.contains('o3')]
 dataO3Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataO3Day.reset_index(drop=True, inplace=True)
-dataO3Day.to_csv(filename + interested_day + "_per_hours_o3_" + city + ".csv", sep=',')
+dataO3Day.to_csv(filename + city + "_" + interestedMonth + "_" + interestedYear + "_per_hours_o3.csv", sep=',')
 
-dataNO2Day  = resCityDay[resCityDay.parameter.str.contains('no2')]
+dataNO2Day  = dataParam[dataParam.parameter.str.contains('no2')]
 dataNO2Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataNO2Day.reset_index(drop=True, inplace=True)
-dataNO2Day.to_csv(filename + interested_day + "_per_hours_no2_" + city + ".csv", sep=',')
+dataNO2Day.to_csv(filename + city + "_" + interestedMonth + "_" + interestedYear + "_per_hours_no2.csv", sep=',')
 
-dataPM10Day = resCityDay[resCityDay.parameter.str.contains('pm10')]
+dataPM10Day = dataParam[dataParam.parameter.str.contains('pm10')]
 dataPM10Day.sort_values(['location', 'date'], ascending=[True, True], inplace=True)
 dataPM10Day.reset_index(drop=True, inplace=True)
-dataPM10Day.to_csv(filename + interested_day + "_per_hours_pm10_" + city + ".csv", sep=',')
+dataPM10Day.to_csv(filename + city + "_" + interestedMonth + "_" + interestedYear + "_per_hours_pm10.csv", sep=',')
 
 print("Data collected sucessfully.")
