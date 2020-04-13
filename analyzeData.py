@@ -1,17 +1,12 @@
 import time # Lord
 import folium 
 import seaborn as sns
-
-from programConfig import *
-
 import geopy.distance
 import matplotlib as mpl
+from programConfig import *
 import matplotlib.pyplot as plt
 import matplotlib.gridspec as gridspec
 from pygsp import graphs, filters, plotting, utils
-
-
-
 
 # Necessary
 missingDataIndicator = False
@@ -159,12 +154,6 @@ Eigenvectors = Graph.U
 print("\nEigenvectors:")
 print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
-
-
-#################################################
-
-
-#"""
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Signal Reconstruction @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -251,17 +240,9 @@ if missingDataIndicator:
                 elapsedTime = (time.process_time() - start)*100
                 print("\nElapsed time(ms): {}.".format(elapsedTime))
 
+                #probably  list missing data [1] should be false after reconstruction 
 else:
     print("\nNo missing data in the dataset.")
-#"""
-
-
-
-
-
-
-
-
 
 """            
 for item in list:
