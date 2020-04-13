@@ -1,63 +1,19 @@
 import os
-import sys
-import math
-import gmplot
 import openaq
-import warnings
-import geopandas
-import numpy as np
-import pandas as pd
-import geopy.distance
-import matplotlib as mpl
-from datetime import datetime
-import matplotlib.pyplot as plt
-from pygsp import graphs, filters, plotting
-
-# Global Variables
-city = "Barcelona"
-selection = ['o3', 'no2', 'pm10'] #PM25 does not exist in Barcelona
-
-interestedYear  = "2020"
-interestedMonth = "March"
-
-monthList = { # Dictionary
-    "January"  : "31",
-    "February" : "28",
-    "March"    : "31",
-    "April"    : "30",
-    "May"      : "31",
-    "June"     : "30",
-    "July"     : "31",
-    "August"   : "31",
-    "September": "30",
-    "October"  : "31",
-    "November" : "30",
-    "December" : "31"
-}
-
-# Avoid warnings
-warnings.simplefilter(action='ignore')
-
-# Set Display Options
-pd.options.display.max_columns = None
-pd.options.display.max_rows = None
-pd.options.display.width = None
-np.set_printoptions(threshold=sys.maxsize)
+from programConfig import * # 
 
 # Check versions
 print("Versions of the libraries:\n")
 print("OpenAQ  v{}.".format(openaq.__version__))
 print("Pandas  v{}.".format(pd.__version__))
-print("Geopy   v{}.".format(geopy.__version__))
 
 api = openaq.OpenAQ()
 
 # List of Parameters
 print("\nThis program gathers information of some of the following parameters:\n")
 param = api.parameters(df=True)
-print(param)
-print(selection)
-print()
+print(param[['name', 'description']])
+print("\nIn particular, the following selection: {}.\n".format(selection))
 
 # Filename
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
@@ -69,7 +25,7 @@ monthIndex = "0" + str(monthIndex) if monthIndex < 10 else str(monthIndex)
 partialDate = interestedYear + "-" + monthIndex + "-"
 
 for day in range(1, int(monthList[interestedMonth]) + 1):
-    print("Wait a moment, please...")
+    print("({}/{}): Wait a moment, please...".format(day, int(monthList[interestedMonth])))
     partialDay = "0" + str(day) if day < 10 else str(day)
     auxDateFrom = partialDate + partialDay
     auxDateTo   = partialDate + partialDay + "T23:00:00"
@@ -83,6 +39,7 @@ columnsToRename = {"coordinates.latitude" : "latitude", "coordinates.longitude" 
 columnsSensorsToDelete = ["id", "country", "city", "cities", "sourceName", "sourceNames", "sourceType", "sourceTypes", 
                           "firstUpdated", "lastUpdated", "countsByMeasurement", "coordinates.longitude", "coordinates.latitude", "parameters", "count"]
 columnsSensorsToRename = {"locations" : "spot"}
+
 infoSensor = api.locations(city=city, df=True)
 infoSensor = infoSensor.drop(columnsSensorsToDelete, axis=1)
 infoSensor = infoSensor.rename(columns=columnsSensorsToRename)
@@ -118,4 +75,4 @@ dataPM10Day.sort_values(['location', 'date'], ascending=[True, True], inplace=Tr
 dataPM10Day.reset_index(drop=True, inplace=True)
 dataPM10Day.to_csv(filename + city + "_" + interestedMonth + "_" + interestedYear + "_per_hours_pm10.csv", sep=',')
 
-print("Data collected sucessfully.")
+print("\nAll the data has been collected sucessfully.")
