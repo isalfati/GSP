@@ -154,9 +154,9 @@ Eigenvectors = Graph.U
 print("\nEigenvectors:")
 print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@ Signal Reconstruction @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Signal Reconstruction using Stankovic Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 # Smoothness of Eigenvectors
 eigenvec   = []
@@ -177,70 +177,79 @@ vertexSignal = [[]]
 
 # Is any data missing?
 if missingDataIndicator:
+    #TODO: Encapsulate in a function.
     print("\nThere is some data missing, reconstructing data.")
-       
+
     for index, elem in enumerate(listMissingData):
-        identifier = elem[0]
+        spot       = elem[0]
         missing    = elem[1]
         listTimes  = elem[2]
 
-        print("Index {} is element {}.".format(index, elem))
+        unrecoverableData = []
+        print("\nIndex {} is the station located at {}.".format(index, spot))
+        print("({}/{}): Reconstructing data, please wait.\n".format(index+1, len(listMissingData)+1))
 
         for timeslot in listTimes:
-            print("\n############### New Timeslot ###############")
-            print("Checking time slot: {}.".format(timeslot))            
             valuesDF = dataParam[dataParam.date.str.contains(timeslot)]
-            valuesSignal = valuesDF["value"].tolist()       # Values <----------------|
-            valuesStations = valuesDF["location"].tolist()  #                         |
-            stations = locationStation["location"].tolist() # Vertex who has values ->|
+            if not len(valuesDF.index):
+                #print("We cannot recover the data from the following timeslot: {}.".format(timeslot))
+                unrecoverableData.append(timeslot)
+            else:
+                print("->@@@@@ Initializing signal recovery for timeslot {}. @@@@@<-\n".format(timeslot))
+                valuesSignal = valuesDF["value"].tolist()       # Values <----------------|
+                valuesStations = valuesDF["location"].tolist()  #                         |
+                stations = locationStation["location"].tolist() # Vertex who has values ->|
 
-            vertexSignal = [] #
-            for i in valuesStations:
-                vertexSignal.append(stations.index(i))
+                vertexSignal = [] #
+                for i in valuesStations:
+                    vertexSignal.append(stations.index(i))
 
-            M = len(vertexSignal)
-            # Definition of K
-            K = 6
-            
-            vertexSignal = [] #
-            for i in valuesStations:
-                vertexSignal.append(stations.index(i))
+                M = len(vertexSignal)
+                # Definition of K
+                K = 6
+                
+                vertexSignal = [] #
+                for i in valuesStations:
+                    vertexSignal.append(stations.index(i))
 
-            M = len(vertexSignal)
-            # Definition of K
-            
-            for val in range(1, M+1):
-                K = val
-                print("\n========== New It ==========")
-                print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+                M = len(vertexSignal)
+                # Definition of K
+                
                 print("Vertex List: {}.".format(vertexSignal))
                 print("Signal List: {}.".format(valuesSignal))
 
-                # Start Time
-                start = time.process_time()
-                
-                measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
-                pInv = np.linalg.pinv(measurementMatrix)
+                for val in range(1, M+1):
+                    K = val
+                    print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+                    
+                  
+                    measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+                    pInv = np.linalg.pinv(measurementMatrix)
 
-                coeficientsX = np.matmul(pInv, valuesSignal).tolist()
-                
-                for i in range(0, N-K):
-                    coeficientsX.append(0)
+                    coeficientsX = np.matmul(pInv, valuesSignal).tolist()
+                    
+                    for i in range(0, N-K):
+                        coeficientsX.append(0)
 
-                coeficientsX = np.array(coeficientsX)
-                            
-                # Recover Signal
-                signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
-                signalRecovered = [round(x, decimals) for x in signalRecovered]
+                    coeficientsX = np.array(coeficientsX)
+                                
+                    # Recover Signal
+                    signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+                    signalRecovered = [round(x, decimals) for x in signalRecovered]
 
-                print("Recovered L: {}.".format(signalRecovered))
+                    print("Recovered L: {}.\n".format(signalRecovered))                  
 
-                
-                # End Time
-                elapsedTime = (time.process_time() - start)*100
-                print("\nElapsed time(ms): {}.".format(elapsedTime))
+        listTimes = elem[2] = [item for item in elem[2] if item in unrecoverableData]
 
-                #probably  list missing data [1] should be false after reconstruction 
+        if not elem[2]:
+            elem[1] = False
+        
+        print("Using this method, it is impossible to recover ({}/{}) of the data for the station located at {}:\n".format(len(listTimes), 24*monthList[interestedMonth], spot))
+        print(listTimes)
+        print()
+
+       
+    
 else:
     print("\nNo missing data in the dataset.")
 
