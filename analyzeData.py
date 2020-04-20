@@ -157,7 +157,7 @@ print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) f
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Signal Reconstruction using Stankovic Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
+"""
 # Smoothness of Eigenvectors
 eigenvec   = []
 eigenvecTransposed = []
@@ -165,7 +165,6 @@ smoothness = []
 for index in range(0, len(Eigenvectors[0])):
     eigenvec = np.array([Eigenvectors[:, index]])
     eigenvecTransposed = eigenvec.T
-    
 
 #print("Eigenvector:\n{}.".format(eigenvec))
 #print("Eigenvector Transposed:\n{}.".format(eigenvecTransposed))
@@ -216,7 +215,7 @@ if missingDataIndicator:
                 # Definition of K
                 
                 print("Vertex List: {}.".format(vertexSignal))
-                print("Signal List: {}.".format(valuesSignal))
+                print("Signal List: {}.\n".format(valuesSignal))
 
                 for val in range(1, M+1):
                     K = val
@@ -248,10 +247,57 @@ if missingDataIndicator:
         print(listTimes)
         print()
 
-       
+        #TODO: missingDataIndicator to False if all the data was recovered.
     
 else:
     print("\nNo missing data in the dataset.")
+"""
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End of Stankovic Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@                         @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+uniqueTimestamps = dataParam["date"].unique().tolist()
+uniqueTimestamps.sort()
+print(uniqueTimestamps)
+
+generalMatrix = []
+print("\nGenerating Matrix, wait please..\n")
+
+for timestamp in uniqueTimestamps:
+    auxList = []
+    auxList.append(timestamp)
+
+    for index, value in enumerate(idLocationStation):
+        auxSubSet = dataParam[dataParam.location.str.contains(value)]
+        auxElement = auxSubSet[auxSubSet.date.str.contains(timestamp)]
+        result = auxElement.value.to_list()
+        if not result:
+            auxList.append(-1)
+        else:
+            auxList.append(result[0])
+
+    #print(auxList)
+
+    if not -1 in auxList:
+        generalMatrix.append(auxList)
+
+#print("\n".join(["\t".join([str(cell) for cell in row]) for row in generalMatrix]))
+
+pollutionColumns = ["timestamp"]
+for i in range(0, len(idLocationStation)):
+    pollutionColumns.append(paramAnalyzed + "_" + str(i))
+
+pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
+
+print(pollutionDF)
+
+#TODO: SPLIT 60%, 40%.
+
 
 """            
 for item in list:
