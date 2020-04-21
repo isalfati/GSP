@@ -257,13 +257,13 @@ else:
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@                         @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Cleaning & Splitting Matrices @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 uniqueTimestamps = dataParam["date"].unique().tolist()
 uniqueTimestamps.sort()
-print(uniqueTimestamps)
+#print(uniqueTimestamps)
 
 generalMatrix = []
 print("\nGenerating Matrix, wait please..\n")
@@ -288,16 +288,43 @@ for timestamp in uniqueTimestamps:
 
 #print("\n".join(["\t".join([str(cell) for cell in row]) for row in generalMatrix]))
 
+print("Matrix Generated.")
+
 pollutionColumns = ["timestamp"]
 for i in range(0, len(idLocationStation)):
+    #pollutionColumns.append(spotLocationStation[i])
     pollutionColumns.append(paramAnalyzed + "_" + str(i))
 
 pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
+matrixPollution = pollutionDF.to_numpy()
 
-print(pollutionDF)
+# Split Matrix
 
-#TODO: SPLIT 60%, 40%.
+sizeMatrixPollution = len(matrixPollution)
 
+split60 = int(sizeMatrixPollution*0.6)
+split40 = sizeMatrixPollution-split60
+
+training60 = matrixPollution[0:split60]
+training60DF = pd.DataFrame(training60, columns=pollutionColumns)
+print(training60DF)
+
+test40     = matrixPollution[split60:]
+test40DF = pd.DataFrame(training60, columns=pollutionColumns)
+print(test40DF)
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Cleaning & Splitting Matrices @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Linear Combination Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Linear Combination Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 """            
 for item in list:
