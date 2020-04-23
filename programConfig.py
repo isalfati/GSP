@@ -1,10 +1,10 @@
 import os
 import sys
 import math
-
 import warnings
 import numpy as np
 import pandas as pd
+from sklearn.metrics import mean_squared_error
 
 # Configuration File
 
@@ -35,7 +35,7 @@ monthList = { # Dictionary
 selection = ["o3", "no2", "pm10"]
 
 # Parameter to analyze
-paramAnalyzed = "pm10"
+paramAnalyzed = "no2"
 
 # Avoid warnings
 warnings.simplefilter(action="ignore")

@@ -270,7 +270,6 @@ print("\nGenerating Matrix, wait please..\n")
 
 for timestamp in uniqueTimestamps:
     auxList = []
-    auxList.append(timestamp)
 
     for index, value in enumerate(idLocationStation):
         auxSubSet = dataParam[dataParam.location.str.contains(value)]
@@ -281,23 +280,27 @@ for timestamp in uniqueTimestamps:
         else:
             auxList.append(result[0])
 
+    #print(timestamp)
     #print(auxList)
 
-    if not -1 in auxList:
-        generalMatrix.append(auxList)
+    #if not -1 in auxList:
+    generalMatrix.append(auxList)
+    auxList.append(timestamp)
+
 
 #print("\n".join(["\t".join([str(cell) for cell in row]) for row in generalMatrix]))
 
 print("Matrix Generated.")
 
-pollutionColumns = ["timestamp"]
+pollutionColumns = []
 for i in range(0, len(idLocationStation)):
     #pollutionColumns.append(spotLocationStation[i])
     pollutionColumns.append(paramAnalyzed + "_" + str(i))
 
+pollutionColumns.append("timestamp")
+
 pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
 matrixPollution = pollutionDF.to_numpy()
-
 # Split Matrix
 
 sizeMatrixPollution = len(matrixPollution)
@@ -307,11 +310,12 @@ split40 = sizeMatrixPollution-split60
 
 training60 = matrixPollution[0:split60]
 training60DF = pd.DataFrame(training60, columns=pollutionColumns)
-print(training60DF)
+#print(training60DF)
 
 test40     = matrixPollution[split60:]
+print(test40)
 test40DF = pd.DataFrame(training60, columns=pollutionColumns)
-print(test40DF)
+#print(test40DF)
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Cleaning & Splitting Matrices @@@
@@ -321,6 +325,37 @@ print(test40DF)
 #@@@ Linear Combination Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+tmpRecon = np.zeros(len(test40))
+reconStation = 0
+
+for i in range(0, len(test40)):
+    for j in range(0, len(idLocationStation)):
+        #print("tmpRecon: {}, adjacency: {}, laplacian: {}, test: {}.".format(tmpRecon[i], adjacencyMatrix[reconStation][j], LaplacianMatrix[reconStation][j], test40[i][j]))
+        adj = adjacencyMatrix[reconStation][j]
+        lpc = LaplacianMatrix[reconStation][j]
+        tst = test40[i][j]
+
+        if tst < 0:
+            tst = 0
+        
+        tmpRecon[i] += adj*lpc*tst
+    tmpRecon[i] *= -1
+        
+#TODO:  RMSE
+
+originals = test40[:, 0]
+predicted = tmpRecon
+
+print("size originals: {}, size predicted: {}.".format(len(originals), len(predicted)))
+
+for i in range(0, len(originals)):
+    print("{} : {}.".format(originals[i], predicted[i]))
+
+
+MSE = mean_squared_error(test40[:, 0], tmpRecon)
+RMSE = math.sqrt(MSE)
+
+print("RMSE: {}.".format(RMSE))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Linear Combination Method @@@
