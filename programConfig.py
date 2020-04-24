@@ -13,8 +13,8 @@ filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
 # City & Date
 city = "Barcelona"
-interestedMonth = "March"
-interestedYear  = "2020"
+month = "March"
+year  = "2020"
 
 monthList = { # Dictionary
     "January"  : 31,
@@ -35,7 +35,7 @@ monthList = { # Dictionary
 selection = ["o3", "no2", "pm10"]
 
 # Parameter to analyze
-paramAnalyzed = "no2"
+contaminant = "pm10"
 
 # Avoid warnings
 warnings.simplefilter(action="ignore")
