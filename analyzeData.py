@@ -9,7 +9,6 @@ from pygsp import graphs, filters, plotting, utils
 
 missingDataIndicator = False
 
-
 # Import data
 dataParam = pd.read_csv(filename + month + "_" + city + "_" + year + "_" + contaminant + ".csv", sep=",")
 dataParam["DATA"] = pd.to_datetime(dataParam["DATA"], format=("%d/%m/%Y")).dt.strftime("%d-%m-%Y")
@@ -18,7 +17,7 @@ dataParam.reset_index(drop=True, inplace=True)
 
 # Clean data, rename columns and obtain info from stations.
 columnsToClean = ["CODI MESURAMENT", "CODI MUNICIPI", "PROVINCIA", "CODI ESTACIÓ", 
-                  "ÀREA URBANA", "MAGNITUD", "PUNT MOSTREIG", "ANY", "MES", "DIA", "Georeferència"]
+                  "ÀREA URBANA", "MAGNITUD", "CONTAMINANT", "UNITATS", "PUNT MOSTREIG", "ANY", "MES", "DIA", "Georeferència"]
 
 for i in range(1, 25):
     columnsToClean.append("V0" + str(i) if i < 10 else "V" + str(i))
@@ -26,17 +25,55 @@ for i in range(1, 25):
 # Pure and clean data.
 cleanDataParam = dataParam
 cleanDataParam.drop(columns=columnsToClean, inplace=True)
+cleanDataParam = cleanDataParam.where(pd.notnull(cleanDataParam), None)
+print(cleanDataParam)
 
 # Info about the stations
 infoStations = cleanDataParam.drop_duplicates(subset="CODI EOI")
-infoStations = infoStations.iloc[:,0:6]
+infoStations = infoStations.iloc[:,0:7]
 infoStations.reset_index(drop=True, inplace=True)
 print(infoStations)
 
-print("These are the stations that measure {}:\n".format(contaminant))
+print("\nThese are the stations that measure {}:\n".format(contaminant))
 print(*infoStations["NOM ESTACIÓ"], sep="\n")
 
+
+for colname in infoStations.columns.values:
+    for i, val in cleanDataParam[colname].iteritems():
+        if val is None:
+            print("Column Missing: {}, row index: {}, Actual Value: {}, Codi EOI: {}.".format(colname, i, val, cleanDataParam.iloc[i]["CODI EOI"]))
+            eoi = cleanDataParam.iloc[i]["CODI EOI"]
+            element = infoStations[infoStations["CODI EOI"] == eoi][colname]
+            print(element)
+#            cleanDataParam.iloc[i][colname] = element
+
+print(cleanDataParam)
+            
+            
+
+
+
+"""
+# Filling gaps on basic information
+for station in infoStations["CODI EOI"]:
+    tmpDF = cleanDataParam[cleanDataParam["CODI EOI"] == station]
+    tmpDF = tmpDF[tmpDF["DATA"] == "01-03-2020"]
+    ll = tmpDF[8:].tolist()
+    print(tmpDF)
+    print(ll)
+"""
+
+    
+            
+
+
+
+
 #TODO: Missing data and TIMESTAMPS
+listMissingData = []
+for elem in infoStations["NOM ESTACIÓ"]:
+    listMissingData.append([elem, False, []])
+print(*listMissingData, sep="\n")
 
 # Adjacency, Distance and Weighted Matrices
 points = [infoStations["LATITUD"].tolist(), infoStations["LONGITUD"].tolist()]
@@ -82,15 +119,15 @@ for i in range(0, size):
 # Because we want undirected graphs, we add the tranposed matrix.
 distancesMatrix = distancesMatrix + distancesMatrix.T
 print("\nDistances Matrix:")
-print("\n".join(["\t".join([str(cell) for cell in row]) for row in distancesMatrix]))
+#print("\n".join(["\t".join([str(cell) for cell in row]) for row in distancesMatrix]))
 
 adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
 print("\nAdjacency Matrix:")
-print("\n".join(["\t".join([str(cell) for cell in row]) for row in adjacencyMatrix]))
+#print("\n".join(["\t".join([str(cell) for cell in row]) for row in adjacencyMatrix]))
 
 weightMatrix = weightMatrix + weightMatrix.T
 print("\nWeighted Matrix:")
-print("\n".join(["\t".join([str(cell) for cell in row]) for row in weightMatrix]))
+#print("\n".join(["\t".join([str(cell) for cell in row]) for row in weightMatrix]))
 
 #@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Graph Creation @@@
@@ -104,7 +141,7 @@ Graph.compute_laplacian("normalized")
 LaplacianSparseMatrix = Graph.L
 LaplacianMatrix = LaplacianSparseMatrix.toarray()
 print("\nLaplacian Matrix (Normalized):")
-print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
+#print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
 
 # Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
 #   Where A is the diagonal matrix of eigenvalues
@@ -120,7 +157,7 @@ print("\nEigenvalues, a.k.a. Graph Adjacency Spectrum:\n {}.".format(Graph.e))
 
 Eigenvectors = Graph.U
 print("\nEigenvectors:")
-print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
+#print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Signal Reconstruction using Stankovic Method @@@
@@ -129,6 +166,7 @@ print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) f
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End of Stankovic Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
 
 
 
