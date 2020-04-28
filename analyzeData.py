@@ -28,7 +28,7 @@ cleanDataParam.drop(columns=columnsToClean, inplace=True)
 cleanDataParam = cleanDataParam.where(pd.notnull(cleanDataParam), None)
 print(cleanDataParam)
 
-# Info about the stations
+# Info about the stations (TODO: Ensure that all fields are not NONE/Null/NaN)
 infoStations = cleanDataParam.drop_duplicates(subset="CODI EOI")
 infoStations = infoStations.iloc[:,0:7]
 infoStations.reset_index(drop=True, inplace=True)
@@ -37,37 +37,14 @@ print(infoStations)
 print("\nThese are the stations that measure {}:\n".format(contaminant))
 print(*infoStations["NOM ESTACIÓ"], sep="\n")
 
-
+# Fill simple gaps of information that can be extracted from infoStations
 for colname in infoStations.columns.values:
     for i, val in cleanDataParam[colname].iteritems():
         if val is None:
-            print("Column Missing: {}, row index: {}, Actual Value: {}, Codi EOI: {}.".format(colname, i, val, cleanDataParam.iloc[i]["CODI EOI"]))
+            #print("Column Missing: {}, row index: {}, Actual Value: {}, Codi EOI: {}.".format(colname, i, val, cleanDataParam.iloc[i]["CODI EOI"]))
             eoi = cleanDataParam.iloc[i]["CODI EOI"]
             element = infoStations[infoStations["CODI EOI"] == eoi][colname]
-            print(element)
-#            cleanDataParam.iloc[i][colname] = element
-
-print(cleanDataParam)
-            
-            
-
-
-
-"""
-# Filling gaps on basic information
-for station in infoStations["CODI EOI"]:
-    tmpDF = cleanDataParam[cleanDataParam["CODI EOI"] == station]
-    tmpDF = tmpDF[tmpDF["DATA"] == "01-03-2020"]
-    ll = tmpDF[8:].tolist()
-    print(tmpDF)
-    print(ll)
-"""
-
-    
-            
-
-
-
+            cleanDataParam.at[i, colname] = element.iat[0]
 
 #TODO: Missing data and TIMESTAMPS
 listMissingData = []
