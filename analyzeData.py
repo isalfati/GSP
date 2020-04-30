@@ -26,7 +26,6 @@ for i in range(1, 25):
 cleanDataParam = dataParam
 cleanDataParam.drop(columns=columnsToClean, inplace=True)
 cleanDataParam = cleanDataParam.where(pd.notnull(cleanDataParam), None)
-print(cleanDataParam)
 
 # Info about the stations (TODO: Ensure that all fields are not NONE/Null/NaN)
 infoStations = cleanDataParam.drop_duplicates(subset="CODI EOI")
@@ -45,6 +44,8 @@ for colname in infoStations.columns.values:
             eoi = cleanDataParam.iloc[i]["CODI EOI"]
             element = infoStations[infoStations["CODI EOI"] == eoi][colname]
             cleanDataParam.at[i, colname] = element.iat[0]
+
+print(cleanDataParam)
 
 #TODO: Missing data and TIMESTAMPS
 listMissingData = []
@@ -144,9 +145,81 @@ print("\nEigenvectors:")
 #@@@ End of Stankovic Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Creating Matrix: Timestamp / S1, ..., SN @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+dates = cleanDataParam["DATA"].unique().tolist()
+columnNames = list(cleanDataParam.columns.values)
+originalHours = columnNames[cleanDataParam.columns.get_loc("H01"):]
+hours = [elem.replace("H", "") for elem in originalHours]
+
+timestamps = []
+for date in dates:
+    for h in hours:
+        timestamps.append(date + "_" + h + ":00:00")
+
+
+
+generalMatrix = []
+
+for TS in timestamps:
+    date = TS.split("_")[0]
+    print("@@@@@@@@@@ Date: {}.".format(date))
+    for H in originalHours:
+        print("@@@@@@@@@@@@@@@@@@@@ Hour: {}.".format(H))
+        auxList = []
+        for ST in infoStations["CODI EOI"]:
+            #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Station: {}/{}.".format(ST,infoStations[infoStations["CODI EOI"] == ST]["NOM ESTACIÓ"].iat[0] ))
+            subDF = cleanDataParam[cleanDataParam["DATA"].str.contains(date)]
+            auxValue = subDF[subDF["CODI EOI"] == ST][H].iat[0]
+            #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Value: {}.".format(auxValue))
+            auxList.append(auxValue)
+        print(auxList)
+
+
+
+            
+
+
+"""
+
+for date in dates:
+    #print("DATE: {}.".format(date))
+
+    for index, st in enumerate(infoStations["CODI EOI"]):
+        #print("Index: {}, STATION: {}.".format(index, st))
+        stDF = cleanDataParam[cleanDataParam["CODI EOI"] == st]
+        stDF.sort_values("CODI EOI", ascending=True, inplace=True)
+        dateStDF = stDF[stDF["DATA"].str.contains(date)]
+
+        dateStDF.iloc[:, 8:]
+        #infoStations.iloc[:,0:7]
+
+        #dayValues = dateStDF.values
+        #dayValues = [val for sublist in dayValues for val in sublist]
+        #dayValues = dayValues[8:].as_matrix()
+        print(dateStDF)
+        
+        #if not dayValues:
+        #    print("Station in: {} on date: {} has no recorded data.".format(infoStations[infoStations["CODI EOI"] == st]["NOM ESTACIÓ"].iat[0], date))
+        
+        #if None in dayValues:
+        #    print(("Station in: {} on date: {} has some invalid data.".format(infoStations[infoStations["CODI EOI"] == st]["NOM ESTACIÓ"].iat[0], date)))
+    
+""" 
 
 
 
 
+
+
+
+
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Creating Matrix: Timestamp / S1, ..., SN @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
