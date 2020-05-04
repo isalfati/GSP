@@ -45,12 +45,13 @@ for colname in infoStations.columns.values:
             element = infoStations[infoStations["CODI EOI"] == eoi][colname]
             cleanDataParam.at[i, colname] = element.iat[0]
 
-print(cleanDataParam)
+#print(cleanDataParam)
 
 #TODO: Missing data and TIMESTAMPS
 listMissingData = []
 for elem in infoStations["NOM ESTACIÓ"]:
     listMissingData.append([elem, False, []])
+print()
 print(*listMissingData, sep="\n")
 
 # Adjacency, Distance and Weighted Matrices
@@ -96,7 +97,7 @@ for i in range(0, size):
 
 # Because we want undirected graphs, we add the tranposed matrix.
 distancesMatrix = distancesMatrix + distancesMatrix.T
-print("\nDistances Matrix:")
+print("Distances Matrix:")
 #print("\n".join(["\t".join([str(cell) for cell in row]) for row in distancesMatrix]))
 
 adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
@@ -159,67 +160,55 @@ for date in dates:
     for h in hours:
         timestamps.append(date + "_" + h + ":00:00")
 
+generalMatrix = []            
+missingDataPerColumn = np.zeros((len(infoStations)))
 
+for day in range(1, monthList[month]+1):
+    iMonth = list(monthList.keys()).index(month) + 1
+    d = "0" + str(day) if day < 10 else str(day)
+    m = "0" + str(iMonth) if iMonth < 10 else str(iMonth)
+    date = d + "-" + m + "-" + year
 
-generalMatrix = []
-
-for TS in timestamps:
-    date = TS.split("_")[0]
-    print("@@@@@@@@@@ Date: {}.".format(date))
-    for H in originalHours:
-        print("@@@@@@@@@@@@@@@@@@@@ Hour: {}.".format(H))
+    for hour in originalHours:
         auxList = []
-        for ST in infoStations["CODI EOI"]:
-            #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Station: {}/{}.".format(ST,infoStations[infoStations["CODI EOI"] == ST]["NOM ESTACIÓ"].iat[0] ))
+        for index, station in enumerate(infoStations["CODI EOI"]):
             subDF = cleanDataParam[cleanDataParam["DATA"].str.contains(date)]
-            auxValue = subDF[subDF["CODI EOI"] == ST][H].iat[0]
-            #print("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@ Value: {}.".format(auxValue))
-            auxList.append(auxValue)
-        print(auxList)
-
-
-
+            auxDF = subDF[subDF["CODI EOI"] == station][hour]
+            value = None
+            if not auxDF.empty:        
+                value = subDF[subDF["CODI EOI"] == station][hour].iat[0]
             
+            if value is None:
+                missingDataPerColumn[index] += 1
+            #print("Station: {}.".format(infoStations[infoStations["CODI EOI"] == station]["NOM ESTACIÓ"].iat[0]))
+            auxList.append(value)
+            # Since we can check None values it may be worth to add which fields are missing data.
+        auxList.append(date + "_" + hour.replace("H", "") + ":00:00")
+        #print(auxList)
+        generalMatrix.append(auxList)
+
+print(missingDataPerColumn)
 
 
-"""
 
-for date in dates:
-    #print("DATE: {}.".format(date))
+pollutionColumns = []
+for name in infoStations["NOM ESTACIÓ"]:
+    pollutionColumns.append(name)
+pollutionColumns.append("timestamp")
 
-    for index, st in enumerate(infoStations["CODI EOI"]):
-        #print("Index: {}, STATION: {}.".format(index, st))
-        stDF = cleanDataParam[cleanDataParam["CODI EOI"] == st]
-        stDF.sort_values("CODI EOI", ascending=True, inplace=True)
-        dateStDF = stDF[stDF["DATA"].str.contains(date)]
+pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
+#matrixPollution = pollutionDF.to_numpy()
 
-        dateStDF.iloc[:, 8:]
-        #infoStations.iloc[:,0:7]
+#TODO: DROP COLUMNS WITH ALL NANS.
 
-        #dayValues = dateStDF.values
-        #dayValues = [val for sublist in dayValues for val in sublist]
-        #dayValues = dayValues[8:].as_matrix()
-        print(dateStDF)
-        
-        #if not dayValues:
-        #    print("Station in: {} on date: {} has no recorded data.".format(infoStations[infoStations["CODI EOI"] == st]["NOM ESTACIÓ"].iat[0], date))
-        
-        #if None in dayValues:
-        #    print(("Station in: {} on date: {} has some invalid data.".format(infoStations[infoStations["CODI EOI"] == st]["NOM ESTACIÓ"].iat[0], date)))
-    
-""" 
+print(pollutionDF)
 
 
 
 
 
-
-
-
-
-
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@ End Creating Matrix: Timestamp / S1, ..., SN @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Creating Matrix: Name1, ..., NameN /Timestamp @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 
