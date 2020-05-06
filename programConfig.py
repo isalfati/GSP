@@ -37,6 +37,9 @@ selection = ["o3", "no2", "pm10"]
 # Parameter to analyze
 contaminant = "pm10"
 
+# Minimum amount of data for a station to be kept 0 < x < 1
+minPercentatge = 0.85
+
 # Avoid warnings
 warnings.simplefilter(action="ignore")
 

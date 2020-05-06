@@ -187,28 +187,94 @@ for day in range(1, monthList[month]+1):
         #print(auxList)
         generalMatrix.append(auxList)
 
-print(missingDataPerColumn)
-
-
+print("\nAmount of data missing per station:")
+print(*missingDataPerColumn, sep=", ")
 
 pollutionColumns = []
+#for name in infoStations["NOM ESTACIÓ"]:
 for name in infoStations["NOM ESTACIÓ"]:
     pollutionColumns.append(name)
+
 pollutionColumns.append("timestamp")
 
 pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
-#matrixPollution = pollutionDF.to_numpy()
 
-#TODO: DROP COLUMNS WITH ALL NANS.
+# Drop station that do not have at least 85% of the data, they are only a few.
+columnsToDrop = []
+listStationNames = infoStations["NOM ESTACIÓ"].tolist()
 
-print(pollutionDF)
+for index in range(0, len(missingDataPerColumn)):
+    if missingDataPerColumn[index] > (monthList[month]*24*minPercentatge):
+        columnsToDrop.append(listStationNames[index])
 
+print("\nOriginal Stations:")
+print(listStationNames, sep="\t")
 
+print("\nThese are the stations that do not fullfill the {} constraint:".format(minPercentatge))
+print(columnsToDrop, sep="\t")
 
+pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
+pollutionDF.dropna(axis=0, inplace=True)
 
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End of Matrix Creation and Cleaning @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@ End Creating Matrix: Name1, ..., NameN /Timestamp @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Split Matrix for analysis purpouses @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+matrixPollution = pollutionDF.to_numpy()
+cleanPollutionColumns = [item for item in pollutionColumns if item not in columnsToDrop]
+print("\nClean Columns:")
+print(cleanPollutionColumns)
 
+sizeMatrixPollution = len(matrixPollution)
+
+split60 = int(sizeMatrixPollution*0.6)
+split40 = sizeMatrixPollution - split60
+
+training60 = matrixPollution[0:split60]
+training60DF = pd.DataFrame(training60, columns=cleanPollutionColumns)
+
+test40 = matrixPollution[split60:]
+test40DF = pd.DataFrame(test40, columns=cleanPollutionColumns)
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Matrix for analysis purpouses @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Linear Combination Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+tmpRecon = np.zeros(len(test40))
+reconStation = 0
+
+for i in range(0, len(test40)):
+    for j in range(0, len(cleanPollutionColumns)-1):
+        print("tmpRecon: {}, adjacency: {}, laplacian: {}, test: {}.".format(tmpRecon[i], adjacencyMatrix[reconStation][j], LaplacianMatrix[reconStation][j], test40[i][j]))
+        adj = adjacencyMatrix[reconStation][j]
+        lpc = LaplacianMatrix[reconStation][j]
+        tst = test40[i][j]
+
+        tmpRecon[i] += (adj*lpc*tst)
+    tmpRecon[i] *= -1
+
+originalValuesStation = test40[:, reconStation]
+predictedValuesStation = tmpRecon
+
+print("size originals: {}, size predicted: {}.".format(len(originalValuesStation), len(predictedValuesStation)))
+
+for i in range(0, len(originalValuesStation)):
+        print("{} : {}.".format(originalValuesStation[i], predictedValuesStation[i]))
+
+MSE = mean_squared_error(test40[:, reconStation], tmpRecon)
+RMSE = math.sqrt(MSE)
+
+print("RMSE: {}.".format(RMSE))
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End Linear Combination Method @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+            
