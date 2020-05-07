@@ -61,7 +61,7 @@ size = len(infoStations)
 adjacencyMatrix = np.zeros((size, size))        # 1 or 0
 distancesMatrix = np.zeros((size, size))        # [i][j] = distance between [i] and [j]
 weightMatrix    = np.zeros((size, size))        # [i][j] = e^(-distance(i,j)²) / (tau²)
-maxDistanceBetweenStations = 20.0
+maxDistanceBetweenStations = 70.0
 
 sumDistances = 0
 
@@ -98,15 +98,15 @@ for i in range(0, size):
 # Because we want undirected graphs, we add the tranposed matrix.
 distancesMatrix = distancesMatrix + distancesMatrix.T
 print("Distances Matrix:")
-#print("\n".join(["\t".join([str(cell) for cell in row]) for row in distancesMatrix]))
+print("\n".join(["\t".join([str(cell) for cell in row]) for row in distancesMatrix]))
 
 adjacencyMatrix = adjacencyMatrix + adjacencyMatrix.T
 print("\nAdjacency Matrix:")
-#print("\n".join(["\t".join([str(cell) for cell in row]) for row in adjacencyMatrix]))
+print("\n".join(["\t".join([str(cell) for cell in row]) for row in adjacencyMatrix]))
 
 weightMatrix = weightMatrix + weightMatrix.T
 print("\nWeighted Matrix:")
-#print("\n".join(["\t".join([str(cell) for cell in row]) for row in weightMatrix]))
+print("\n".join(["\t".join([str(cell) for cell in row]) for row in weightMatrix]))
 
 #@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Graph Creation @@@
@@ -136,15 +136,7 @@ print("\nEigenvalues, a.k.a. Graph Adjacency Spectrum:\n {}.".format(Graph.e))
 
 Eigenvectors = Graph.U
 print("\nEigenvectors:")
-#print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
-
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@ Signal Reconstruction using Stankovic Method @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-#@@@ End of Stankovic Method @@@
-#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Creating Matrix: Timestamp / S1, ..., SN @@@
@@ -228,6 +220,7 @@ matrixPollution = pollutionDF.to_numpy()
 cleanPollutionColumns = [item for item in pollutionColumns if item not in columnsToDrop]
 print("\nClean Columns:")
 print(cleanPollutionColumns)
+print()
 
 sizeMatrixPollution = len(matrixPollution)
 
@@ -244,6 +237,8 @@ test40DF = pd.DataFrame(test40, columns=cleanPollutionColumns)
 #@@@ End Matrix for analysis purpouses @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+# METHOD A)
+
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Linear Combination Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
@@ -253,7 +248,6 @@ reconStation = 0
 
 for i in range(0, len(test40)):
     for j in range(0, len(cleanPollutionColumns)-1):
-        print("tmpRecon: {}, adjacency: {}, laplacian: {}, test: {}.".format(tmpRecon[i], adjacencyMatrix[reconStation][j], LaplacianMatrix[reconStation][j], test40[i][j]))
         adj = adjacencyMatrix[reconStation][j]
         lpc = LaplacianMatrix[reconStation][j]
         tst = test40[i][j]
@@ -264,17 +258,44 @@ for i in range(0, len(test40)):
 originalValuesStation = test40[:, reconStation]
 predictedValuesStation = tmpRecon
 
-print("size originals: {}, size predicted: {}.".format(len(originalValuesStation), len(predictedValuesStation)))
-
 for i in range(0, len(originalValuesStation)):
-        print("{} : {}.".format(originalValuesStation[i], predictedValuesStation[i]))
+        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
 
 MSE = mean_squared_error(test40[:, reconStation], tmpRecon)
 RMSE = math.sqrt(MSE)
 
-print("RMSE: {}.".format(RMSE))
+print("\nRMSE: {}.".format(RMSE))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Linear Combination Method @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-            
+
+# METHOD B)
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ Machine Learning - Linear Regression @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
+#@@@ End Machine Learning - Linear Regression @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
+
+# METHOD C)
+
+#@@@@@@@@@@@@@@@@@@@@@
+#@@@ GSP Stankovic @@@
+#@@@@@@@@@@@@@@@@@@@@@
+
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+#@@@ End of GSP Stankovic @@@
+#@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+# Variation 1)
+
+# Variation 2)
+
+# Variation 3)
+
+# Future work Variation 4)
