@@ -258,8 +258,8 @@ for i in range(0, len(test40)):
 originalValuesStation = test40[:, reconStation]
 predictedValuesStation = tmpRecon
 
-for i in range(0, len(originalValuesStation)):
-        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
+#for i in range(0, len(originalValuesStation)):
+#        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
 
 MSE = mean_squared_error(test40[:, reconStation], tmpRecon)
 RMSE = math.sqrt(MSE)
@@ -276,6 +276,17 @@ print("\nRMSE: {}.".format(RMSE))
 #@@@ Machine Learning - Linear Regression @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
+reconStationAdj = adjacencyMatrix[reconStation]
+
+columnNamesAdj = []
+
+
+for i in range(0, len(pollutionColumns)-1):
+    if reconStationAdj[i] > 0:
+        print("r {}, cname: {}.".format(reconStationAdj[i], pollutionColumns[i]))
+        columnNamesAdj.append(pollutionColumns[i])
+
+columnNamesAdj = [item for item in columnNamesAdj if item not in columnsToDrop]
 
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
