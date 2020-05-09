@@ -120,7 +120,7 @@ Graph.compute_laplacian("normalized")
 LaplacianSparseMatrix = Graph.L
 LaplacianMatrix = LaplacianSparseMatrix.toarray()
 print("\nLaplacian Matrix (Normalized):")
-#print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
+print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in LaplacianMatrix]))
 
 # Compute a full eigendecomposition of the graph Laplacian such that: L = UAU*
 #   Where A is the diagonal matrix of eigenvalues
@@ -193,17 +193,21 @@ pollutionDF = pd.DataFrame(generalMatrix, columns=pollutionColumns)
 
 # Drop station that do not have at least 85% of the data, they are only a few.
 columnsToDrop = []
+columnsIndexToDrop = []
 listStationNames = infoStations["NOM ESTACIÓ"].tolist()
 
 for index in range(0, len(missingDataPerColumn)):
     if missingDataPerColumn[index] > (monthList[month]*24*minPercentatge):
         columnsToDrop.append(listStationNames[index])
+        columnsIndexToDrop.append(index)
 
 print("\nOriginal Stations:")
 print(listStationNames, sep="\t")
 
 print("\nThese are the stations that do not fullfill the {} constraint:".format(minPercentatge))
 print(columnsToDrop, sep="\t")
+print("\nIndex of those columns:")
+print(columnsIndexToDrop, sep=", ")
 
 pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
 pollutionDF.dropna(axis=0, inplace=True)
@@ -228,10 +232,11 @@ split60 = int(sizeMatrixPollution*0.6)
 split40 = sizeMatrixPollution - split60
 
 training60 = matrixPollution[0:split60]
-training60DF = pd.DataFrame(training60, columns=cleanPollutionColumns)
+training60DF = pd.DataFrame(training60, columns=pollutionDF.columns.values)
 
 test40 = matrixPollution[split60:]
-test40DF = pd.DataFrame(test40, columns=cleanPollutionColumns)
+test40DF = pd.DataFrame(test40, columns=pollutionDF.columns.values)
+print(test40DF)
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Matrix for analysis purpouses @@@
@@ -244,22 +249,38 @@ test40DF = pd.DataFrame(test40, columns=cleanPollutionColumns)
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
 tmpRecon = np.zeros(len(test40))
+# Station To Be Reconstructed
 reconStation = 0
 
-for i in range(0, len(test40)):
-    for j in range(0, len(cleanPollutionColumns)-1):
-        adj = adjacencyMatrix[reconStation][j]
-        lpc = LaplacianMatrix[reconStation][j]
-        tst = test40[i][j]
+adjacencyCols = adjacencyMatrix[reconStation]
+interestedAdjacencyCols = [] 
+laplacianCols = LaplacianMatrix[reconStation]
+interestedLaplacianCols = []
 
+for index in range(0, len(adjacencyCols)):
+    if index not in columnsIndexToDrop:
+        interestedAdjacencyCols.append(adjacencyCols[index])
+        interestedLaplacianCols.append(laplacianCols[index])
+
+print("Adjacency of interested columns: ")
+print(interestedAdjacencyCols, sep=", ")
+
+for i in range(0, len(test40)):
+    for j in range(0, len(interestedAdjacencyCols)):
+        adj = interestedAdjacencyCols[j]
+        lpc = interestedLaplacianCols[j]
+        tst = test40[i][j]
+        print("ADJ: {}, LPC: {}, TST: {}.".format(adj, lpc, tst))
         tmpRecon[i] += (adj*lpc*tst)
+    print("@@@@ Result: {}.".format(tmpRecon[i]))
+    print()
     tmpRecon[i] *= -1
 
 originalValuesStation = test40[:, reconStation]
 predictedValuesStation = tmpRecon
 
-#for i in range(0, len(originalValuesStation)):
-#        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
+for i in range(0, len(originalValuesStation)):
+        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
 
 MSE = mean_squared_error(test40[:, reconStation], tmpRecon)
 RMSE = math.sqrt(MSE)
@@ -275,19 +296,6 @@ print("\nRMSE: {}.".format(RMSE))
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Machine Learning - Linear Regression @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-reconStationAdj = adjacencyMatrix[reconStation]
-
-columnNamesAdj = []
-
-
-for i in range(0, len(pollutionColumns)-1):
-    if reconStationAdj[i] > 0:
-        print("r {}, cname: {}.".format(reconStationAdj[i], pollutionColumns[i]))
-        columnNamesAdj.append(pollutionColumns[i])
-
-columnNamesAdj = [item for item in columnNamesAdj if item not in columnsToDrop]
-
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
 #@@@ End Machine Learning - Linear Regression @@@
