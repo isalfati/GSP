@@ -236,7 +236,8 @@ training60DF = pd.DataFrame(training60, columns=pollutionDF.columns.values)
 
 test40 = matrixPollution[split60:]
 test40DF = pd.DataFrame(test40, columns=pollutionDF.columns.values)
-print(test40DF)
+#print(test40DF)
+#print(training60DF)
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Matrix for analysis purpouses @@@
@@ -270,22 +271,22 @@ for i in range(0, len(test40)):
         adj = interestedAdjacencyCols[j]
         lpc = interestedLaplacianCols[j]
         tst = test40[i][j]
-        print("ADJ: {}, LPC: {}, TST: {}.".format(adj, lpc, tst))
+        #print("ADJ: {}, LPC: {}, TST: {}.".format(adj, lpc, tst))
         tmpRecon[i] += (adj*lpc*tst)
-    print("@@@@ Result: {}.".format(tmpRecon[i]))
-    print()
+    #print("@@@@ Result: {}.".format(tmpRecon[i]))
+    #print()
     tmpRecon[i] *= -1
 
 originalValuesStation = test40[:, reconStation]
 predictedValuesStation = tmpRecon
 
-for i in range(0, len(originalValuesStation)):
-        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
+#for i in range(0, len(originalValuesStation)):
+#        print("Original vs Reconstructed: {} % {}.".format(originalValuesStation[i], predictedValuesStation[i]))
 
 MSE = mean_squared_error(test40[:, reconStation], tmpRecon)
 RMSE = math.sqrt(MSE)
 
-print("\nRMSE: {}.".format(RMSE))
+print("\nRMSE: {}\n.".format(RMSE))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End Linear Combination Method @@@
@@ -296,6 +297,40 @@ print("\nRMSE: {}.".format(RMSE))
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ Machine Learning - Linear Regression @@@
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+adjColNames = []
+
+for index in range(0, len(cleanPollutionColumns)-1):
+    if adjacencyCols[index] > 0:
+        adjColNames.append(cleanPollutionColumns[index])
+    
+print(adjColNames)
+
+########### Training
+adjacencyTraining60 = training60DF[adjColNames]
+input60X  = adjacencyTraining60.to_numpy()
+output60Y = training60DF[cleanPollutionColumns[reconStation]].to_numpy()
+
+model = LinearRegression().fit(input60X, output60Y)
+
+r_sq = model.score(input60X, output60Y)
+print("Coefficient of Determination: {}.".format(r_sq))
+print("Intercept: {}.".format(model.intercept_))
+print("Slope: {}.".format(model.coef_))
+
+########### Test
+
+adjacencyTest40 = test40DF[adjColNames]
+input40X  = adjacencyTest40.to_numpy()
+output40Y = test40DF[cleanPollutionColumns[reconStation]].to_numpy()
+
+y_pred = model.predict(input40X)
+#print("Predicted Response: ", y_pred, sep="\n")
+
+MSE = mean_squared_error(output40Y, y_pred)
+RMSE = math.sqrt(MSE)
+
+print("\nRMSE: {}\n.".format(RMSE))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
 #@@@ End Machine Learning - Linear Regression @@@

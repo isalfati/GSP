@@ -5,6 +5,7 @@ import warnings
 import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
+from sklearn.linear_model import LinearRegression
 
 # Configuration File
 
@@ -35,7 +36,7 @@ monthList = { # Dictionary
 selection = ["o3", "no2", "pm10"]
 
 # Parameter to analyze
-contaminant = "no2"
+contaminant = "o3"
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85
