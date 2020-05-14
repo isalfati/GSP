@@ -36,7 +36,7 @@ monthList = { # Dictionary
 selection = ["o3", "no2", "pm10"]
 
 # Parameter to analyze
-contaminant = "o3"
+contaminant = "pm10"
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85

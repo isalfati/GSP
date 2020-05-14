@@ -183,7 +183,6 @@ print("\nAmount of data missing per station:")
 print(*missingDataPerColumn, sep=", ")
 
 pollutionColumns = []
-#for name in infoStations["NOM ESTACIÓ"]:
 for name in infoStations["NOM ESTACIÓ"]:
     pollutionColumns.append(name)
 
@@ -211,6 +210,7 @@ print(columnsIndexToDrop, sep=", ")
 
 pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
 pollutionDF.dropna(axis=0, inplace=True)
+print(pollutionDF)
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End of Matrix Creation and Cleaning @@@
@@ -330,7 +330,7 @@ y_pred = model.predict(input40X)
 MSE = mean_squared_error(output40Y, y_pred)
 RMSE = math.sqrt(MSE)
 
-print("\nRMSE: {}\n.".format(RMSE))
+print("\nRMSE: {}.\n".format(RMSE))
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@#@@@@@@@@@@@@@@@@@@@
 #@@@ End Machine Learning - Linear Regression @@@
@@ -341,6 +341,86 @@ print("\nRMSE: {}\n.".format(RMSE))
 #@@@@@@@@@@@@@@@@@@@@@
 #@@@ GSP Stankovic @@@
 #@@@@@@@@@@@@@@@@@@@@@
+
+# Smoothness of Eigenvectors
+eigenvec = []
+eigenvecTransposed = []
+smoothness = []
+
+for index in range(0, len(Eigenvectors[0])):
+    eigenvec = np.array([Eigenvectors[:, index]])
+    eigenvecTransposed = eigenvec.T
+
+print("Eigenvector: \n{}.".format(eigenvec))
+print("\nEigenvector Transposed:\n{}.".format(eigenvecTransposed))
+print("\nSmoothness of the eigenvector:\n")
+print("\n\n".join(["\n".join(["\t".join([str(round(item, decimalsSparse)) for item in row]) for row in elem]) for elem in smoothness]))
+
+N = len(infoStations["NOM ESTACIÓ"]) # N Nodes of our graph
+vertexSignal = [[]]
+
+# Is any data missing?
+#if missingDataIndicator: # <- Aplicación #1
+#print("\nThere is some data missing, reconstructing data.")
+
+auxPollutionDF = pollutionDF
+auxPollutionDF.drop(columns=listStationNames[0], inplace=True)
+
+interestedLength = pollutionDF.shape[1]-1
+
+N = len(infoStations["NOM ESTACIÓ"]) # N Nodes of our graph
+
+#REPASAR 
+
+for elemTime in auxPollutionDF["timestamp"].unique().tolist():
+    #print("Timestamp: {}.".format(elemTime))
+    values = auxPollutionDF[auxPollutionDF["timestamp"].str.contains(elemTime)].values.tolist()[0]
+ 
+    if not len(values):
+        print("we cannot recover the data from the following timeslot: {}.".format(elemTime))
+        #add to unrecoverable
+    else:
+        # initializing recovery
+        valuesSignal = values[0:interestedLength]
+        valuesStations = auxPollutionDF.columns.values.tolist()[0:interestedLength]
+        stations = infoStations["NOM ESTACIÓ"].tolist()
+
+        vertexSignal = []
+        for name in valuesStations:
+            vertexSignal.append(stations.index(name))
+
+        print("Vertex List: {}.".format(vertexSignal))
+        print("Signal List: {}.\n".format(valuesSignal))        
+    
+        K = M = len(vertexSignal)
+
+        for val in range(1, M+1):
+            K = val
+            print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+
+            measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K]) # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+            pInv = np.linalg.pinv(measurementMatrix)
+
+            coeficientsX = np.matmul(pInv, valuesSignal).tolist()
+            
+            for i in range(0, N-K):
+                coeficientsX.append(0)
+
+            coeficientsX = np.array(coeficientsX)
+
+            # Recover Signal
+            signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+            signalRecovered = [round(x, decimals) for x in signalRecovered]
+
+            print("Recovered L: {}.\n".format(signalRecovered))
+    
+
+    
+
+
+
+
+
 
 #@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 #@@@ End of GSP Stankovic @@@
