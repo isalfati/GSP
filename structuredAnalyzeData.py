@@ -148,9 +148,11 @@ def obtainPollutionDataMatrix(infoStations, cleanDataParam):
     return generalMatrix, missingDataPerColumn, timestamps 
 
 def findColumnsToDrop(infoStations, missingDataPerColumn):
+    print("Finding columns to be dropped...\n")
+    
     # Drop stations that do not have at least 85% of the data (a few have 0 data).
     columnsToDrop = []
-    columnIndexToDrop = []
+    columnsIndexToDrop = []
     listStationNames = infoStations["NOM ESTACIÓ"].tolist()
 
     for index in range(0, len(missingDataPerColumn)):
@@ -158,7 +160,85 @@ def findColumnsToDrop(infoStations, missingDataPerColumn):
             columnsToDrop.append(listStationNames[index])
             columnsIndexToDrop.append(index)
 
-    return columnsToDrop, columnIndexToDrop
+    return columnsToDrop, columnsIndexToDrop
+
+def splitDataSet(pollutionColumns, columnsToDrop, pollutionDF):
+    print("Splitting data set...\n")
+
+    matrixPollution = pollutionDF.to_numpy()
+    cleanPollutionColumns = [item for item in pollutionColumns if item not in columnsToDrop]
+    sizeMatrixPollution = len(matrixPollution)
+
+    split60 = int(sizeMatrixPollution*0.6)
+    split40 = sizeMatrixPollution - split60
+
+    set60 = matrixPollution[0:split60]
+    set60DF = pd.DataFrame(set60, columns=pollutionDF.columns.values)
+
+    set40 = matrixPollution[split60:]
+    set40DF = pd.DataFrame(set40, columns=pollutionDF.columns.values)
+
+    return set40, set40DF, set60, set60DF, cleanPollutionColumns
+
+def linearCombination(adjacencyCols, laplacianCols, sizeSet40, columnsIndexToDrop, set40):
+        print("Linear Combination Reconstruction...\n")
+
+        recon = np.zeros(sizeSet40)
+        interestedAdjacencyCols = []
+        interestedLaplacianCols = []
+
+        for index in range(0, len(adjacencyCols)):
+            if index not in columnsIndexToDrop:
+                interestedAdjacencyCols.append(adjacencyCols[index])
+                interestedLaplacianCols.append(laplacianCols[index])
+
+        print("Adjacency of interested columns: ")
+        print(interestedAdjacencyCols, sep=", ")
+
+        print("Lacplacian of interested columns: ")
+        print(interestedLaplacianCols, sep=", ")
+
+        for i in range(0, sizeSet40):
+            for j in range(0, len(interestedAdjacencyCols)):
+                adj = interestedAdjacencyCols[j]
+                lpc = interestedLaplacianCols[j]
+                tst = set40[i][j]
+                #print("ADJ: {}, LPC: {}, TST: {}.".format(adj, lpc, tst))
+                recon[i] += (adj*lpc*tst)
+            recon[i] *= -1
+            #print("@@@@ Result: {}.\n".format(recon[i]))
+    
+        return recon
+    
+def linearRegressionML(sizeCleanPollutionColumns, adjacencyCols, cleanPollutionColumns, set60DF, set40DF, station):
+    print("Linear Regression - ML...")
+
+    adjColNames = []
+    for index in range(0, sizeCleanPollutionColumns):
+        if adjacencyCols[index] > 0:
+            adjColNames.append(cleanPollutionColumns[index])
+
+    adjacencyTraining60 = set60DF[adjColNames]
+    input60X  = adjacencyTraining60.to_numpy()
+    output60Y = set60DF[cleanPollutionColumns[station]].to_numpy()
+
+    # Training
+    model = LinearRegression().fit(input60X, output60Y)
+    r_sq = model.score(input60X, output60Y)
+    
+    print("Summary of Training:\n")
+    print("Coefficient of Determination: {}.".format(r_sq))
+    print("Intercept: {}.".format(model.intercept_))
+    print("Slope: {}.".format(model.coef_))
+
+    # Prediction
+    adjacencyTest40 = set40DF[adjColNames]
+    input40X  = adjacencyTest40.to_numpy()
+
+    y_pred = model.predict(input40X)
+    #print("Predicted Response: ", y_pred, sep="\n")
+
+    return y_pred
 
 def main():
     print("Welcome. This program analyzes the data of different contaminants in the air of Catalonia.")
@@ -238,7 +318,7 @@ def main():
     pollutionAux = pd.DataFrame(generalMatrix, columns=pollutionColumns)
     pollutionDF = pollutionAux.where(pd.notnull(pollutionAux), None)
 
-    # 
+    # Find Columns that do not fulfill the % of data.
     columnsToDrop, columnsIndexToDrop = findColumnsToDrop(infoStations, missingDataPerColumn)
 
     print("\nThese are the stations that do not fullfill the {} constraint:".format(minPercentatge))
@@ -246,5 +326,51 @@ def main():
     print("\nIndex of those columns:")
     print(columnsIndexToDrop, sep=", ")
 
+    # For Method C (Stankovic)
+    pollutionStankovicDF = pollutionDF.copy()
+
+    pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
+    pollutionDF.dropna(axis=0, inplace=True)
+    pollutionDF.reset_index(drop=True, inplace=True)
+
+    # Split
+    set40, set40DF, set60, set60DF, cleanPollutionColumns = splitDataSet(pollutionColumns, columnsToDrop, pollutionDF)
+
+    # Target Station
+    stationToReconstruct = 0
+    
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #@@@ Linear Combination Method @@@
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    
+    originalValues = set40[:, stationToReconstruct]
+    predictedValues = linearCombination(adjacencyMatrix[stationToReconstruct], 
+                                        LaplacianMatrix[stationToReconstruct], 
+                                        len(set40), columnsIndexToDrop, set40)
+
+    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValues)
+    RMSE = math.sqrt(MSE)
+
+    print("Linear combination RMSE: {}.\n".format(RMSE))
+
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #@@@ Machine Learning - Linear Regression @@@
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    predictedValuesLinearRegression = linearRegressionML(len(cleanPollutionColumns)-1, adjacencyMatrix[stationToReconstruct], cleanPollutionColumns, set60DF, set40DF, stationToReconstruct)
+    
+    #def linearRegressionML(sizeCleanPollutionColumns, adjacencyCols, cleanPollutionColumns, set60DF, set40DF, station):
+
+    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValuesLinearRegression)
+    RMSE = math.sqrt(MSE)
+
+    print("Linear Regression RMSE: {}.\n".format(RMSE))
+
+    #@@@@@@@@@@@@@@@@@@@@@
+    #@@@ GSP Stankovic @@@
+    #@@@@@@@@@@@@@@@@@@@@@
+
 if __name__ == "__main__":
     main()
+
+    
