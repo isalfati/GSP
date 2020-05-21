@@ -240,6 +240,84 @@ def linearRegressionML(sizeCleanPollutionColumns, adjacencyCols, cleanPollutionC
 
     return y_pred
 
+def stankovicMethod(infoStations, Eigenvectors, dataSet):
+    print("Stankovic Method...")
+
+    N = len(infoStations["NOM ESTACIÓ"])
+    recoveredDataSet = []
+    currentPositive = []
+    maxK = 0
+
+    for elemTime in dataSet["timestamp"].unique().tolist():
+        #print("Timestamp: {}.".format(elemTime))
+        values = dataSet[dataSet["timestamp"].str.contains(elemTime)].values.tolist()[0]
+        #print("Values: {}.".format(values))
+        
+        valuesSignal = values[0:len(values)-1]
+        #print("Values Signal: {}.".format(valuesSignal))
+
+        valuesStations = dataSet.columns.values.tolist()[0:len(values)-1]
+        #print("Stations: {}.".format(valuesStations))
+        
+        listStations = infoStations["NOM ESTACIÓ"].tolist()
+        
+        vertexSignal = []
+        for index, name in enumerate(valuesStations):
+            if valuesSignal[index] is not None:
+                vertexSignal.append(listStations.index(name))
+
+        valuesSignal = [item for item in valuesSignal if item is not None]
+        M = len(vertexSignal)
+
+        #print("ValuesList: {}.".format(valuesSignal))
+        #print("VertexList: {}.".format(vertexSignal))
+        #print("SignalList: {}.\n".format(valuesSignal))
+
+        for val in range(0, M+1):
+            signalRecovered = []
+            K = val
+            #print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+
+            # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
+            measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K])
+
+            #print("MM: {}.".format(measurementMatrix))
+
+            pInv = np.linalg.pinv(measurementMatrix)
+
+            coeficientsX = np.matmul(pInv, valuesSignal).tolist()
+
+            for i in range(0, N-K):
+                coeficientsX.append(0)
+            
+            #print("coeficientsX: {}.".format(coeficientsX))
+
+            coeficientsX = np.array(coeficientsX)
+
+            #Recover Signal.
+            signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+            signalRecovered = [round(x, decimals) for x in signalRecovered]
+
+            #print("Recovered L: {}.\n".format(signalRecovered))
+
+            #print(signalRecovered)
+
+            positive = all(item >= 0 for item in signalRecovered)
+
+            
+            if positive:
+                maxK = K
+                currentPositive = signalRecovered
+                currentPositive.append(elemTime)
+                #print(currentPositive)
+
+            if K == M:
+                #print("MaxK: {} -> Appending: {}.".format(maxK, currentPositive))
+                recoveredDataSet.append(currentPositive)
+                currentPositive = []
+
+    return recoveredDataSet
+
 def main():
     print("Welcome. This program analyzes the data of different contaminants in the air of Catalonia.")
     print("Right now is configured to analyze the following contaminant: {}.\n".format(contaminant))
@@ -327,7 +405,7 @@ def main():
     print(columnsIndexToDrop, sep=", ")
 
     # For Method C (Stankovic)
-    pollutionStankovicDF = pollutionDF.copy()
+    #pollutionStankovicDF = pollutionDF.copy()
 
     pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
     pollutionDF.dropna(axis=0, inplace=True)
@@ -369,6 +447,20 @@ def main():
     #@@@@@@@@@@@@@@@@@@@@@
     #@@@ GSP Stankovic @@@
     #@@@@@@@@@@@@@@@@@@@@@
+
+    # Number of nodes in our graph
+    N = len(infoStations["NOM ESTACIÓ"]) 
+    # TODO: This is wrong, it uses different values of K for PM10.
+    predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
+    predictedStankovicDF = pd.DataFrame(predictedStankovic, columns=pollutionColumns)
+
+    predictedStankovicStation = predictedStankovicDF[pollutionColumns[stationToReconstruct]].values.tolist()
+
+    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedStankovicStation)
+    RMSE = math.sqrt(MSE)
+
+    print("Stankovic Regression RMSE: {}.\n".format(RMSE))
+
 
 if __name__ == "__main__":
     main()
