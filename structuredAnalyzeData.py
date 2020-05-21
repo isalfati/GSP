@@ -148,7 +148,7 @@ def obtainPollutionDataMatrix(infoStations, cleanDataParam):
     return generalMatrix, missingDataPerColumn, timestamps 
 
 def findColumnsToDrop(infoStations, missingDataPerColumn):
-    print("Finding columns to be dropped...\n")
+    print("Finding columns to be dropped...")
     
     # Drop stations that do not have at least 85% of the data (a few have 0 data).
     columnsToDrop = []
@@ -192,11 +192,11 @@ def linearCombination(adjacencyCols, laplacianCols, sizeSet40, columnsIndexToDro
                 interestedAdjacencyCols.append(adjacencyCols[index])
                 interestedLaplacianCols.append(laplacianCols[index])
 
-        print("Adjacency of interested columns: ")
-        print(interestedAdjacencyCols, sep=", ")
+        #print("Adjacency of interested columns: ")
+        #print(interestedAdjacencyCols, sep=", ")
 
-        print("Lacplacian of interested columns: ")
-        print(interestedLaplacianCols, sep=", ")
+        #print("Lacplacian of interested columns: ")
+        #print(interestedLaplacianCols, sep=", ")
 
         for i in range(0, sizeSet40):
             for j in range(0, len(interestedAdjacencyCols)):
@@ -429,7 +429,7 @@ def main():
     MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValues)
     RMSE = math.sqrt(MSE)
 
-    print("Linear combination RMSE: {}.\n".format(RMSE))
+    print("\nLinear combination RMSE: {}.\n".format(RMSE))
 
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     #@@@ Machine Learning - Linear Regression @@@
@@ -460,6 +460,13 @@ def main():
     RMSE = math.sqrt(MSE)
 
     print("Stankovic Regression RMSE: {}.\n".format(RMSE))
+
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #@@@ Variation #1: Adding Noise to a Random Station @@@
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    #faultyStation = rand
+    
 
 
 if __name__ == "__main__":
