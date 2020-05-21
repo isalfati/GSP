@@ -404,12 +404,30 @@ def main():
     print("\nIndex of those columns:")
     print(columnsIndexToDrop, sep=", ")
 
-    # For Method C (Stankovic)
-    #pollutionStankovicDF = pollutionDF.copy()
-
     pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
     pollutionDF.dropna(axis=0, inplace=True)
     pollutionDF.reset_index(drop=True, inplace=True)
+
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+    #@@@ Variation #1: Adding Noise to a Random Station @@@
+    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+
+    faultyStation = 1
+    mu, sigma = 0, 0.1
+
+    variationPollutionDF = pollutionDF.copy()
+
+    # Creation of noise with the same dimensions as a column (station)
+    noiseValues = np.random.normal(mu, sigma,[len(variationPollutionDF), 1])
+    originalValues = variationPollutionDF[pollutionColumns[faultyStation]].values
+
+    newValues = np.hstack([noiseValues[i] + originalValues[i] for i in range(0, len(noiseValues))])
+    variationPollutionDF[pollutionColumns[faultyStation]] = newValues
+
+
+    # ------ add both to a list, for over it.
+
+
 
     # Split
     set40, set40DF, set60, set60DF, cleanPollutionColumns = splitDataSet(pollutionColumns, columnsToDrop, pollutionDF)
@@ -465,7 +483,23 @@ def main():
     #@@@ Variation #1: Adding Noise to a Random Station @@@
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    #faultyStation = rand
+    # Creation of noise with the same dimensions as a column (station)
+    noiseValues = np.random.normal(mu, sigma,[len(pollutionDF), 1])
+    originalValues = pollutionDF[pollutionColumns[faultyStation]].values
+
+    newValues = np.hstack([noiseValues[i] + originalValues[i] for i in range(0, len(noiseValues))])
+    pollutionDF[pollutionColumns[faultyStation]] = newValues
+
+
+
+    
+
+
+"""
+for item in list:
+    if conditional:
+        expression
+"""
     
 
 
