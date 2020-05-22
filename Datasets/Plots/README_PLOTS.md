@@ -1,0 +1,1 @@
+This directory contains folium maps and adjacency imanges generated during execution.

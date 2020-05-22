@@ -1,11 +1,14 @@
 import time # Lord
-#import folium
-#import seaborn as sns
+import folium
+import seaborn as sns
 import geopy.distance
 from programConfig import *
 import matplotlib.pyplot as plt
 #import matplotlib.gridspec as gridspec
 from pygsp import graphs, filters, plotting, utils
+
+# Program created by: Ivan Salfati 
+# Mail: ivansalfatift@gmail.com
 
 def importData():
     print("Importing data...\n")
@@ -58,6 +61,7 @@ def obtainMissingData(infoStations):
     
     print("Summary of missing data: \n")
     print(*listMissing, sep="\n")
+    print()
 
     return listMissing
 
@@ -104,6 +108,46 @@ def obtainWeightAdjacencyMatrix(distancesMatrix, maxDistance, size, tau):
                 weightMatrix[i][j] = adjacencyMatrix[i][j] = 0
 
     return weightMatrix, adjacencyMatrix
+
+def coordinatePlots(infoStations, weightMatrix):
+    print("\nGenerating Folium Map...")
+
+    min_lat = infoStations["LATITUD"].min()
+    max_lat = infoStations["LATITUD"].max()
+    min_lon = infoStations["LONGITUD"].min()
+    max_lon = infoStations["LONGITUD"].max()
+    center_lat = (min_lat + max_lat) / 2
+    center_lon = (min_lon + max_lon) / 2
+
+    m = folium.Map(location=[center_lat, center_lon], tiles='openstreetmap', zoom_start=10, control_scale=True)
+
+    for i in range(0, len(infoStations)):
+        folium.Marker([infoStations.iloc[i]['LATITUD'], infoStations.iloc[i]['LONGITUD']], popup=infoStations.iloc[i]["NOM ESTACIÓ"]).add_to(m)
+
+    m.save(filename + "Plots/" + month + "_" + city + "_" + year + "_" + contaminant + "_" + str(maxDistanceBetweenStations) + "Km_map.html")
+
+    print("\nGenerating Adjacency Plot...")
+
+    fig, ax = plt.subplots()
+    
+    # Style
+    sns.set(style='whitegrid', color_codes=True)
+
+    sns.scatterplot(x="LONGITUD", y="LATITUD", data=infoStations, ax=ax)
+
+    ax.set_xlabel("Longitud")
+    ax.set_ylabel("Latitud")
+
+    #Plot Edges
+    for i in range(0, len(weightMatrix[0])):
+        pointTmp = [weightMatrix[0][i], weightMatrix[1][i]]
+        for j in range(i, len(weightMatrix[0])):
+            if weightMatrix[i][j] > 0.0:
+                df2 = pd.DataFrame(np.array([[infoStations.loc[i]["LATITUD"], infoStations.loc[i]["LONGITUD"]], [infoStations.loc[j]["LATITUD"], infoStations.loc[j]["LONGITUD"]]]), columns=["LONGITUD", "LATITUD"])
+                ax.plot(df2["LATITUD"], df2["LONGITUD"], 'black')
+
+    ax.plot(infoStations["LONGITUD"], infoStations["LATITUD"], 'bo') # Black-Blue Circles
+    plt.savefig((filename + "Plots/" + month + "_" + city + "_" + year + "_" + contaminant + "_" + str(maxDistanceBetweenStations) + "Km_adjacencies.png"))
 
 def obtainPollutionDataMatrix(infoStations, cleanDataParam):
     print("\nObtaining pollution data matrix, please wait...\n")
@@ -181,7 +225,7 @@ def splitDataSet(pollutionColumns, columnsToDrop, pollutionDF):
     return set40, set40DF, set60, set60DF, cleanPollutionColumns
 
 def linearCombination(adjacencyCols, laplacianCols, sizeSet40, columnsIndexToDrop, set40):
-        print("Linear Combination Reconstruction...\n")
+        print("Linear Combination Reconstruction...")
 
         recon = np.zeros(sizeSet40)
         interestedAdjacencyCols = []
@@ -329,11 +373,10 @@ def main():
     infoStations = obtainStationInfo(cleanDataParam)
 
     # Find which timestamps have missing data
-    listMissingData = obtainMissingData(infoStations)
+    #listMissingData = obtainMissingData(infoStations)
 
     # Calculate Distance Matrix, each element contains the distance between elem [i] and elem [j]
     points = [infoStations["LATITUD"].tolist(), infoStations["LONGITUD"].tolist()]
-    maxDistanceBetweenStations = 80 # km 
 
     distancesMatrix, tau = obtainDistancesMatrix(points, len(infoStations))
 
@@ -379,6 +422,8 @@ def main():
     print("\nEigenvectors:")
     print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
+    coordinatePlots(infoStations, weightMatrix)
+    
     #plt.stem(Eigenvalues)
     #plt.show()
 
@@ -403,6 +448,7 @@ def main():
     print(columnsToDrop, sep="\t")
     print("\nIndex of those columns:")
     print(columnsIndexToDrop, sep=", ")
+    print()
 
     pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
     pollutionDF.dropna(axis=0, inplace=True)
@@ -412,95 +458,71 @@ def main():
     #@@@ Variation #1: Adding Noise to a Random Station @@@
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    faultyStation = 1
-    mu, sigma = 0, 0.1
-
     variationPollutionDF = pollutionDF.copy()
 
     # Creation of noise with the same dimensions as a column (station)
     noiseValues = np.random.normal(mu, sigma,[len(variationPollutionDF), 1])
-    originalValues = variationPollutionDF[pollutionColumns[faultyStation]].values
+    originalValues = variationPollutionDF[pollutionColumns[targetStation[1]]].values
 
     newValues = np.hstack([noiseValues[i] + originalValues[i] for i in range(0, len(noiseValues))])
-    variationPollutionDF[pollutionColumns[faultyStation]] = newValues
+    variationPollutionDF[pollutionColumns[targetStation[1]]] = newValues
 
+    # Apply reconstruction over all created data sets.
+    listDataSets = []
+    listDataSets.append(pollutionDF)
+    listDataSets.append(variationPollutionDF)
 
-    # ------ add both to a list, for over it.
+    for index, elemDF in enumerate(listDataSets):
+        print("@@@@@@@@@@@@@@@@@@@@")
+        print("@@@ Data Set: #{} @@@".format(index))
+        print("@@@@@@@@@@@@@@@@@@@@\n")
 
+        stationToReconstruct = targetStation[index]
 
+        # Split
+        set40, set40DF, set60, set60DF, cleanPollutionColumns = splitDataSet(pollutionColumns, columnsToDrop, elemDF)
+        
+        #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        #@@@ Linear Combination Method @@@
+        #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        
+        originalValues = set40[:, stationToReconstruct]
+        predictedValues = linearCombination(adjacencyMatrix[stationToReconstruct], 
+                                            LaplacianMatrix[stationToReconstruct], 
+                                            len(set40), columnsIndexToDrop, set40)
 
-    # Split
-    set40, set40DF, set60, set60DF, cleanPollutionColumns = splitDataSet(pollutionColumns, columnsToDrop, pollutionDF)
+        MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValues)
+        RMSE = math.sqrt(MSE)
 
-    # Target Station
-    stationToReconstruct = 0
-    
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    #@@@ Linear Combination Method @@@
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    
-    originalValues = set40[:, stationToReconstruct]
-    predictedValues = linearCombination(adjacencyMatrix[stationToReconstruct], 
-                                        LaplacianMatrix[stationToReconstruct], 
-                                        len(set40), columnsIndexToDrop, set40)
+        print("\nLinear combination RMSE: {}.\n".format(RMSE))
 
-    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValues)
-    RMSE = math.sqrt(MSE)
+        #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        #@@@ Machine Learning - Linear Regression @@@
+        #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    print("\nLinear combination RMSE: {}.\n".format(RMSE))
+        predictedValuesLinearRegression = linearRegressionML(len(cleanPollutionColumns)-1, adjacencyMatrix[stationToReconstruct], cleanPollutionColumns, set60DF, set40DF, stationToReconstruct)
+        
+        MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValuesLinearRegression)
+        RMSE = math.sqrt(MSE)
 
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    #@@@ Machine Learning - Linear Regression @@@
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
+        print("\nLinear Regression RMSE: {}.\n".format(RMSE))
 
-    predictedValuesLinearRegression = linearRegressionML(len(cleanPollutionColumns)-1, adjacencyMatrix[stationToReconstruct], cleanPollutionColumns, set60DF, set40DF, stationToReconstruct)
-    
-    #def linearRegressionML(sizeCleanPollutionColumns, adjacencyCols, cleanPollutionColumns, set60DF, set40DF, station):
+        #@@@@@@@@@@@@@@@@@@@@@
+        #@@@ GSP Stankovic @@@
+        #@@@@@@@@@@@@@@@@@@@@@
 
-    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValuesLinearRegression)
-    RMSE = math.sqrt(MSE)
+        # Number of nodes in our graph
+        N = len(infoStations["NOM ESTACIÓ"]) 
+        # TODO: This is wrong, it uses different values of K for PM10.
+        predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
+        predictedStankovicDF = pd.DataFrame(predictedStankovic, columns=pollutionColumns)
 
-    print("Linear Regression RMSE: {}.\n".format(RMSE))
+        predictedStankovicStation = predictedStankovicDF[pollutionColumns[stationToReconstruct]].values.tolist()
 
-    #@@@@@@@@@@@@@@@@@@@@@
-    #@@@ GSP Stankovic @@@
-    #@@@@@@@@@@@@@@@@@@@@@
+        MSE = mean_squared_error(set40[:, stationToReconstruct], predictedStankovicStation)
+        RMSE = math.sqrt(MSE)
 
-    # Number of nodes in our graph
-    N = len(infoStations["NOM ESTACIÓ"]) 
-    # TODO: This is wrong, it uses different values of K for PM10.
-    predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
-    predictedStankovicDF = pd.DataFrame(predictedStankovic, columns=pollutionColumns)
-
-    predictedStankovicStation = predictedStankovicDF[pollutionColumns[stationToReconstruct]].values.tolist()
-
-    MSE = mean_squared_error(set40[:, stationToReconstruct], predictedStankovicStation)
-    RMSE = math.sqrt(MSE)
-
-    print("Stankovic Regression RMSE: {}.\n".format(RMSE))
-
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-    #@@@ Variation #1: Adding Noise to a Random Station @@@
-    #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
-
-    # Creation of noise with the same dimensions as a column (station)
-    noiseValues = np.random.normal(mu, sigma,[len(pollutionDF), 1])
-    originalValues = pollutionDF[pollutionColumns[faultyStation]].values
-
-    newValues = np.hstack([noiseValues[i] + originalValues[i] for i in range(0, len(noiseValues))])
-    pollutionDF[pollutionColumns[faultyStation]] = newValues
-
-
-
-    
-
-
-"""
-for item in list:
-    if conditional:
-        expression
-"""
-    
+        print("\nStankovic Regression RMSE: {}.\n".format(RMSE))
 
 
 if __name__ == "__main__":

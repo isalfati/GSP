@@ -12,11 +12,6 @@ from sklearn.linear_model import LinearRegression
 # Filename
 filename = os.environ["HOME"] + "/Desktop/GSP/Datasets/"
 
-# City & Date
-city = "Barcelona"
-month = "March"
-year  = "2020"
-
 monthList = { # Dictionary
     "January"  : 31,
     "February" : 28,
@@ -35,12 +30,31 @@ monthList = { # Dictionary
 # Selected Parameters
 selection = ["o3", "no2", "pm10"]
 
+############################### Parameters to be modified ###############################
+
+# City & Date       # If city = BCN, month = March, the small dataset test will be used instead.
+city = "Barcelona"  # Right now, Barcelona is the only one possible.
+month = "January"   # January, February and March possible.
+year  = "2020"      # Only 2020 possible.
+
 # Parameter to analyze
-contaminant = "pm10"
+contaminant = "pm10" # any of the selection list.
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85
 
+# Maximum distance between stations
+maxDistanceBetweenStations = 50 # km 
+
+# Target Station Selector:
+# [0]: Station to reconstruct, [1]: Faulty Station
+targetStation = [7, 1]
+
+# Parameters of faulty station
+mu, sigma = 0, 0.5
+
+#########################################################################################
+ 
 # Avoid warnings
 warnings.simplefilter(action="ignore")
 
