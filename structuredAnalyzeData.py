@@ -356,6 +356,7 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
                 #print(currentPositive)
 
             if K == M:
+                #print("MAXK: {}.".format(maxK))
                 #print("MaxK: {} -> Appending: {}.".format(maxK, currentPositive))
                 recoveredDataSet.append(currentPositive)
                 currentPositive = []
@@ -450,9 +451,11 @@ def main():
     print(columnsIndexToDrop, sep=", ")
     print()
 
+    print("Size Data Set pre-Drop NA: {}.".format(len(pollutionDF)))
     pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
     pollutionDF.dropna(axis=0, inplace=True)
     pollutionDF.reset_index(drop=True, inplace=True)
+    print("Size Data Set post-Drop NA: {}.".format(len(pollutionDF)))
 
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     #@@@ Variation #1: Adding Noise to a Random Station @@@

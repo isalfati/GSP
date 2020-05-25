@@ -34,7 +34,7 @@ selection = ["o3", "no2", "pm10"]
 
 # City & Date       # If city = BCN, month = March, the small dataset test will be used instead.
 city = "Barcelona"  # Right now, Barcelona is the only one possible.
-month = "January"   # January, February and March possible.
+month = "March"   # January, February and March possible.
 year  = "2020"      # Only 2020 possible.
 
 # Parameter to analyze
