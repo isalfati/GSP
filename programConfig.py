@@ -38,7 +38,7 @@ month = "March"   # January, February and March possible.
 year  = "2020"      # Only 2020 possible.
 
 # Parameter to analyze
-contaminant = "pm10" # any of the selection list.
+contaminant = "o3" # any of the selection list.
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85
@@ -48,10 +48,11 @@ maxDistanceBetweenStations = 50 # km
 
 # Target Station Selector:
 # [0]: Station to reconstruct, [1]: Faulty Station
-targetStation = [7, 1]
+# Two scenarios, Faulty station impacts (adjacent) or it doesn't.
+targetStation = [1, 3]
 
 # Parameters of faulty station
-mu, sigma = 0, 0.5
+mu, sigma = 0, 255
 
 #########################################################################################
  

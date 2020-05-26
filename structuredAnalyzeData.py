@@ -455,7 +455,7 @@ def main():
     pollutionDF.drop(columns=columnsToDrop, axis=1, inplace=True)
     pollutionDF.dropna(axis=0, inplace=True)
     pollutionDF.reset_index(drop=True, inplace=True)
-    print("Size Data Set post-Drop NA: {}.".format(len(pollutionDF)))
+    print("Size Data Set post-Drop NA: {}.\n".format(len(pollutionDF)))
 
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
     #@@@ Variation #1: Adding Noise to a Random Station @@@
@@ -475,12 +475,14 @@ def main():
     listDataSets.append(pollutionDF)
     listDataSets.append(variationPollutionDF)
 
+    print("Reconstructing data on station: {}. For the second round, the faulty station will be: {}.\n".format(targetStation[0], targetStation[1]))
+
     for index, elemDF in enumerate(listDataSets):
         print("@@@@@@@@@@@@@@@@@@@@")
         print("@@@ Data Set: #{} @@@".format(index))
         print("@@@@@@@@@@@@@@@@@@@@\n")
 
-        stationToReconstruct = targetStation[index]
+        stationToReconstruct = targetStation[0]
 
         # Split
         set40, set40DF, set60, set60DF, cleanPollutionColumns = splitDataSet(pollutionColumns, columnsToDrop, elemDF)
