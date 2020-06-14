@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<head>    
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    
+        <script>
+            L_NO_TOUCH = false;
+            L_DISABLE_3D = false;
+        </script>
+    
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.js"></script>
+    <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.5.1/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
+    <link rel="stylesheet" href="https://rawcdn.githack.com/python-visualization/folium/master/folium/templates/leaflet.awesome.rotate.css"/>
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+    <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
+    
+            <meta name="viewport" content="width=device-width,
+                initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+            <style>
+                #map_50fa500593f54365add2589be4bb51cc {
+                    position: relative;
+                    width: 100.0%;
+                    height: 100.0%;
+                    left: 0.0%;
+                    top: 0.0%;
+                }
+            </style>
+        
+</head>
+<body>    
+    
+            <div class="folium-map" id="map_50fa500593f54365add2589be4bb51cc" ></div>
+        
+</body>
+<script>    
+    
+            var map_50fa500593f54365add2589be4bb51cc = L.map(
+                "map_50fa500593f54365add2589be4bb51cc",
+                {
+                    center: [41.465845, 2.1159991000000002],
+                    crs: L.CRS.EPSG3857,
+                    zoom: 10,
+                    zoomControl: true,
+                    preferCanvas: false,
+                }
+            );
+            L.control.scale().addTo(map_50fa500593f54365add2589be4bb51cc);
+
+            
+
+        
+    
+            var tile_layer_ca5c6d32d98e4651b2ef8a5493bbf1c5 = L.tileLayer(
+                "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+            var marker_e938848dbe55483bb655e35fa2c46fe7 = L.marker(
+                [41.40388, 2.204501],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_72ae2910c4bf4805aab0a465172c9607 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_38571d0abf094101b0ed488a782ac106 = $(`<div id="html_38571d0abf094101b0ed488a782ac106" style="width: 100.0%; height: 100.0%;">Barcelona (Poblenou)</div>`)[0];
+            popup_72ae2910c4bf4805aab0a465172c9607.setContent(html_38571d0abf094101b0ed488a782ac106);
+        
+
+        marker_e938848dbe55483bb655e35fa2c46fe7.bindPopup(popup_72ae2910c4bf4805aab0a465172c9607)
+        ;
+
+        
+    
+    
+            var marker_6ebde9cb03984191ace0dd70db136eb0 = L.marker(
+                [41.385315000000006, 2.1537998],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_35378188f6a24dfa830ea391cd3f8d89 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_74937ab03ae14a0d8e052311971cee8a = $(`<div id="html_74937ab03ae14a0d8e052311971cee8a" style="width: 100.0%; height: 100.0%;">Barcelona (Eixample)</div>`)[0];
+            popup_35378188f6a24dfa830ea391cd3f8d89.setContent(html_74937ab03ae14a0d8e052311971cee8a);
+        
+
+        marker_6ebde9cb03984191ace0dd70db136eb0.bindPopup(popup_35378188f6a24dfa830ea391cd3f8d89)
+        ;
+
+        
+    
+    
+            var marker_7169c3c4b3be4c6b916efe227ab825e6 = L.marker(
+                [41.398724, 2.1533987999999997],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_531d0582177148d59a0d36b504ee7fe6 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a9acadf367fb464a92b0b4f17683fc2f = $(`<div id="html_a9acadf367fb464a92b0b4f17683fc2f" style="width: 100.0%; height: 100.0%;">Barcelona (Gràcia - Sant Gervasi)</div>`)[0];
+            popup_531d0582177148d59a0d36b504ee7fe6.setContent(html_a9acadf367fb464a92b0b4f17683fc2f);
+        
+
+        marker_7169c3c4b3be4c6b916efe227ab825e6.bindPopup(popup_531d0582177148d59a0d36b504ee7fe6)
+        ;
+
+        
+    
+    
+            var marker_bf85a42acab546e5b56197949d2760ff = L.marker(
+                [41.426109999999994, 2.1480017000000005],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_4e68353e0f474ad589820a62418d3459 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_f38868fcf01943c68d9a83c52f408a1b = $(`<div id="html_f38868fcf01943c68d9a83c52f408a1b" style="width: 100.0%; height: 100.0%;">Barcelona (Parc Vall Hebron)</div>`)[0];
+            popup_4e68353e0f474ad589820a62418d3459.setContent(html_f38868fcf01943c68d9a83c52f408a1b);
+        
+
+        marker_bf85a42acab546e5b56197949d2760ff.bindPopup(popup_4e68353e0f474ad589820a62418d3459)
+        ;
+
+        
+    
+    
+            var marker_0b4721989cea4a1e8f407464c1681ff1 = L.marker(
+                [41.38749, 2.1151996],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_686d396f8e8d435099148b7ebe9a6708 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_115defa6b580403b8fcf0c60aed6e3bc = $(`<div id="html_115defa6b580403b8fcf0c60aed6e3bc" style="width: 100.0%; height: 100.0%;">Barcelona (Palau Reial)</div>`)[0];
+            popup_686d396f8e8d435099148b7ebe9a6708.setContent(html_115defa6b580403b8fcf0c60aed6e3bc);
+        
+
+        marker_0b4721989cea4a1e8f407464c1681ff1.bindPopup(popup_686d396f8e8d435099148b7ebe9a6708)
+        ;
+
+        
+    
+    
+            var marker_1eb735d229c84d43a8e64e184934b521 = L.marker(
+                [41.41843, 2.1238973],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_128360793f074fd89bc5358b6803f083 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c3489f54718f40c490fd3645f867d825 = $(`<div id="html_c3489f54718f40c490fd3645f867d825" style="width: 100.0%; height: 100.0%;">Barcelona (Observatori Fabra)</div>`)[0];
+            popup_128360793f074fd89bc5358b6803f083.setContent(html_c3489f54718f40c490fd3645f867d825);
+        
+
+        marker_1eb735d229c84d43a8e64e184934b521.bindPopup(popup_128360793f074fd89bc5358b6803f083)
+        ;
+
+        
+    
+    
+            var marker_cfaff3584483489f92e1193d1c0018c3 = L.marker(
+                [41.370476000000004, 2.1149993],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_47ed4cd098bf4957ba8008e51c475551 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8fd8b0a58acb4bf9ba988be8f878ee09 = $(`<div id="html_8fd8b0a58acb4bf9ba988be8f878ee09" style="width: 100.0%; height: 100.0%;">L'Hospitalet de Llobregat</div>`)[0];
+            popup_47ed4cd098bf4957ba8008e51c475551.setContent(html_8fd8b0a58acb4bf9ba988be8f878ee09);
+        
+
+        marker_cfaff3584483489f92e1193d1c0018c3.bindPopup(popup_47ed4cd098bf4957ba8008e51c475551)
+        ;
+
+        
+    
+    
+            var marker_ca36405c5d9043528263bc5970961393 = L.marker(
+                [41.481970000000004, 2.1882975],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_924051189dd6471585d3838ce4a8482e = L.popup({"maxWidth": "100%"});
+
+        
+            var html_4f9097fbccf7424bbdca2c24ecd39ecc = $(`<div id="html_4f9097fbccf7424bbdca2c24ecd39ecc" style="width: 100.0%; height: 100.0%;">Montcada i Reixac</div>`)[0];
+            popup_924051189dd6471585d3838ce4a8482e.setContent(html_4f9097fbccf7424bbdca2c24ecd39ecc);
+        
+
+        marker_ca36405c5d9043528263bc5970961393.bindPopup(popup_924051189dd6471585d3838ce4a8482e)
+        ;
+
+        
+    
+    
+            var marker_6645454b0a474d8183c80fa1f6fc2be9 = L.marker(
+                [41.469826, 2.1758357999999998],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_6a304c81415f4824955e505a8e7dfbd7 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_c4194362654441719b3bcf7a21f435d6 = $(`<div id="html_c4194362654441719b3bcf7a21f435d6" style="width: 100.0%; height: 100.0%;">Montcada i Reixac (Can Sant Joan)</div>`)[0];
+            popup_6a304c81415f4824955e505a8e7dfbd7.setContent(html_c4194362654441719b3bcf7a21f435d6);
+        
+
+        marker_6645454b0a474d8183c80fa1f6fc2be9.bindPopup(popup_6a304c81415f4824955e505a8e7dfbd7)
+        ;
+
+        
+    
+    
+            var marker_9b80ba9ee5f4417089b6c299810ce166 = L.marker(
+                [41.492115000000005, 2.0424971999999997],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_1fd706dedc35495694c17e4e5a36640d = L.popup({"maxWidth": "100%"});
+
+        
+            var html_a4b016d760b84ad4965100123376aaeb = $(`<div id="html_a4b016d760b84ad4965100123376aaeb" style="width: 100.0%; height: 100.0%;">Rubí</div>`)[0];
+            popup_1fd706dedc35495694c17e4e5a36640d.setContent(html_a4b016d760b84ad4965100123376aaeb);
+        
+
+        marker_9b80ba9ee5f4417089b6c299810ce166.bindPopup(popup_1fd706dedc35495694c17e4e5a36640d)
+        ;
+
+        
+    
+    
+            var marker_106ba8d7892d4aa69b168ba92eae0647 = L.marker(
+                [41.561214, 2.1011107000000004],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_da7579c9b4504a7eb767df1008d3b278 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_8b8c45b9fb81491d92669f2acec2c603 = $(`<div id="html_8b8c45b9fb81491d92669f2acec2c603" style="width: 100.0%; height: 100.0%;">Sabadell</div>`)[0];
+            popup_da7579c9b4504a7eb767df1008d3b278.setContent(html_8b8c45b9fb81491d92669f2acec2c603);
+        
+
+        marker_106ba8d7892d4aa69b168ba92eae0647.bindPopup(popup_da7579c9b4504a7eb767df1008d3b278)
+        ;
+
+        
+    
+    
+            var marker_695b50610e7a49dfb3cd1c6a9ebf9d25 = L.marker(
+                [41.425594, 2.2221997000000004],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_3587109fe32748f8912f8f0fc0c87a02 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_0e6d97f4bf834fbe80b274d92303041f = $(`<div id="html_0e6d97f4bf834fbe80b274d92303041f" style="width: 100.0%; height: 100.0%;">Sant Adrià de Besòs</div>`)[0];
+            popup_3587109fe32748f8912f8f0fc0c87a02.setContent(html_0e6d97f4bf834fbe80b274d92303041f);
+        
+
+        marker_695b50610e7a49dfb3cd1c6a9ebf9d25.bindPopup(popup_3587109fe32748f8912f8f0fc0c87a02)
+        ;
+
+        
+    
+    
+            var marker_316406d43df54d84a5cbf648f515e98a = L.marker(
+                [41.526722, 2.1838],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_40837784aa854b3380d3a4fc80170282 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_fe3cdd1b38d146a4af4d8a5439dfb4b3 = $(`<div id="html_fe3cdd1b38d146a4af4d8a5439dfb4b3" style="width: 100.0%; height: 100.0%;">Santa Perpètua de Mogoda</div>`)[0];
+            popup_40837784aa854b3380d3a4fc80170282.setContent(html_fe3cdd1b38d146a4af4d8a5439dfb4b3);
+        
+
+        marker_316406d43df54d84a5cbf648f515e98a.bindPopup(popup_40837784aa854b3380d3a4fc80170282)
+        ;
+
+        
+    
+    
+            var marker_df3bb57b430d410db6fbb3355690f0b5 = L.marker(
+                [41.39219, 2.0097985],
+                {}
+            ).addTo(map_50fa500593f54365add2589be4bb51cc);
+        
+    
+        var popup_cb034dd1b703491289b5472e614b8f49 = L.popup({"maxWidth": "100%"});
+
+        
+            var html_9e3e28e13f7548908122d4393e9db84a = $(`<div id="html_9e3e28e13f7548908122d4393e9db84a" style="width: 100.0%; height: 100.0%;">Sant Vicenç dels Horts (Ribot)</div>`)[0];
+            popup_cb034dd1b703491289b5472e614b8f49.setContent(html_9e3e28e13f7548908122d4393e9db84a);
+        
+
+        marker_df3bb57b430d410db6fbb3355690f0b5.bindPopup(popup_cb034dd1b703491289b5472e614b8f49)
+        ;
+
+        
+    
+</script>
