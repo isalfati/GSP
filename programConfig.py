@@ -38,7 +38,7 @@ month = "March"   # January, February and March possible.
 year  = "2020"      # Only 2020 possible.
 
 # Parameter to analyze
-contaminant = "pm10" # any of the selection list.
+contaminant = "no2" # any of the selection list.
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85

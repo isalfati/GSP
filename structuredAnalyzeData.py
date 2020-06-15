@@ -140,6 +140,7 @@ def coordinatePlots(infoStations, weightMatrix):
     ax.set_ylabel("Latitud")
 
     #Plot Edges
+    
     for i in range(0, len(weightMatrix[0])):
         pointTmp = [weightMatrix[0][i], weightMatrix[1][i]]
         for j in range(i, len(weightMatrix[0])):
@@ -454,7 +455,8 @@ def main():
     print("\nEigenvectors:")
     print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in Eigenvectors]))
 
-    coordinatePlots(infoStations, weightMatrix)
+    # Uncomment for plots
+    #coordinatePlots(infoStations, weightMatrix)
     
     #plt.stem(Eigenvalues)
     #plt.show()
