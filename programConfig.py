@@ -34,17 +34,17 @@ selection = ["o3", "no2", "pm10"]
 
 # City & Date       # If city = BCN, month = March, the small dataset test will be used instead.
 city = "Barcelona"  # Right now, Barcelona is the only one possible.
-month = "January"   # January, February and March possible.
+month = "March"   # January, February and March possible.
 year  = "2020"      # Only 2020 possible.
 
 # Parameter to analyze
-contaminant = "o3" # any of the selection list.
+contaminant = "pm10" # any of the selection list.
 
 # Minimum amount of data for a station to be kept 0 < x < 1
 minPercentatge = 0.85
 
 # Maximum distance between stations
-maxDistanceBetweenStations = 10 # km 
+maxDistanceBetweenStations = 20 # km 
 
 # Target Station Selector:
 # [0]: Station to reconstruct, [1]: Faulty Station
@@ -71,3 +71,5 @@ np.set_printoptions(threshold=np.inf, suppress=True)
 # Display number options
 decimals = 4
 decimalsSparse = 3
+
+VALUEK = 1
