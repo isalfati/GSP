@@ -129,7 +129,7 @@ def coordinatePlots(infoStations, weightMatrix):
 
     print("\nGenerating Adjacency Plot...")
 
-    fig, ax = plt.subplots()
+    fig, ax = plt.subplots(figsize=(10,10), dpi=700)
     
     # Style
     sns.set(style='whitegrid', color_codes=True)
