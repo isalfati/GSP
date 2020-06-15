@@ -79,6 +79,7 @@ def obtainDistancesMatrix(points, size):
             destination = [points[0][j], points[1][j]]
             #print(" |-> To {}.".format(destination))
             distance = round(geopy.distance.VincentyDistance(origin, destination).km, decimals) # LAT1 / LONG1 @ LAT2 / LONG2
+            #print(distance)
             sumDistances += distance
             distancesMatrix[i][j] = distance
 
@@ -239,17 +240,21 @@ def linearCombination(adjacencyCols, laplacianCols, sizeSet40, columnsIndexToDro
         #print("Adjacency of interested columns: ")
         #print(interestedAdjacencyCols, sep=", ")
 
-        #print("Lacplacian of interested columns: ")
+        #print("Laplacian of interested columns: ")
         #print(interestedLaplacianCols, sep=", ")
+
+        #print("First element of the set:" )
+        #print(set40[0])
 
         for i in range(0, sizeSet40):
             for j in range(0, len(interestedAdjacencyCols)):
                 adj = interestedAdjacencyCols[j]
-                lpc = interestedLaplacianCols[j]
+                lpc = -interestedLaplacianCols[j]
                 tst = set40[i][j]
                 #print("ADJ: {}, LPC: {}, TST: {}.".format(adj, lpc, tst))
                 recon[i] += (adj*lpc*tst)
-            recon[i] *= -1
+                #print(recon[i])
+            #recon[i] *= -1
             #print("@@@@ Result: {}.\n".format(recon[i]))
     
         return recon
@@ -320,7 +325,7 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
         for val in range(0, M+1):
             signalRecovered = []
             K = val
-            #print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
+            print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
 
             # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
             measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K])
@@ -348,12 +353,11 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
 
             positive = all(item >= 0 for item in signalRecovered)
 
-            
             if positive:
                 maxK = K
                 currentPositive = signalRecovered
                 currentPositive.append(elemTime)
-                #print(currentPositive)
+                print(currentPositive)
 
             if K == M:
                 #print("MAXK: {}.".format(maxK))
@@ -369,6 +373,8 @@ def main():
 
     # Import Data
     cleanDataParam = importData()
+
+    #print(cleanDataParam)
 
     # Obtain Info about Stations
     infoStations = obtainStationInfo(cleanDataParam)
@@ -475,7 +481,7 @@ def main():
     listDataSets.append(pollutionDF)
     listDataSets.append(variationPollutionDF)
 
-    print("Reconstructing data on station: {}. For the second round, the faulty station will be: {}.\n".format(targetStation[0], targetStation[1]))
+    print("Reconstructing data on station: {}. For the second round, the faulty station will be: {}.\n".format(infoStations.iloc[targetStation[0]]['NOM ESTACIÓ'], infoStations.iloc[targetStation[1]]['NOM ESTACIÓ']))
 
     for index, elemDF in enumerate(listDataSets):
         print("@@@@@@@@@@@@@@@@@@@@")
@@ -496,6 +502,14 @@ def main():
                                             LaplacianMatrix[stationToReconstruct], 
                                             len(set40), columnsIndexToDrop, set40)
 
+        A = set40DF["timestamp"].tolist()
+        B = set40[:, stationToReconstruct]
+        C = predictedValues
+
+        print("[Timestamp, Original, Predicted]")
+        for i in range(0, len(A)):
+            print("{}, \t {}, \t {}.".format(A[i], B[i], C[i]))
+
         MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValues)
         RMSE = math.sqrt(MSE)
 
@@ -507,6 +521,11 @@ def main():
 
         predictedValuesLinearRegression = linearRegressionML(len(cleanPollutionColumns)-1, adjacencyMatrix[stationToReconstruct], cleanPollutionColumns, set60DF, set40DF, stationToReconstruct)
         
+        C = predictedValuesLinearRegression
+        print("[Timestamp, Original, Predicted]")
+        for i in range(0, len(A)):
+            print("{}, \t {}, \t {}.".format(A[i], B[i], C[i]))
+
         MSE = mean_squared_error(set40[:, stationToReconstruct], predictedValuesLinearRegression)
         RMSE = math.sqrt(MSE)
 
@@ -524,10 +543,17 @@ def main():
 
         predictedStankovicStation = predictedStankovicDF[pollutionColumns[stationToReconstruct]].values.tolist()
 
-        MSE = mean_squared_error(set40[:, stationToReconstruct], predictedStankovicStation)
-        RMSE = math.sqrt(MSE)
+        #print("Original:")
+        #print(set40[:, stationToReconstruct])
 
-        print("\nStankovic Regression RMSE: {}.\n".format(RMSE))
+        #print("Predicted:")
+        #print(predictedStankovicStation)
+
+
+        #MSE = mean_squared_error(set40[:, stationToReconstruct], predictedStankovicStation)
+        #RMSE = math.sqrt(MSE)
+
+        #print("\nStankovic Regression RMSE: {}.\n".format(RMSE))
 
 
 if __name__ == "__main__":
