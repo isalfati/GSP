@@ -291,7 +291,7 @@ def linearRegressionML(sizeCleanPollutionColumns, adjacencyCols, cleanPollutionC
 
     return y_pred
 
-def stankovicMethod(infoStations, Eigenvectors, dataSet):
+def stankovicMethod(infoStations, Eigenvectors, EigenvectorsOrig, dataSet):
     print("Stankovic Method...")
 
     N = len(infoStations["NOM ESTACIÓ"])
@@ -304,10 +304,10 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
         values = dataSet[dataSet["timestamp"].str.contains(elemTime)].values.tolist()[0]
         #print("Values: {}.".format(values))
         
-        valuesSignal = values[0:len(values)-1]
+        valuesSignal = values[0:len(values)-1]        
         #print("Values Signal: {}.".format(valuesSignal))
 
-        valuesStations = dataSet.columns.values.tolist()[0:len(values)-1]
+        valuesStations = dataSet.columns.values.tolist()[0:len(values)-1]        
         #print("Stations: {}.".format(valuesStations))
         
         listStations = infoStations["NOM ESTACIÓ"].tolist()
@@ -317,10 +317,9 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
             if valuesSignal[index] is not None:
                 vertexSignal.append(listStations.index(name))
 
-        valuesSignal = [item for item in valuesSignal if item is not None]
+        #valuesSignal = [item for item in valuesSignal if item is not None]
         M = len(vertexSignal)
-
-        #print("ValuesList: {}.".format(valuesSignal))
+        #print("M: {}.".format(M))
         #print("VertexList: {}.".format(vertexSignal))
         #print("SignalList: {}.\n".format(valuesSignal))
 
@@ -330,11 +329,14 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
         #print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
 
         # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
-        measurementMatrix = np.array(Eigenvectors[vertexSignal, 0:K])
+        measurementMatrix = np.array(Eigenvectors[0:M, 0:K])
+        #print(measurementMatrix.shape)
 
         #print("MM: {}.".format(measurementMatrix))
 
         pInv = np.linalg.pinv(measurementMatrix)
+
+        #print(pInv.shape)
 
         coeficientsX = np.matmul(pInv, valuesSignal).tolist()
 
@@ -346,7 +348,7 @@ def stankovicMethod(infoStations, Eigenvectors, dataSet):
         coeficientsX = np.array(coeficientsX)
 
         #Recover Signal.
-        signalRecovered = np.matmul(Eigenvectors, coeficientsX.T)
+        signalRecovered = np.matmul(EigenvectorsOrig, coeficientsX.T)
         signalRecovered = [round(x, decimals) for x in signalRecovered]
 
         #print("Recovered L: {}.\n".format(signalRecovered))
@@ -500,12 +502,24 @@ def main():
 
     variationPollutionDF = pollutionDF.copy()
 
+    mean = pollutionDF[pollutionColumns[targetStation[1]]].sum() / len(pollutionDF)
+    print("MEAN: {}.".format(mean))
+
     # Creation of noise with the same dimensions as a column (station)
-    noiseValues = np.random.normal(mu, sigma,[len(variationPollutionDF), 1])
+    #noiseValues = np.random.normal(mu, sigma, [len(variationPollutionDF), 1])
+    noiseValues = np.random.normal(mu, mean*levelError, [len(variationPollutionDF), 1])
+
     originalVal = variationPollutionDF[pollutionColumns[targetStation[1]]].values
 
     newValues = np.hstack([noiseValues[i] + originalVal[i] for i in range(0, len(noiseValues))])
+    #newValues = [x + mean*levelError for x in noiseValues]
     variationPollutionDF[pollutionColumns[targetStation[1]]] = newValues
+
+    
+    #print("Original vs Corrputed")
+    #for j in range(0, len(originalVal)):
+    #    print("{}, {}.".format(originalVal[j], newValues[j]))
+    
 
     # Apply reconstruction over all created data sets.
     listDataSets = []
@@ -533,8 +547,8 @@ def main():
                                             LaplacianMatrix[stationToReconstruct], 
                                             len(set40), columnsIndexToDrop, set40)
 
-        #A = set40DF["timestamp"].tolist()
-        #B = set40[:, stationToReconstruct]
+        A = set40DF["timestamp"].tolist()
+        B = set40[:, stationToReconstruct]
         #C = predictedValues
 
         #print("[Timestamp, Original, Predicted]")
@@ -575,9 +589,23 @@ def main():
 
         # Number of nodes in our graph
         N = len(infoStations["NOM ESTACIÓ"]) 
-        # TODO: This is wrong, it uses different values of K for PM10.
+
+        EigenCustom = np.delete(Eigenvectors, targetStation, 1)
+        #print(EigenCustom.shape)
+
+        #print("\nEigenCustom:")
+        #print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in EigenCustom]))
+        
+
         #predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
-        predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
+
+        customSet40DF = set40DF.copy()
+        #st = infoStations.iloc[targetStation[0]
+        customSet40DF.drop(columns=infoStations.iloc[targetStation[0]]['NOM ESTACIÓ'], inplace=True)
+        #print(customSet40DF)
+
+
+        predictedStankovic = stankovicMethod(infoStations, EigenCustom, Eigenvectors, customSet40DF)
         predictedStankovicDF = pd.DataFrame(predictedStankovic, columns=pollutionColumns)
 
         predictedStankovicStation = predictedStankovicDF[pollutionColumns[stationToReconstruct]].values.tolist()
