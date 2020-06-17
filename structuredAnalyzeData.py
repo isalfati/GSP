@@ -318,11 +318,13 @@ def stankovicMethod(infoStations, Eigenvectors, EigenvectorsOrig, dataSet):
             if valuesSignal[index] is not None:
                 vertexSignal.append(listStations.index(name))
 
+        valuesSignalArray = np.array(valuesSignal)
+        valuesSignalArray
         #valuesSignal = [item for item in valuesSignal if item is not None]
         M = len(vertexSignal)
         #print("M: {}.".format(M))
         #print("VertexList: {}.".format(vertexSignal))
-        #print("SignalList: {}.\n".format(valuesSignal))
+        #print("SignalList: {}.\n".format(valuesSignalArray))
 
         #for val in range(0, M):
         signalRecovered = []
@@ -337,25 +339,29 @@ def stankovicMethod(infoStations, Eigenvectors, EigenvectorsOrig, dataSet):
 
         pInv = np.linalg.pinv(measurementMatrix)
 
-        #print(pInv)
-        #print(valuesSignal)
-        coeficientsX = np.matmul(pInv, valuesSignal)
+        #print(pInv.shape)
+        #print(valuesSignalArray)
+        #print(valuesSignalArray.shape)
+        coeficientsX = np.matmul(pInv, valuesSignalArray)
 
         concat = np.zeros(N-K)
 
         #for i in range(0, N-K):
         #    coeficientsX.append(0)
         
-        #print("coeficientsX: {}.".format(coeficientsX))
+        
 
         #coeficientsX = np.array(coeficientsX)
         coeficientsX = np.concatenate((coeficientsX, concat))
         #print("coef X: {}.".format(coeficientsX))
 
-        #Recover Signal.
-        signalRecovered = np.matmul(EigenvectorsOrig, coeficientsX.T)
-        signalRecovered = [round(x, decimals) for x in signalRecovered]
+        #print("coeficientsX: {}.".format(coeficientsX))
+        #print(coeficientsX.shape)
 
+        #Recover Signal.
+        signalRecovered = np.matmul(EigenvectorsOrig, coeficientsX)
+        #signalRecovered = [round(x, decimals) for x in signalRecovered]
+        signalRecovered = [x for x in signalRecovered]
         #print("Recovered L: {}.\n".format(signalRecovered))
 
         #print(signalRecovered)
@@ -399,6 +405,7 @@ def mean_bias_error(y_true, y_pred):
     mbe = diff.mean()
 
     return mbe
+
 
 def main():
     print("Welcome. This program analyzes the data of different contaminants in the air of Catalonia.")
