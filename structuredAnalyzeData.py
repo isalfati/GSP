@@ -2,6 +2,7 @@ import time # Lord
 import folium
 import seaborn as sns
 import geopy.distance
+from copy import deepcopy
 from programConfig import *
 import matplotlib.pyplot as plt
 #import matplotlib.gridspec as gridspec
@@ -329,23 +330,27 @@ def stankovicMethod(infoStations, Eigenvectors, EigenvectorsOrig, dataSet):
         #print("N: {}, M: {}, K = {}.".format(N, len(vertexSignal), K))
 
         # Extract all eigenvector rows of the indexes corresponding to station of the data not missing and the K first columns
-        measurementMatrix = np.array(Eigenvectors[0:M, 0:K])
+        measurementMatrix = np.array(Eigenvectors[:, 0:K])
         #print(measurementMatrix.shape)
 
         #print("MM: {}.".format(measurementMatrix))
 
         pInv = np.linalg.pinv(measurementMatrix)
 
-        #print(pInv.shape)
+        #print(pInv)
+        #print(valuesSignal)
+        coeficientsX = np.matmul(pInv, valuesSignal)
 
-        coeficientsX = np.matmul(pInv, valuesSignal).tolist()
+        concat = np.zeros(N-K)
 
-        for i in range(0, N-K):
-            coeficientsX.append(0)
+        #for i in range(0, N-K):
+        #    coeficientsX.append(0)
         
         #print("coeficientsX: {}.".format(coeficientsX))
 
-        coeficientsX = np.array(coeficientsX)
+        #coeficientsX = np.array(coeficientsX)
+        coeficientsX = np.concatenate((coeficientsX, concat))
+        #print("coef X: {}.".format(coeficientsX))
 
         #Recover Signal.
         signalRecovered = np.matmul(EigenvectorsOrig, coeficientsX.T)
@@ -590,12 +595,11 @@ def main():
         # Number of nodes in our graph
         N = len(infoStations["NOM ESTACIÓ"]) 
 
-        EigenCustom = np.delete(Eigenvectors, targetStation, 1)
-        #print(EigenCustom.shape)
-
+        EigenCustom = Eigenvectors.copy()
+        EigenCustom = np.delete(EigenCustom, (targetStation[0]), 0)
+        
         #print("\nEigenCustom:")
         #print("\n".join(["\t".join([str(round(cell, decimalsSparse)) for cell in row]) for row in EigenCustom]))
-        
 
         #predictedStankovic = stankovicMethod(infoStations, Eigenvectors, set40DF)
 
