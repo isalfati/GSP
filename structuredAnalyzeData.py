@@ -512,22 +512,30 @@ def main():
     #@@@ Variation #1: Adding Noise to a Random Station @@@
     #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
 
-    variationPollutionDF = pollutionDF.copy()
+    variationPollutionDF = pollutionDF.copy()  #10%
+    variationPollutionDF2 = pollutionDF.copy() #15%
+    variationPollutionDF3 = pollutionDF.copy() #20%
 
     mean = pollutionDF[pollutionColumns[targetStation[1]]].sum() / len(pollutionDF)
     print("MEAN: {}.".format(mean))
 
     # Creation of noise with the same dimensions as a column (station)
-    #noiseValues = np.random.normal(mu, sigma, [len(variationPollutionDF), 1])
-    noiseValues = np.random.normal(mu, mean*levelError, [len(variationPollutionDF), 1])
-
+    noiseValues = np.random.normal(mu, mean*levelError[0], [len(variationPollutionDF), 1])
     originalVal = variationPollutionDF[pollutionColumns[targetStation[1]]].values
-
     newValues = np.hstack([noiseValues[i] + originalVal[i] for i in range(0, len(noiseValues))])
-    #newValues = [x + mean*levelError for x in noiseValues]
     variationPollutionDF[pollutionColumns[targetStation[1]]] = newValues
 
-    
+    noiseValues = np.random.normal(mu, mean*levelError[1], [len(variationPollutionDF2), 1])
+    originalVal = variationPollutionDF2[pollutionColumns[targetStation[1]]].values
+    newValues = np.hstack([noiseValues[i] + originalVal[i] for i in range(0, len(noiseValues))])
+    variationPollutionDF2[pollutionColumns[targetStation[1]]] = newValues
+
+    noiseValues = np.random.normal(mu, mean*levelError[2], [len(variationPollutionDF3), 1])
+    originalVal = variationPollutionDF3[pollutionColumns[targetStation[1]]].values
+    newValues = np.hstack([noiseValues[i] + originalVal[i] for i in range(0, len(noiseValues))])
+    variationPollutionDF3[pollutionColumns[targetStation[1]]] = newValues
+
+
     #print("Original vs Corrputed")
     #for j in range(0, len(originalVal)):
     #    print("{}, {}.".format(originalVal[j], newValues[j]))
@@ -537,6 +545,8 @@ def main():
     listDataSets = []
     listDataSets.append(pollutionDF)
     listDataSets.append(variationPollutionDF)
+    listDataSets.append(variationPollutionDF2)
+    listDataSets.append(variationPollutionDF3)
 
     print("Reconstructing data on station: {}. For the second round, the faulty station will be: {}.\n".format(infoStations.iloc[targetStation[0]]['NOM ESTACIÓ'], infoStations.iloc[targetStation[1]]['NOM ESTACIÓ']))
 
@@ -544,6 +554,9 @@ def main():
         print("@@@@@@@@@@@@@@@@@@@@")
         print("@@@ Data Set: #{} @@@".format(index))
         print("@@@@@@@@@@@@@@@@@@@@\n")
+
+        if(index >= 1):
+            print("Error on faulty station: {}%.".format(levelError[index-1]*100))
 
         stationToReconstruct = targetStation[0]
 
@@ -572,7 +585,10 @@ def main():
         print("\nLinear combination RMSE: {}.".format(RMSE))
 
         MBE = mean_bias_error(set40[:, stationToReconstruct], predictedValues)
-        print("                    MBE: {}.\n".format(MBE))
+        print("                    MBE: {}.".format(MBE))
+
+        RSQUARE = r2_score(set40[:, stationToReconstruct], predictedValues)
+        print("                    R2: {}.\n".format(RSQUARE))
 
         #@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@
         #@@@ Machine Learning - Linear Regression @@@
@@ -591,7 +607,10 @@ def main():
         print("\nLinear Regression RMSE: {}.".format(RMSE))
         
         MBE = mean_bias_error(set40[:, stationToReconstruct], predictedValuesLinearRegression)
-        print("                   MBE: {}.\n".format(MBE))
+        print("                   MBE: {}.".format(MBE))
+
+        RSQUARE = r2_score(set40[:, stationToReconstruct], predictedValuesLinearRegression)
+        print("                    R2: {}.\n".format(RSQUARE))
 
         #@@@@@@@@@@@@@@@@@@@@@
         #@@@ GSP Stankovic @@@
@@ -632,7 +651,10 @@ def main():
         print("\nStankovic RMSE: {}.".format(RMSE))
 
         MBE = mean_bias_error(set40[:, stationToReconstruct], predictedStankovicStation)
-        print("           MBE: {}.\n".format(MBE))
+        print("           MBE: {}.".format(MBE))
+
+        RSQUARE = r2_score(set40[:, stationToReconstruct], predictedStankovicStation)
+        print("            R2: {}.\n".format(RSQUARE))
 
 
 if __name__ == "__main__":

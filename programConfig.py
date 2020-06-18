@@ -6,6 +6,7 @@ import numpy as np
 import pandas as pd
 from sklearn.metrics import mean_squared_error
 from sklearn.linear_model import LinearRegression
+from sklearn.metrics import r2_score
 
 # Configuration File
 
@@ -34,8 +35,8 @@ selection = ["o3", "no2", "pm10"]
 
 # City & Date       # If city = BCN, month = March, the small dataset test will be used instead.
 city = "Barcelona"  # Right now, Barcelona is the only one possible.
-month = "February"   # January, February and March possible.
 year  = "2020"      # Only 2020 possible.
+month = "February"   # January, February and March possible.
 
 # Parameter to analyze
 contaminant = "pm10" # any of the selection list.
@@ -73,8 +74,8 @@ decimals = 4
 decimalsSparse = 3
 
 # Value of K to reconstruct
-VALUEK = 8
 
 # Error Percentage
-levelError = 0.20
+levelError = [0.10, 0.15, 0.20]
 
+VALUEK = 8
