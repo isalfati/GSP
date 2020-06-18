@@ -168,9 +168,9 @@ Linear Regression RMSE: 5.882017128650987.
 @@@@@@@@@@ Stankovic @@@@@@@@@@
 Stankovic Method...
 
-Stankovic RMSE: 27.075302408093663.
-           MBE: -19.125420470842233.
-            R2: -1.311171724086968.
+Stankovic RMSE: 9.565943771614894.
+           MBE: -5.8686922483533275.
+            R2: 0.7115030467656239.
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ Data Set: #1 @@@
@@ -182,31 +182,31 @@ Splitting data set...
 @@@@@@@@@@ LC @@@@@@@@@@
 Linear Combination Reconstruction...
 
-Linear combination RMSE: 8.762738668172155.
-                    MBE: -4.921269044060457.
-                    R2: 0.7579164366957132.
+Linear combination RMSE: 8.75167091464871.
+                    MBE: -4.908807904115356.
+                    R2: 0.7585275764905647.
 
 
 @@@@@@@@@@ MLR @@@@@@@@@@
 Linear Regression - ML...
 Summary of Training:
 
-Coefficient of Determination: 0.7580552143484411.
-Intercept: -1.8657188976487724.
-Slope: [ 0.19141577  0.31499575  0.1587223  -0.00374013  0.11234591  0.27236183
-  0.10509018  0.14167222].
+Coefficient of Determination: 0.7614780648048614.
+Intercept: -1.9336653493843556.
+Slope: [ 0.20463517  0.30740236  0.20414469 -0.00353488  0.09592399  0.25706075
+  0.1051635   0.13012743].
 
-Linear Regression RMSE: 5.825182935863905.
-                   MBE: -0.08412967329732257.
-                    R2: 0.893019476011585.
+Linear Regression RMSE: 5.994640829600136.
+                   MBE: 0.02172453899232559.
+                    R2: 0.8867046936276087.
 
 
 @@@@@@@@@@ Stankovic @@@@@@@@@@
 Stankovic Method...
 
-Stankovic RMSE: 27.066612125645833.
-           MBE: -19.110909177420137.
-            R2: -1.3096883418151788.
+Stankovic RMSE: 9.57335059438471.
+           MBE: -5.864937063197359.
+            R2: 0.7110561126996591.
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ Data Set: #2 @@@
@@ -218,31 +218,31 @@ Splitting data set...
 @@@@@@@@@@ LC @@@@@@@@@@
 Linear Combination Reconstruction...
 
-Linear combination RMSE: 8.787174385868504.
-                    MBE: -4.927086243711399.
-                    R2: 0.7565644088014543.
+Linear combination RMSE: 8.819533127869873.
+                    MBE: -4.921744372064427.
+                    R2: 0.7547682060284038.
 
 
 @@@@@@@@@@ MLR @@@@@@@@@@
 Linear Regression - ML...
 Summary of Training:
 
-Coefficient of Determination: 0.7591005399559091.
-Intercept: -1.9380633018273876.
-Slope: [ 0.20462323  0.31236477  0.15430719 -0.00296107  0.11116943  0.27187372
-  0.10425091  0.13694313].
+Coefficient of Determination: 0.7607972435509387.
+Intercept: -1.9809582661402025.
+Slope: [ 0.19841471  0.31061113  0.18666563 -0.0061632   0.10247949  0.26106126
+  0.10896839  0.13827975].
 
-Linear Regression RMSE: 5.880697460868771.
-                   MBE: -0.04982623476681981.
-                    R2: 0.8909706914439876.
+Linear Regression RMSE: 6.002373223437111.
+                   MBE: -0.042162054349853.
+                    R2: 0.8864122294245382.
 
 
 @@@@@@@@@@ Stankovic @@@@@@@@@@
 Stankovic Method...
 
-Stankovic RMSE: 27.00622540509046.
-           MBE: -19.102242913700103.
-            R2: -1.2993938197557768.
+Stankovic RMSE: 9.657106409783287.
+           MBE: -5.882793748951427.
+            R2: 0.7059781423617407.
 
 @@@@@@@@@@@@@@@@@@@@
 @@@ Data Set: #3 @@@
@@ -254,29 +254,29 @@ Splitting data set...
 @@@@@@@@@@ LC @@@@@@@@@@
 Linear Combination Reconstruction...
 
-Linear combination RMSE: 8.731416108563812.
-                    MBE: -4.882968602113329.
-                    R2: 0.7596440072473952.
+Linear combination RMSE: 8.7705687689762.
+                    MBE: -4.875398146437483.
+                    R2: 0.7574836072638133.
 
 
 @@@@@@@@@@ MLR @@@@@@@@@@
 Linear Regression - ML...
 Summary of Training:
 
-Coefficient of Determination: 0.7548696604180416.
-Intercept: -1.886150361261464.
-Slope: [ 0.19024753  0.32747449  0.07557126 -0.00253792  0.1325855   0.29044882
-  0.10450528  0.15833684].
+Coefficient of Determination: 0.7555644442670265.
+Intercept: -1.8438039643366793.
+Slope: [ 0.1939344   0.32104506  0.08807293 -0.00268254  0.12815584  0.29025167
+  0.10386659  0.15442512].
 
-Linear Regression RMSE: 5.740429908784366.
-                   MBE: -0.10678881205409203.
-                    R2: 0.8961098387051375.
+Linear Regression RMSE: 5.747480004738751.
+                   MBE: -0.06123871260175163.
+                    R2: 0.895854497071478.
 
 
 @@@@@@@@@@ Stankovic @@@@@@@@@@
 Stankovic Method...
 
-Stankovic RMSE: 27.099340665956035.
-           MBE: -19.16796785692645.
-            R2: -1.315277399687874.
+Stankovic RMSE: 9.585486972542784.
+           MBE: -5.8188203374943175.
+            R2: 0.710323045413623.
 
